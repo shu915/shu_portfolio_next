@@ -9,6 +9,11 @@ import {
 
 const wordpressGraphqlUrl = process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL;
 
+if (!wordpressGraphqlUrl) {
+  throw new Error(
+    "NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL が環境変数に設定されていません"
+  );
+}
 function makeClient() {
   return new ApolloClient({
     cache: new InMemoryCache(),
