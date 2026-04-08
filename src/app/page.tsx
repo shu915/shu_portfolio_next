@@ -31,7 +31,7 @@ export default async function Home() {
   const posts = data?.posts.nodes ?? [];
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-16">
+    <div className="max-w-2xl mx-auto px-4 py-16">
       <h1 className="text-2xl font-bold mb-8">最新投稿</h1>
       <ul className="flex flex-col gap-6">
         {posts.map((post) => (
@@ -47,6 +47,6 @@ export default async function Home() {
           </li>
         ))}
       </ul>
-    </main>
+    </div>
   );
 }
