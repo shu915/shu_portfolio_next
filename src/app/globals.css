@@ -1,26 +1,45 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@theme {
+  --color-primary: #211E55;
+  --color-secondary: #E4EBF7;
+  --color-accent: #d7003a;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #ffffff;
+  color: #333333;
+  font-family: var(--font-noto-serif-jp), serif;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ナビリンクのホバーアンダーライン（疑似要素はTailwindで表現不可） */
+.nav-underline-link {
+  position: relative;
+  line-height: 1;
+}
+.nav-underline-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: #fff;
+  border-radius: 5px;
+  transform: scale(0, 1);
+  transition: transform 0.3s ease;
+}
+.nav-underline-link:hover::after {
+  transform: scale(1, 1);
+}
+
+/* ハンバーガーバーのトランジション（open/close 両方向に効かせるため共通定義） */
+.hamburger-bar {
+  display: block;
+  position: absolute;
+  height: 0.125rem;
+  background-color: #fff;
+  transition: transform 0.3s ease, width 0.3s ease, top 0.3s ease;
 }
