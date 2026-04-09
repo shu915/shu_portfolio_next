@@ -35,6 +35,86 @@ body {
   transform: scale(1, 1);
 }
 
+/* スクロールガイドのライン流下アニメーション */
+@keyframes scrollLine {
+  0%   { transform: translateY(-60px); }
+  75%  { transform: translateY(0); }
+  100% { transform: translateY(60px); }
+}
+
+/* セクションタイトル（両端に三角形を持つリボン形状） */
+.section-title {
+  position: relative;
+  width: 14rem;
+  height: 3rem;
+  line-height: 3rem;
+  text-align: center;
+  background-color: var(--color-primary);
+  color: #fff;
+}
+.section-title::before,
+.section-title::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-top: 24px solid transparent;
+  border-bottom: 24px solid transparent;
+}
+.section-title::before {
+  left: -16px;
+  border-right: 16px solid var(--color-primary);
+}
+.section-title::after {
+  right: -16px;
+  border-left: 16px solid var(--color-primary);
+}
+.section-title--secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+}
+.section-title--secondary::before {
+  border-right-color: var(--color-secondary);
+}
+.section-title--secondary::after {
+  border-left-color: var(--color-secondary);
+}
+
+/* アローボタン（右下にL字ボーダーをskewで描くボタン） */
+.arrow-button {
+  position: relative;
+  display: inline-block;
+  width: 15rem;
+  font-size: 1.25rem;
+  letter-spacing: 0.2em;
+  line-height: 1.5;
+  padding-left: 0.25rem;
+  font-weight: 700;
+}
+.arrow-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -0.9rem;
+  width: 15rem;
+  height: 100%;
+  border-right: 1.5px solid var(--color-primary);
+  border-bottom: 1.5px solid var(--color-primary);
+  transform: skew(45deg);
+  transition: width 0.3s ease;
+}
+.arrow-button:hover::after {
+  width: 17rem;
+}
+.arrow-button--white {
+  color: #fff;
+}
+.arrow-button--white::after {
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+}
+
 /* ハンバーガーバーのトランジション（open/close 両方向に効かせるため共通定義） */
 .hamburger-bar {
   display: block;
