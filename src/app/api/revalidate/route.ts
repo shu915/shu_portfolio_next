@@ -2,41 +2,52 @@ import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * WordPress の webhook を受け取り、該当タグのキャッシュを即時無効化する
- *
- * 呼び出し例（WordPress 側の設定）:
- *   POST https://your-site.com/api/revalidate
- *   Header: x-revalidate-secret: YOUR_SECRET
- *   Body: { "post_type": "post" }  // または "works"
- *
- * 環境変数:
- *   REVALIDATE_SECRET — WordPress 側と共有するシークレットトークン
+ * WordPress の post_type → 再検証する Next.js キャッシュタグのマッピング
+ * 個別ページタグ（post-[slug] / works-[slug]）は postSlug から動的生成する
  */
-export async function POST(request: NextRequest) {
-  const secret = request.headers.get("x-revalidate-secret");
+const POST_TYPE_LIST_TAGS: Record<string, string[]> = {
+  post:  ["posts"],
+  works: ["works"],
+};
 
-  if (!process.env.REVALIDATE_SECRET) {
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  const configuredSecret = process.env.NEXTJS_REVALIDATE_SECRET;
+  if (!configuredSecret) {
+    throw new Error("NEXTJS_REVALIDATE_SECRET が環境変数に設定されていません");
+  }
+
+  const secret = req.headers.get("x-revalidate-secret");
+  if (secret !== configuredSecret) {
+    return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
+  }
+
+  let postType: string;
+  let postSlug: string | undefined;
+  try {
+    const body = await req.json();
+    postType = body.postType;
+    postSlug = body.postSlug;
+  } catch {
+    return NextResponse.json({ message: "Invalid JSON body" }, { status: 400 });
+  }
+
+  const listTags = POST_TYPE_LIST_TAGS[postType];
+  if (!listTags) {
     return NextResponse.json(
-      { message: "REVALIDATE_SECRET が設定されていません" },
-      { status: 500 }
+      { message: `Unknown postType: ${postType}` },
+      { status: 400 }
     );
   }
 
-  if (secret !== process.env.REVALIDATE_SECRET) {
-    return NextResponse.json(
-      { message: "Invalid secret" },
-      { status: 401 }
-    );
+  // 一覧・フロントページのタグ
+  const tags = [...listTags];
+
+  // 個別ページのタグ（例: works-my-slug）
+  if (postSlug) {
+    tags.push(`${postType}-${postSlug}`);
   }
 
-  const body = await request.json().catch(() => ({})) as { post_type?: string };
-  const postType = body.post_type;
+  tags.forEach((tag) => revalidateTag(tag, {}));
 
-  // post_type に応じてタグを選択
-  // WordPress カスタム投稿タイプ "works" → works タグ
-  // 一般投稿（post）→ posts タグ
-  const tag = postType === "works" ? "works" : "posts";
-  revalidateTag(tag, "max");
-
-  return NextResponse.json({ revalidated: true, tag });
+  return NextResponse.json({ revalidated: true, tags });
 }

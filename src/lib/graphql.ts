@@ -1,8 +1,8 @@
-const GRAPHQL_URL = process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL;
+const GRAPHQL_URL = process.env.NEXTJS_WORDPRESS_GRAPHQL_URL;
 
 if (!GRAPHQL_URL) {
   throw new Error(
-    "NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL が環境変数に設定されていません"
+    "NEXTJS_WORDPRESS_GRAPHQL_URL が環境変数に設定されていません"
   );
 }
 

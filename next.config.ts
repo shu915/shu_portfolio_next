@@ -2,8 +2,9 @@ import type { NextConfig } from "next";
 
 const WORDPRESS_HOSTNAME = (() => {
   try {
-    return process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL
-      ? new URL(process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL).hostname
+    const url = process.env.NEXTJS_WORDPRESS_GRAPHQL_URL;
+    return url
+      ? new URL(url).hostname
       : "api.shu-digital-works.com";
   } catch {
     return "api.shu-digital-works.com";
