@@ -1,19 +1,28 @@
 import type { NextConfig } from "next";
 
-const WORDPRESS_HOSTNAME = process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL
-  ? new URL(process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL).hostname
-  : "shu-web-creation.local";
+const WORDPRESS_HOSTNAME = (() => {
+  try {
+    return process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL
+      ? new URL(process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL).hostname
+      : "api.shu-digital-works.com";
+  } catch {
+    return "api.shu-digital-works.com";
+  }
+})();
 
 const isDev = process.env.NODE_ENV === "development";
 
+/**
+ * WordPress が .local ドメインの間は本番モードでも画像最適化をスキップする。
+ * プライベートIPに解決されるため、Next.js のセキュリティブロックにかかるため。
+ * 本番サーバーに公開ドメインの WordPress を使う場合は自動的に最適化が有効になる。
+ */
+const isLocalWordPress = WORDPRESS_HOSTNAME.endsWith(".local") ||
+  WORDPRESS_HOSTNAME === "localhost";
+
 const nextConfig: NextConfig = {
   images: {
-    /**
-     * 開発環境では Next.js の画像最適化サーバーが .local ドメインを
-     * 名前解決できず 400 を返すため、最適化をスキップする。
-     * 本番環境では通常どおり最適化が有効になる。
-     */
-    unoptimized: isDev,
+    unoptimized: isDev || isLocalWordPress,
     remotePatterns: [
       {
         protocol: "http",

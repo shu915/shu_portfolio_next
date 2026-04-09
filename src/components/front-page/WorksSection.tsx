@@ -1,10 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { gql } from "@apollo/client";
-import { query } from "@/lib/apollo-client";
+import { gqlFetch } from "@/lib/graphql";
 import { ArticleListItem } from "@/components/ui/ArticleListItem";
 
-const GET_WORKS = gql`
+const GET_WORKS = `
   query GetWorksPortfolio {
     works(first: 4) {
       nodes {
@@ -70,11 +69,11 @@ const SERVICE_ITEMS = [
  * - 制作実績ポートフォリオ一覧（WPGraphQL から取得）
  */
 export async function WorksSection() {
-  const { data } = await query<{ works: { nodes: WorksNode[] } }>({
-    query: GET_WORKS,
+  const data = await gqlFetch<{ works: { nodes: WorksNode[] } }>(GET_WORKS, {
+    tags: ["works"],
   });
 
-  const works = data?.works.nodes ?? [];
+  const works = data.works.nodes ?? [];
 
   return (
     <section
@@ -149,7 +148,7 @@ export async function WorksSection() {
                 href={`/works/${work.slug}`}
                 title={work.title}
                 date={work.date}
-                excerpt={work.excerpt.replace(/<[^>]*>/g, "")}
+                excerpt={work.excerpt.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim()}
                 thumbnailUrl={work.featuredImage?.node.sourceUrl}
                 thumbnailAlt={work.featuredImage?.node.altText}
                 categoryName={work.services?.nodes[0]?.name}

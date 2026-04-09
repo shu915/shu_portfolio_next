@@ -27,7 +27,7 @@ function formatDate(dateStr: string): string {
  * WordPress テーマの article-list-item.php を移植
  *
  * - h-full でグリッドセルの高さを使い切る
- * - タイトルエリアを h-[3.94rem] 固定にすることで
+ * - タイトルエリアを leading(1.3) × 3行分の固定高さにすることで
  *   日付・抜粋の縦位置をカード間で揃える
  * - 抜粋エリアを flex-1 にすることでカード底面を揃える
  */
@@ -56,8 +56,8 @@ export function ArticleListItem({
         />
       </div>
 
-      {/* タイトル：3行分の固定高さでカード間の縦位置を揃える */}
-      <p className="text-base font-bold tracking-widest mt-[0.2rem] leading-[1.3] h-[3.94rem] overflow-hidden">
+      {/* タイトル：leading × 3行分の固定高さでカード間の縦位置を揃える */}
+      <p className="text-base font-bold tracking-widest mt-[0.2rem] leading-[1.3] h-[calc(1.3*3*1rem)] line-clamp-3">
         {title}
       </p>
 

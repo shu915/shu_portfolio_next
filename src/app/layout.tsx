@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Noto_Serif_JP } from "next/font/google";
-import { ApolloProvider } from "@/components/providers/ApolloProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
@@ -34,12 +33,10 @@ export default function RootLayout({
       className={`${cormorantGaramond.variable} ${notoSerifJP.variable}`}
     >
       <body className="min-h-screen flex flex-col">
-        <ApolloProvider>
-          <Header />
-          {/* ヘッダーが fixed のため、コンテンツ上部に同じ高さの余白を確保 */}
-          <main className="flex-1 mt-15">{children}</main>
-          <Footer />
-        </ApolloProvider>
+        <Header />
+        {/* ヘッダーが fixed のため、コンテンツ上部に同じ高さの余白を確保 */}
+        <main className="flex-1 mt-15">{children}</main>
+        <Footer />
       </body>
     </html>
   );

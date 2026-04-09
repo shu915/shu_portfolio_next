@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { gql } from "@apollo/client";
-import { query } from "@/lib/apollo-client";
+import { gqlFetch } from "@/lib/graphql";
 import { ArticleListItem } from "@/components/ui/ArticleListItem";
 
-const GET_ARTICLES = gql`
+const GET_ARTICLES = `
   query GetFrontPageArticles {
     posts(first: 3) {
       nodes {
@@ -57,11 +56,11 @@ const CATEGORY_LINKS = [
  * - 1239px 以下でカラム切り替え（右カラムは display:contents で親のflexに合流）
  */
 export async function ArticlesSection() {
-  const { data } = await query<{ posts: { nodes: PostNode[] } }>({
-    query: GET_ARTICLES,
+  const data = await gqlFetch<{ posts: { nodes: PostNode[] } }>(GET_ARTICLES, {
+    tags: ["posts"],
   });
 
-  const posts = data?.posts.nodes ?? [];
+  const posts = data.posts.nodes ?? [];
 
   return (
     <section className="py-20 bg-primary" aria-labelledby="articles-section-title">
@@ -76,7 +75,7 @@ export async function ArticlesSection() {
                   href={`/articles/${post.slug}`}
                   title={post.title}
                   date={post.date}
-                  excerpt={post.excerpt.replace(/<[^>]*>/g, "")}
+                  excerpt={post.excerpt.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim()}
                   thumbnailUrl={post.featuredImage?.node.sourceUrl}
                   thumbnailAlt={post.featuredImage?.node.altText}
                   categoryName={post.categories?.nodes[0]?.name}
