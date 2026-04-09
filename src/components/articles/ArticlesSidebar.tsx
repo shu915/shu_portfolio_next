@@ -113,11 +113,11 @@ export function ArticlesSidebar({
           {recentPosts.map((post) => (
             <article
               key={post.id}
-              className="group w-full border-b border-[#eee] py-2 last:border-b-0 hover:bg-[#fafafa]"
+              className="group w-full border-b border-[#eee] last:border-b-0 hover:bg-[#fafafa]"
             >
               <Link
                 href={`/articles/${post.slug}`}
-                className="flex gap-2 items-start"
+                className="mt-4 flex gap-2 items-start"
               >
                 <div className="relative aspect-square w-[35%] max-w-20 shrink-0 overflow-hidden">
                   <Image
@@ -134,15 +134,19 @@ export function ArticlesSidebar({
                   <h3 className="line-clamp-2 h-[2.2rem] text-sm font-bold leading-[1.3]">
                     {trimTitle(post.title)}
                   </h3>
-                  <div className="mt-0.5 flex flex-wrap items-baseline gap-x-2 gap-y-1 max-md:flex-col max-md:items-start md:justify-between">
-                    {post.categories?.nodes[0]?.name && (
-                      <span className="inline-block rounded-sm bg-secondary px-1 py-0.5 text-xs font-semibold tracking-widest">
+                  {/*
+                    .p-sidebar-article-item__meta 相当：
+                    カテゴリは inline-block、日付は block で必ず改行（横並びにしない）
+                  */}
+                  <div className="mt-[0.1rem]">
+                    {post.categories?.nodes[0]?.name ? (
+                      <span className="inline-block rounded-sm bg-secondary px-1 py-0.5 text-[0.75rem] font-semibold tracking-widest">
                         {post.categories.nodes[0].name}
                       </span>
-                    )}
+                    ) : null}
                     <time
                       dateTime={new Date(post.date).toISOString()}
-                      className="block text-[0.8rem] tracking-wide text-[#333] max-md:ml-4 md:ml-0"
+                      className="block text-[0.8rem] tracking-[0.05em] text-[#333] max-md:ml-4"
                     >
                       {formatDateShort(post.date)}
                     </time>
