@@ -11,9 +11,13 @@ const POST_TYPE_LIST_TAGS: Record<string, string[]> = {
 };
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const secret = req.headers.get("x-revalidate-secret");
+  const configuredSecret = process.env.NEXTJS_REVALIDATE_SECRET;
+  if (!configuredSecret) {
+    throw new Error("NEXTJS_REVALIDATE_SECRET が環境変数に設定されていません");
+  }
 
-  if (secret !== process.env.NEXTJS_REVALIDATE_SECRET) {
+  const secret = req.headers.get("x-revalidate-secret");
+  if (secret !== configuredSecret) {
     return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
   }
 
