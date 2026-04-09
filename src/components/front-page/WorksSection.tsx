@@ -142,7 +142,7 @@ export async function WorksSection() {
 
         {/* 制作実績グリッド */}
         <ul className="mt-6 grid grid-cols-4 gap-6 max-[1199px]:grid-cols-2 max-[1199px]:justify-center max-[629px]:grid-cols-1 max-[629px]:w-[16.6rem] max-[629px]:mx-auto">
-          {works.map((work) => (
+          {works.map((work, index) => (
             <li key={work.id}>
               <ArticleListItem
                 href={`/works/${work.slug}`}
@@ -152,6 +152,7 @@ export async function WorksSection() {
                 thumbnailUrl={work.featuredImage?.node.sourceUrl}
                 thumbnailAlt={work.featuredImage?.node.altText}
                 categoryName={work.services?.nodes[0]?.name}
+                priority={index === 0}
               />
             </li>
           ))}

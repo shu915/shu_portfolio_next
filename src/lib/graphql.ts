@@ -26,12 +26,17 @@ export async function gqlFetch<T>(
   {
     tags = [],
     revalidate = DEFAULT_REVALIDATE,
-  }: { tags?: string[]; revalidate?: number } = {}
+    variables,
+  }: {
+    tags?: string[];
+    revalidate?: number;
+    variables?: Record<string, unknown>;
+  } = {}
 ): Promise<T> {
   const res = await fetch(GRAPHQL_URL!, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query }),
+    body: JSON.stringify(variables ? { query, variables } : { query }),
     next: { tags, revalidate },
   });
 
