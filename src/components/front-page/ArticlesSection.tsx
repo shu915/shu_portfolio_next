@@ -69,7 +69,7 @@ export async function ArticlesSection() {
 
           {/* 記事カードリスト（3列）*/}
           <ul className="flex justify-between gap-10 max-[1239px]:order-2 max-[1239px]:gap-6 max-[899px]:flex-col max-[899px]:items-center max-[899px]:w-[16.6rem]">
-            {posts.map((post) => (
+            {posts.map((post, index) => (
               <li key={post.id} className="w-[16.6rem] shrink-0">
                 <ArticleListItem
                   href={`/articles/${post.slug}`}
@@ -79,6 +79,7 @@ export async function ArticlesSection() {
                   thumbnailUrl={post.featuredImage?.node.sourceUrl}
                   thumbnailAlt={post.featuredImage?.node.altText}
                   categoryName={post.categories?.nodes[0]?.name}
+                  priority={index === 0}
                 />
               </li>
             ))}

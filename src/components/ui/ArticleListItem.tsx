@@ -10,6 +10,11 @@ type Props = {
   thumbnailUrl?: string;
   thumbnailAlt?: string;
   categoryName?: string;
+  /**
+   * ファーストビューに載る1枚だけ true（LCP 向けに preload）
+   * @see https://nextjs.org/docs/app/api-reference/components/image#priority
+   */
+  priority?: boolean;
 };
 
 function formatDate(dateStr: string): string {
@@ -39,6 +44,7 @@ export function ArticleListItem({
   thumbnailUrl,
   thumbnailAlt = "",
   categoryName,
+  priority = false,
 }: Props) {
   return (
     <Link
@@ -51,6 +57,7 @@ export function ArticleListItem({
           src={thumbnailUrl ?? "/img/no-image.webp"}
           alt={thumbnailAlt}
           fill
+          priority={priority}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
           className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-[1.07]"
         />
