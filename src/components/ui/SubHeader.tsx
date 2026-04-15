@@ -15,7 +15,7 @@ const BG_BY_VARIANT: Record<Props["variant"], string | undefined> = {
   articles: subHeaderStyles.bgArticles,
   works: subHeaderStyles.bgWorks,
   profile: subHeaderStyles.bgProfile,
-  contact: undefined,
+  contact: subHeaderStyles.bgContact,
   archive: undefined,
   page: undefined,
 };

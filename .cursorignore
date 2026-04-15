@@ -1,0 +1,7 @@
+# ローカル秘密（AI インデックス・コンテキストから除外）
+.env*
+!.env.example
+
+node_modules/
+.next/
+

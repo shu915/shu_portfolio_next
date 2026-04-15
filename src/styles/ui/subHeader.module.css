@@ -39,3 +39,17 @@
     background-image: url("/images/profile/sub-header-profile-sp-800.webp");
   }
 }
+
+/* レガシー .p-sub-header--contact */
+.bgContact {
+  background-image: image-set(
+    url("/images/contact/sub-header-contact-pc-1920.webp") 1x,
+    url("/images/contact/sub-header-contact-pc-3840.webp") 2x
+  );
+}
+
+@media (max-width: 767px) {
+  .bgContact {
+    background-image: url("/images/contact/sub-header-contact-sp-800.webp");
+  }
+}
