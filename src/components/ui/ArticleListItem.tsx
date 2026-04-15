@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { formatDateJa } from "@/lib/format-date-ja";
 
 type Props = {
   href: string;
@@ -16,16 +17,6 @@ type Props = {
    */
   priority?: boolean;
 };
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr)
-    .toLocaleDateString("ja-JP", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    })
-    .replace(/\//g, ".");
-}
 
 /**
  * 記事・Works カード（一覧ページ・フロントページで共通使用）
@@ -72,10 +63,10 @@ export function ArticleListItem({
       {/* メタ情報（日付・カテゴリ） */}
       <div className="flex justify-between mt-[0.4rem]">
         <time
-          dateTime={new Date(date).toISOString()}
+          dateTime={date}
           className="text-[0.8rem] flex items-center gap-1 tracking-widest"
         >
-          {formatDate(date)}
+          {formatDateJa(date)}
         </time>
         {categoryName && (
           <span className="text-[0.75rem] bg-secondary inline-flex items-center rounded-sm tracking-widest px-1 py-[0.1rem] font-semibold">

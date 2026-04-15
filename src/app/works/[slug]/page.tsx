@@ -4,6 +4,7 @@ import { WorkSingleMain } from "@/components/works/WorkSingleMain";
 import { WorksPageShell } from "@/components/works/WorksPageShell";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
+import { stripExcerptHtml } from "@/lib/articles-archive";
 import { getWorkBySlug } from "@/lib/work-single";
 
 type PageProps = {
@@ -16,10 +17,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!work) {
     return { title: "制作実績が見つかりません | Shu Digital Works" };
   }
-  const excerpt = work.excerpt
-    ?.replace(/<[^>]*>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  const excerpt = work.excerpt ? stripExcerptHtml(work.excerpt) : undefined;
   return {
     title: `${work.title} | Shu Digital Works`,
     description: excerpt?.slice(0, 160) || undefined,

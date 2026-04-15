@@ -6,7 +6,10 @@ import { ArticlesSidebar } from "@/components/articles/ArticlesSidebar";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
 import { getPostBySlug } from "@/lib/article-single";
-import { getArticlesSidebarBundle } from "@/lib/articles-archive";
+import {
+  getArticlesSidebarBundle,
+  stripExcerptHtml,
+} from "@/lib/articles-archive";
 
 /*
  * `export const revalidate` は付けない。Next.js 16 では動的ルート（ƒ）と併用すると
@@ -26,10 +29,7 @@ export async function generateMetadata({
   if (!post) {
     return { title: "記事が見つかりません | Shu Digital Works" };
   }
-  const excerpt = post.excerpt
-    ?.replace(/<[^>]*>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  const excerpt = post.excerpt ? stripExcerptHtml(post.excerpt) : undefined;
   return {
     title: `${post.title} | Shu Digital Works`,
     description: excerpt?.slice(0, 160) || undefined,

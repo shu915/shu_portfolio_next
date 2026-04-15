@@ -3,18 +3,9 @@ import Link from "next/link";
 import { ArticleBodyHtml } from "@/components/articles/ArticleBodyHtml";
 import { ArticleToc } from "@/components/articles/ArticleToc";
 import type { WorkSingle } from "@/lib/work-single";
+import { formatDateJa } from "@/lib/format-date-ja";
 import { prepareArticleBodyHtml } from "@/lib/article-body-html";
 import articleBodyStyles from "@/styles/articles/articleBody.module.css";
-
-function formatDateJa(dateStr: string): string {
-  return new Date(dateStr)
-    .toLocaleDateString("ja-JP", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    })
-    .replace(/\//g, ".");
-}
 
 type Props = {
   work: WorkSingle;
@@ -48,30 +39,30 @@ export function WorkSingleMain({ work }: Props) {
             </Link>
           ))}
         </div>
-        <div className="flex shrink-0 flex-col gap-1 text-sm tracking-wide text-[#333] md:items-end">
+        <div className="flex shrink-0 flex-col gap-1 text-sm tracking-wide text-body md:items-end">
           <span className="inline-flex items-center gap-1">
-            <CalendarIcon className="size-4 shrink-0 text-[#333]" aria-hidden />
-            <span className="inline-block w-[2.8rem] shrink-0 text-[0.85em] text-[#555]">
+            <CalendarIcon className="size-4 shrink-0 text-body" aria-hidden />
+            <span className="inline-block w-[2.8rem] shrink-0 text-[0.85em] text-body-muted">
               公開日
             </span>
             <time
               className="inline-block min-w-20 tabular-nums"
-              dateTime={new Date(work.date).toISOString()}
+              dateTime={work.date}
             >
               {formatDateJa(work.date)}
             </time>
           </span>
           <span className="inline-flex items-center gap-1">
             <PencilSquareIcon
-              className="size-4 shrink-0 text-[#333]"
+              className="size-4 shrink-0 text-body"
               aria-hidden
             />
-            <span className="inline-block w-[2.8rem] shrink-0 text-[0.85em] text-[#555]">
+            <span className="inline-block w-[2.8rem] shrink-0 text-[0.85em] text-body-muted">
               更新日
             </span>
             <time
               className="inline-block min-w-20 tabular-nums"
-              dateTime={new Date(work.modified).toISOString()}
+              dateTime={work.modified}
             >
               {formatDateJa(work.modified)}
             </time>
@@ -80,7 +71,7 @@ export function WorkSingleMain({ work }: Props) {
       </div>
 
       {work.featuredImage?.node.sourceUrl && (
-        <figure className="relative mt-6 aspect-[1.618/1] w-full overflow-hidden border border-[#eee] bg-secondary">
+        <figure className="relative mt-6 aspect-[1.618/1] w-full overflow-hidden border border-border-subtle bg-secondary">
           <Image
             src={work.featuredImage.node.sourceUrl}
             alt={work.featuredImage.node.altText || work.title}

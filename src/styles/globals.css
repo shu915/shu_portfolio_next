@@ -4,11 +4,15 @@
   --color-primary: #211E55;
   --color-secondary: #E4EBF7;
   --color-accent: #d7003a;
+  /* 本文・メタ行・薄い枠（body の color / レガシー #eee 相当を一箇所で管理） */
+  --color-body: #333333;
+  --color-body-muted: #555555;
+  --color-border-subtle: #eeeeee;
 }
 
 body {
   background-color: #ffffff;
-  color: #333333;
+  color: var(--color-body);
   font-family: var(--font-noto-serif-jp), serif;
   font-size: 1rem;
   line-height: 1.6;
