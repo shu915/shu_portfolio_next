@@ -1,10 +1,11 @@
+import { sendContactNotification } from "@/lib/send-contact-email";
 import { contactFormSchema } from "@/lib/validations/contact-form";
 import { NextRequest, NextResponse } from "next/server";
 import { flattenError } from "zod";
 
 /**
- * コンタクトフォーム用 BFF。
- * 現状は検証のみ通して 200。後から Resend / Turnstile をここに足す。
+ * コンタクトフォーム用 BFF。Zod 検証後に Resend で通知メール送信。
+ * Turnstile は後から追加。
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
   let json: unknown;
@@ -29,7 +30,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  void parsed.data;
+  const sent = await sendContactNotification(parsed.data);
+  if (!sent.ok) {
+    return NextResponse.json(
+      {
+        ok: false as const,
+        message:
+          "送信に失敗しました。時間をおいて再度お試しください。問題が続く場合は別の方法でお問い合わせください。",
+      },
+      { status: 503 }
+    );
+  }
 
   return NextResponse.json({ ok: true as const }, { status: 200 });
 }
