@@ -97,11 +97,12 @@ const GET_ARTICLES_SIDEBAR_BUNDLE = `
   }
 `;
 
-/** 1リクエストあたりの件数（全件走査のラウンドトリップ数を抑える） */
-const SIDEBAR_DATES_CHUNK_SIZE = 100;
-
-/** API が壊れたときの無限ループ防止（100 × 50 = 最大 5000 件分まで） */
-const SIDEBAR_DATES_MAX_ITERATIONS = 50;
+/**
+ * 月別アーカイブ集計に使う投稿日の取得上限（1 GraphQL リクエスト）。
+ * 全投稿がこの件数以下なら全件分の日付が取れる。
+ * 超えたらチャンクループ復活・WP 側集計・`posts(first: n)` の見直しなどが必要。
+ */
+const SIDEBAR_POST_DATES_MAX = 100;
 
 export type ArchivePostNode = {
   id: string;
@@ -153,36 +154,16 @@ type PostDatesChunkResult = {
 };
 
 async function fetchAllPostDatesForSidebar(): Promise<string[]> {
-  const dates: string[] = [];
-  let offset = 0;
+  const data = await gqlFetch<PostDatesChunkResult>(GET_POST_DATES_OFFSET_CHUNK, {
+    variables: {
+      size: SIDEBAR_POST_DATES_MAX,
+      offset: 0,
+    },
+    tags: ["posts"],
+  });
 
-  for (let i = 0; i < SIDEBAR_DATES_MAX_ITERATIONS; i++) {
-    const data = await gqlFetch<PostDatesChunkResult>(GET_POST_DATES_OFFSET_CHUNK, {
-      variables: {
-        size: SIDEBAR_DATES_CHUNK_SIZE,
-        offset,
-      },
-      tags: ["posts"],
-    });
-
-    const nodes = data.posts?.nodes ?? [];
-    if (nodes.length === 0) {
-      break;
-    }
-
-    for (const n of nodes) {
-      dates.push(n.date);
-    }
-
-    const hasMore = data.posts?.pageInfo?.offsetPagination?.hasMore ?? false;
-    offset += nodes.length;
-
-    if (!hasMore) {
-      break;
-    }
-  }
-
-  return dates;
+  const nodes = data.posts?.nodes ?? [];
+  return nodes.map((n) => n.date);
 }
 
 function filterNonEmptyTaxonomies(nodes: TaxonomyNode[]): TaxonomyNode[] {
@@ -237,7 +218,7 @@ export async function getArticlesArchiveOffsetPage(
   return { posts: nodes, totalPages };
 }
 
-/** サイドバー：カテゴリ・タグ・新着3件・月別アーカイブ用の日付一覧（日付は offset で全件） */
+/** サイドバー：カテゴリ・タグ・新着3件・月別アーカイブ用の日付一覧（日付は最大 SIDEBAR_POST_DATES_MAX 件） */
 export async function getArticlesSidebarBundle(): Promise<ArticlesSidebarBundle> {
   const [data, postDates] = await Promise.all([
     gqlFetch<{
@@ -261,7 +242,7 @@ export function stripExcerptHtml(html: string): string {
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
-/** 投稿日 ISO から年別・月別件数（`fetchAllPostDatesForSidebar` で取得した全日付ベース） */
+/** 投稿日 ISO から年別・月別件数（`fetchAllPostDatesForSidebar` で取得した日付ベース。件数は SIDEBAR_POST_DATES_MAX 以下想定） */
 export function groupPostDatesByYearMonth(
   dates: string[]
 ): { year: number; months: { month: number; count: number }[] }[] {

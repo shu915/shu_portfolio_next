@@ -49,12 +49,9 @@ function toInternalHref(href: string): ComponentProps<typeof Link>["href"] {
 }
 
 /**
- * 先頭 N 枚は loading=eager（WP の loading="lazy" を上書き）。
- * 本文で装飾用の小さい img が先に並ぶと、実際の LCP は N 枚目以降になり警告が出るため、
- * ブログ記事では余裕を持った値にしている。それでも足りなければ数値を上げる。
+ * 個別記事の本文: 先頭の img 1 枚だけ eager（アイキャッチ相当の大きい画像想定）。
+ * 2 枚目以降は lazy（WP の loading を上書き）。
  */
-const EAGER_IMAGE_COUNT = 24;
-
 function buildParseOptions(): HTMLReactParserOptions {
   let imgIndex = 0;
   const options: HTMLReactParserOptions = {
@@ -69,11 +66,10 @@ function buildParseOptions(): HTMLReactParserOptions {
           return createElement("img", raw);
         }
 
-        const eager = i < EAGER_IMAGE_COUNT;
         const isFirst = i === 0;
         return createElement("img", {
           ...raw,
-          loading: eager ? "eager" : "lazy",
+          loading: isFirst ? "eager" : "lazy",
           ...(isFirst ? { fetchPriority: "high" as const } : {}),
           decoding: raw.decoding ?? "async",
         });
@@ -132,7 +128,7 @@ function buildParseOptions(): HTMLReactParserOptions {
 /**
  * WordPress の the_content 相当 HTML をパースして React ノードとして描画する。
  * リンクは内部を next/link、外部は別タブ＋noopener。
- * img は属性をそのまま渡し、先頭 1 枚は fetchPriority=high・先頭 N 枚は loading=eager だけ上書き。
+ * img は属性をそのまま渡し、先頭 1 枚だけ fetchPriority=high・loading=eager を上書き。
  */
 export function ArticleBodyHtml({ html }: Props) {
   return <>{parse(html, buildParseOptions())}</>;
