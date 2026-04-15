@@ -113,6 +113,33 @@
   resize: none;
 }
 
+.p-contact__form-input[aria-invalid="true"],
+.p-contact__form-textarea[aria-invalid="true"] {
+  border-color: var(--color-accent);
+}
+
+.p-contact__form-field-error {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.p-contact__form-field-error--center {
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.p-contact__form-response--error {
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.p-contact__form-response--success {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
 .p-contact__form-privacy {
   position: relative;
   margin-top: 2rem;

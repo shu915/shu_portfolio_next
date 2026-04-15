@@ -1,15 +1,88 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import {
+  contactFormSchema,
+  type ContactFormValues,
+} from "@/lib/validations/contact-form";
 import "@/styles/contact/pContactForm.css";
+
+function fieldErrorId(name: keyof ContactFormValues): string {
+  return `error-${String(name).replace(/[^a-z0-9-]/gi, "-")}`;
+}
 
 /**
  * レガシー CF7 テンプレート + `_p-contact.scss` と同一クラス。
- * 送信は未接続。
+ * バリデーションは React Hook Form + Zod。
  */
 export function ContactForm() {
-  const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [submitSucceeded, setSubmitSucceeded] = useState(false);
+  const [submitServerError, setSubmitServerError] = useState<string | null>(
+    null
+  );
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<ContactFormValues>({
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      "your-company": "",
+      "your-name": "",
+      "your-email": "",
+      "your-subject": "",
+      "your-message": "",
+      "your-privacy": false,
+    },
+    mode: "onTouched",
+  });
+
+  const privacyAccepted = useWatch({
+    control,
+    name: "your-privacy",
+    defaultValue: false,
+  });
+
+  const onSubmit = async (data: ContactFormValues) => {
+    setSubmitServerError(null);
+    setSubmitSucceeded(false);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const payload: unknown = await res.json().catch(() => null);
+      const message =
+        payload &&
+        typeof payload === "object" &&
+        "message" in payload &&
+        typeof (payload as { message: unknown }).message === "string"
+          ? (payload as { message: string }).message
+          : null;
+
+      if (!res.ok) {
+        setSubmitServerError(
+          message ?? "送信に失敗しました。時間をおいて再度お試しください。"
+        );
+        return;
+      }
+
+      reset();
+      setSubmitSucceeded(true);
+    } catch {
+      setSubmitServerError(
+        "送信に失敗しました。時間をおいて再度お試しください。"
+      );
+    }
+  };
 
   return (
     <div className="p-contact__form">
@@ -22,9 +95,12 @@ export function ContactForm() {
 
       <form
         className="wpcf7-form init"
-        onSubmit={(e) => {
-          e.preventDefault();
+        onSubmit={handleSubmit(onSubmit)}
+        onChange={(e) => {
+          if (!e.nativeEvent.isTrusted) return;
+          setSubmitSucceeded((prev) => (prev ? false : prev));
         }}
+        noValidate
       >
         <div className="p-contact__form-items">
           <div className="p-contact__form-item">
@@ -33,11 +109,10 @@ export function ContactForm() {
             </label>
             <input
               id="your-company"
-              name="your-company"
-              type="text"
               autoComplete="organization"
               className="p-contact__form-input"
               placeholder="例)〇〇株式会社"
+              {...register("your-company")}
             />
           </div>
 
@@ -48,14 +123,25 @@ export function ContactForm() {
             </label>
             <input
               id="your-name"
-              name="your-name"
-              type="text"
               autoComplete="name"
-              required
-              aria-required="true"
               className="p-contact__form-input"
               placeholder="例)山田 太郎"
+              aria-required="true"
+              aria-invalid={errors["your-name"] ? true : undefined}
+              aria-describedby={
+                errors["your-name"] ? fieldErrorId("your-name") : undefined
+              }
+              {...register("your-name")}
             />
+            {errors["your-name"] && (
+              <p
+                id={fieldErrorId("your-name")}
+                className="p-contact__form-field-error"
+                role="alert"
+              >
+                {errors["your-name"].message}
+              </p>
+            )}
           </div>
 
           <div className="p-contact__form-item">
@@ -65,14 +151,26 @@ export function ContactForm() {
             </label>
             <input
               id="your-email"
-              name="your-email"
-              type="email"
               autoComplete="email"
-              required
-              aria-required="true"
+              inputMode="email"
               className="p-contact__form-input"
               placeholder="例)info@example.com"
+              aria-required="true"
+              aria-invalid={errors["your-email"] ? true : undefined}
+              aria-describedby={
+                errors["your-email"] ? fieldErrorId("your-email") : undefined
+              }
+              {...register("your-email")}
             />
+            {errors["your-email"] && (
+              <p
+                id={fieldErrorId("your-email")}
+                className="p-contact__form-field-error"
+                role="alert"
+              >
+                {errors["your-email"].message}
+              </p>
+            )}
           </div>
 
           <div className="p-contact__form-item">
@@ -82,13 +180,24 @@ export function ContactForm() {
             </label>
             <input
               id="your-subject"
-              name="your-subject"
-              type="text"
-              required
-              aria-required="true"
               className="p-contact__form-input"
               placeholder="例)〇〇について"
+              aria-required="true"
+              aria-invalid={errors["your-subject"] ? true : undefined}
+              aria-describedby={
+                errors["your-subject"] ? fieldErrorId("your-subject") : undefined
+              }
+              {...register("your-subject")}
             />
+            {errors["your-subject"] && (
+              <p
+                id={fieldErrorId("your-subject")}
+                className="p-contact__form-field-error"
+                role="alert"
+              >
+                {errors["your-subject"].message}
+              </p>
+            )}
           </div>
 
           <div className="p-contact__form-item">
@@ -98,25 +207,38 @@ export function ContactForm() {
             </label>
             <textarea
               id="your-message"
-              name="your-message"
-              required
-              aria-required="true"
               className="p-contact__form-textarea"
               placeholder="具体的な内容をご記入下さい"
+              aria-required="true"
+              aria-invalid={errors["your-message"] ? true : undefined}
+              aria-describedby={
+                errors["your-message"] ? fieldErrorId("your-message") : undefined
+              }
+              {...register("your-message")}
             />
+            {errors["your-message"] && (
+              <p
+                id={fieldErrorId("your-message")}
+                className="p-contact__form-field-error"
+                role="alert"
+              >
+                {errors["your-message"].message}
+              </p>
+            )}
           </div>
         </div>
 
         <div className="p-contact__form-privacy">
           <input
             id="js-your-privacy-checkbox"
-            name="your-privacy"
             type="checkbox"
-            checked={privacyAccepted}
-            onChange={(e) => setPrivacyAccepted(e.target.checked)}
-            required
             className="p-contact__form-privacy-checkbox"
             aria-required="true"
+            aria-invalid={errors["your-privacy"] ? true : undefined}
+            aria-describedby={
+              errors["your-privacy"] ? fieldErrorId("your-privacy") : undefined
+            }
+            {...register("your-privacy")}
           />
           <label
             htmlFor="js-your-privacy-checkbox"
@@ -133,12 +255,36 @@ export function ContactForm() {
             に同意する
           </label>
         </div>
+        {errors["your-privacy"] && (
+          <p
+            id={fieldErrorId("your-privacy")}
+            className="p-contact__form-field-error p-contact__form-field-error--center"
+            role="alert"
+          >
+            {errors["your-privacy"].message}
+          </p>
+        )}
 
-        <button type="submit" className="p-contact__form-submit">
-          送信する
+        <button
+          type="submit"
+          className="p-contact__form-submit"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "送信中…" : "送信する"}
         </button>
 
-        <div className="wpcf7-response-output" aria-hidden="true" />
+        <div className="wpcf7-response-output" aria-live="polite">
+          {submitServerError && (
+            <span className="p-contact__form-response p-contact__form-response--error">
+              {submitServerError}
+            </span>
+          )}
+          {submitSucceeded && !submitServerError && (
+            <span className="p-contact__form-response p-contact__form-response--success">
+              送信が完了しました。ありがとうございました。
+            </span>
+          )}
+        </div>
       </form>
     </div>
   );
