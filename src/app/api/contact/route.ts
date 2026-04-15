@@ -1,11 +1,11 @@
 import { sendContactNotification } from "@/lib/send-contact-email";
-import { contactFormSchema } from "@/lib/validations/contact-form";
+import { clientIpFromRequest, verifyTurnstileToken } from "@/lib/verify-turnstile";
+import { contactFormApiSchema } from "@/lib/validations/contact-form";
 import { NextRequest, NextResponse } from "next/server";
 import { flattenError } from "zod";
 
 /**
- * コンタクトフォーム用 BFF。Zod 検証後に Resend で通知メール送信。
- * Turnstile は後から追加。
+ * コンタクトフォーム用 BFF。Turnstile → Zod → Resend。
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
   let json: unknown;
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const parsed = contactFormSchema.safeParse(json);
+  const parsed = contactFormApiSchema.safeParse(json);
   if (!parsed.success) {
     return NextResponse.json(
       {
@@ -30,7 +30,21 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const sent = await sendContactNotification(parsed.data);
+  const { turnstileToken, ...formData } = parsed.data;
+  const ip = clientIpFromRequest(req.headers);
+  const turnstileOk = await verifyTurnstileToken(turnstileToken, ip);
+  if (!turnstileOk) {
+    return NextResponse.json(
+      {
+        ok: false as const,
+        message:
+          "送信を確認できませんでした。ページを再読み込みして、もう一度お試しください。",
+      },
+      { status: 403 }
+    );
+  }
+
+  const sent = await sendContactNotification(formData);
   if (!sent.ok) {
     return NextResponse.json(
       {

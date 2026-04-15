@@ -45,3 +45,12 @@ export const contactFormSchema = z.object({
 });
 
 export type ContactFormValues = z.infer<typeof contactFormSchema>;
+
+/** API 送信用（Turnstile トークン付き） */
+export const contactFormApiSchema = contactFormSchema.extend({
+  turnstileToken: z
+    .string()
+    .min(1, "Turnstile の確認を完了してください"),
+});
+
+export type ContactFormApiValues = z.infer<typeof contactFormApiSchema>;

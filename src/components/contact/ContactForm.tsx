@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -8,6 +9,12 @@ import {
   contactFormSchema,
   type ContactFormValues,
 } from "@/lib/validations/contact-form";
+
+const Turnstile = dynamic(
+  () =>
+    import("@marsidev/react-turnstile").then((mod) => mod.Turnstile),
+  { ssr: false, loading: () => null }
+);
 
 const inputClassName =
   "mt-1 w-full appearance-none rounded-none border border-solid border-primary bg-white px-2 py-2 text-[0.9375rem] tracking-widest outline-none ring-0 transition-shadow duration-300 ease-in-out focus:border-primary focus:outline-none focus:ring-0 focus:shadow-[0_0_0_2px_rgba(33,30,85,0.2)] aria-invalid:border-accent";
@@ -20,10 +27,16 @@ function fieldErrorId(name: keyof ContactFormValues): string {
  * レガシー CF7 レイアウト相当。バリデーションは React Hook Form + Zod。
  */
 export function ContactForm() {
+  /** ビルド時に埋め込まれる。キー変更後は `next dev` を再起動すること */
+  const turnstileSiteKey =
+    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim() ?? "";
+
   const [submitSucceeded, setSubmitSucceeded] = useState(false);
   const [submitServerError, setSubmitServerError] = useState<string | null>(
     null
   );
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileMountKey, setTurnstileMountKey] = useState(0);
 
   const {
     register,
@@ -46,11 +59,20 @@ export function ContactForm() {
   const onSubmit = async (data: ContactFormValues) => {
     setSubmitServerError(null);
     setSubmitSucceeded(false);
+    if (turnstileSiteKey && !turnstileToken) {
+      setSubmitServerError(
+        "送信前の確認が完了していません。少し待ってから再度お試しください。"
+      );
+      return;
+    }
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          turnstileToken: turnstileToken ?? "",
+        }),
       });
 
       const payload: unknown = await res.json().catch(() => null);
@@ -70,6 +92,8 @@ export function ContactForm() {
       }
 
       reset();
+      setTurnstileToken(null);
+      setTurnstileMountKey((k) => k + 1);
       setSubmitSucceeded(true);
     } catch {
       setSubmitServerError(
@@ -287,10 +311,50 @@ export function ContactForm() {
           </p>
         )}
 
+        {turnstileSiteKey ? (
+          <div
+            className="mt-8 flex min-h-[65px] w-full flex-col items-center justify-center gap-2"
+            aria-label="Turnstile"
+          >
+            <Turnstile
+              key={turnstileMountKey}
+              siteKey={turnstileSiteKey}
+              onSuccess={(token) => {
+                setTurnstileToken(token);
+                setSubmitServerError(null);
+              }}
+              onExpire={() => {
+                setTurnstileToken(null);
+              }}
+              onError={(errorCode) => {
+                setTurnstileToken(null);
+                if (process.env.NODE_ENV === "development") {
+                  console.warn("[Turnstile]", errorCode);
+                }
+                setSubmitServerError(
+                  "送信前の確認に失敗しました。ページを再読み込みしてお試しください。"
+                );
+              }}
+            />
+            {!turnstileToken && (
+              <p className="text-center text-xs text-body-muted">
+                送信前の確認を待っています…
+              </p>
+            )}
+          </div>
+        ) : process.env.NODE_ENV === "development" ? (
+          <p className="mt-8 text-center text-xs text-accent">
+            開発用: .env.local に NEXT_PUBLIC_TURNSTILE_SITE_KEY を設定してください
+          </p>
+        ) : null}
+
         <button
           type="submit"
           className="mx-auto mt-8 block w-50 cursor-pointer appearance-none rounded-none border-2 border-solid border-primary bg-primary py-4 font-bold leading-none tracking-widest text-white outline-none ring-0 transition-[filter] duration-300 ease-in-out hover:brightness-110 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
-          disabled={isSubmitting}
+          disabled={
+            isSubmitting ||
+            (Boolean(turnstileSiteKey) && !turnstileToken)
+          }
         >
           {isSubmitting ? "送信中…" : "送信する"}
         </button>
