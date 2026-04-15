@@ -1,8 +1,9 @@
+import subHeaderStyles from "@/styles/ui/subHeader.module.css";
+
 /**
  * 各ページ上部のサブヘッダー（背景画像 + タイトル + サブタイトル）
  *
- * variant に対応する背景画像クラス（sub-header-bg-[variant]）を
- * globals.css に定義すること
+ * 背景が必要な variant は `src/styles/ui/subHeader.module.css` に追加する
  */
 type Props = {
   variant: "works" | "articles" | "profile" | "contact" | "archive" | "page";
@@ -10,10 +11,22 @@ type Props = {
   subtitle: string;
 };
 
+const BG_BY_VARIANT: Record<Props["variant"], string | undefined> = {
+  articles: subHeaderStyles.bgArticles,
+  works: undefined,
+  profile: undefined,
+  contact: undefined,
+  archive: undefined,
+  page: undefined,
+};
+
 export function SubHeader({ variant, title, subtitle }: Props) {
+  const bgClass = BG_BY_VARIANT[variant];
   return (
     <div
-      className={`sub-header-bg-${variant} h-75 max-md:h-50 bg-cover bg-center bg-no-repeat`}
+      className={[bgClass, "h-75 max-md:h-50 bg-cover bg-center bg-no-repeat"]
+        .filter(Boolean)
+        .join(" ")}
     >
       <div className="max-w-[1232px] mx-auto px-8 md:px-6 max-md:px-4 h-full">
         <div className="flex flex-col justify-center gap-4 h-full">

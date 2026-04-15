@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import headerStyles from "@/styles/layout/header.module.css";
+import navStyles from "@/styles/layout/navUnderline.module.css";
 
 const NAV_LINKS = [
   { label: "Top", href: "/" },
@@ -15,8 +17,10 @@ const NAV_LINKS = [
 const SITE_TITLE_CLASS =
   "text-white text-[1.875rem] font-medium tracking-[0.03em] font-(family-name:--font-cormorant)";
 
-const NAV_LINK_CLASS =
-  "nav-underline-link text-white text-[1.25rem] font-medium tracking-[0.03em] font-(family-name:--font-cormorant)";
+const NAV_LINK_CLASS = [
+  navStyles.navUnderline,
+  "text-white text-[1.25rem] font-medium tracking-[0.03em] font-(family-name:--font-cormorant)",
+].join(" ");
 
 /**
  * 投稿・Works詳細ページではサイトタイトルを div にする
@@ -64,12 +68,12 @@ export function Header() {
           {/* バー2本 */}
           <span className="relative block h-[0.6rem] w-7.5">
             <span
-              className={`hamburger-bar left-0 w-full ${
+              className={`${headerStyles.bar} left-0 w-full ${
                 isMenuOpen ? "top-1/2 -translate-y-1/2 rotate-45" : "top-0"
               }`}
             />
             <span
-              className={`hamburger-bar left-0 ${
+              className={`${headerStyles.bar} left-0 ${
                 isMenuOpen
                   ? "w-full top-1/2 -translate-y-1/2 -rotate-45"
                   : "w-[66%] bottom-0"

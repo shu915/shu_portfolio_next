@@ -1,4 +1,5 @@
 import Link from "next/link";
+import navStyles from "@/styles/layout/navUnderline.module.css";
 
 const NAV_LINKS = [
   { label: "Top", href: "/" },
@@ -25,7 +26,7 @@ export function Footer() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="nav-underline-link text-white text-[1.25rem] font-medium tracking-[0.03em] font-(family-name:--font-cormorant)"
+                    className={`${navStyles.navUnderline} text-white text-[1.25rem] font-medium tracking-[0.03em] font-(family-name:--font-cormorant)`}
                   >
                     {label}
                   </Link>

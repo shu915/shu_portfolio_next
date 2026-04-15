@@ -1,0 +1,13 @@
+/* サブヘッダー背景画像（ページ種別ごと・レティナ対応） */
+.bgArticles {
+  background-image: image-set(
+    url("/images/articles/sub-header-articles-pc-1920.webp") 1x,
+    url("/images/articles/sub-header-articles-pc-3150.webp") 2x
+  );
+}
+
+@media (max-width: 767px) {
+  .bgArticles {
+    background-image: url("/images/articles/sub-header-articles-sp-800.webp");
+  }
+}

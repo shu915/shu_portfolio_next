@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { gqlFetch } from "@/lib/graphql";
 import { ArticleListItem } from "@/components/ui/ArticleListItem";
+import { gqlFetch } from "@/lib/graphql";
+import sectionsStyles from "@/styles/front-page/sections.module.css";
 
 const GET_ARTICLES = `
   query GetFrontPageArticles {
@@ -63,10 +64,12 @@ export async function ArticlesSection() {
   const posts = data.posts.nodes ?? [];
 
   return (
-    <section className="py-20 bg-primary" aria-labelledby="articles-section-title">
+    <section
+      className="py-20 bg-primary"
+      aria-labelledby="articles-section-title"
+    >
       <div className="max-w-[1232px] mx-auto px-8 md:px-6 max-md:px-4">
         <div className="flex justify-between gap-12 items-start max-[1239px]:flex-col max-[1239px]:items-center max-[1239px]:gap-6">
-
           {/* 記事カードリスト（3列）*/}
           <ul className="flex justify-between gap-10 max-[1239px]:order-2 max-[1239px]:gap-6 max-[899px]:flex-col max-[899px]:items-center max-[899px]:w-[16.6rem]">
             {posts.map((post, index) => (
@@ -75,7 +78,10 @@ export async function ArticlesSection() {
                   href={`/articles/${post.slug}`}
                   title={post.title}
                   date={post.date}
-                  excerpt={post.excerpt.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim()}
+                  excerpt={post.excerpt
+                    .replace(/<[^>]*>/g, " ")
+                    .replace(/\s+/g, " ")
+                    .trim()}
                   thumbnailUrl={post.featuredImage?.node.sourceUrl}
                   thumbnailAlt={post.featuredImage?.node.altText}
                   categoryName={post.categories?.nodes[0]?.name}
@@ -90,12 +96,11 @@ export async function ArticlesSection() {
            * 子要素が親 flex コンテナに直接参加する（order で並び順制御）
            */}
           <div className="max-[1239px]:contents">
-
             {/* セクションタイトル + カテゴリ */}
             <div className="max-[1239px]:order-1">
               <h2
                 id="articles-section-title"
-                className="section-title section-title--secondary text-[2.25rem] font-bold font-(family-name:--font-cormorant) tracking-[0.15em] max-[1239px]:mx-auto"
+                className={`${sectionsStyles.sectionTitle} ${sectionsStyles.sectionTitleSecondary} text-[2.25rem] font-bold font-(family-name:--font-cormorant) tracking-[0.15em] max-[1239px]:mx-auto`}
               >
                 Articles
               </h2>
@@ -121,14 +126,16 @@ export async function ArticlesSection() {
 
             {/* All Articles ボタン */}
             <div className="mt-8 max-[1239px]:order-3 max-[1239px]:ml-auto max-[1239px]:mt-4 max-[767px]:mx-auto">
-              <Link href="/articles" className="arrow-button arrow-button--white">
+              <Link
+                href="/articles"
+                className={`${sectionsStyles.arrowButton} ${sectionsStyles.arrowButtonWhite}`}
+              >
                 All Articles
               </Link>
               <p className="text-[0.875rem] leading-none mt-2 tracking-[0.05em] text-white">
                 投稿記事一覧はこちら
               </p>
             </div>
-
           </div>
         </div>
       </div>

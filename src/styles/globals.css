@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #211E55;
+  --color-secondary: #E4EBF7;
+  --color-accent: #d7003a;
+}
+
+body {
+  background-color: #ffffff;
+  color: #333333;
+  font-family: var(--font-noto-serif-jp), serif;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/*
+ * fixed ヘッダー（h-15 = 3.75rem）＋見出しまわりの余白
+ * アンカー（#toc-heading-n・本文内リンク）でスクロールしたときにピタッとしすぎないようにする
+ */
+html {
+  scroll-padding-top: calc(3.75rem + 0.75rem);
+}

@@ -1,3 +1,5 @@
+import sectionsStyles from "@/styles/front-page/sections.module.css";
+
 /**
  * フロントページのメインビジュアル（ヒーローセクション）
  * WordPress テーマの .p-front-page__main-visual を移植
@@ -11,9 +13,9 @@ export function HeroSection() {
         /* SP: 固定高さ・縦書きレイアウト */
         "max-md:pt-0 max-md:aspect-auto max-md:h-140",
         /* 背景画像（PC） */
-        "bg-[image-set(url('/front-page-main-visual-pc-1920.webp')_1x,url('/front-page-main-visual-pc-3840.webp')_2x)]",
+        "bg-[image-set(url('/images/front-page/front-page-main-visual-pc-1920.webp')_1x,url('/images/front-page/front-page-main-visual-pc-3840.webp')_2x)]",
         /* 背景画像（SP） */
-        "max-md:bg-[image-set(url('/front-page-main-visual-sp-767.webp')_1x,url('/front-page-main-visual-sp-1500.webp')_2x)]",
+        "max-md:bg-[image-set(url('/images/front-page/front-page-main-visual-sp-767.webp')_1x,url('/images/front-page/front-page-main-visual-sp-1500.webp')_2x)]",
       ].join(" ")}
       aria-label="メインビジュアル"
     >
@@ -87,7 +89,7 @@ export function HeroSection() {
           Scroll
         </span>
         <div
-          className="w-[2px] h-[60px] bg-primary mx-auto relative -bottom-16 animate-[scrollLine_2.2s_cubic-bezier(0.76,0,0.3,1)_infinite]"
+          className={`w-[2px] h-[60px] bg-primary mx-auto relative -bottom-16 ${sectionsStyles.heroScrollLine}`}
           aria-hidden="true"
         />
       </div>

@@ -31,6 +31,9 @@ function trimTitle(title: string, maxChars = 36): string {
 
 /**
  * 記事一覧サイドバー（レガシー sidebar.php に相当）
+ *
+ * next/image はデフォルトで lazy になり、ファーストビュー内のサムネが LCP になると
+ * 開発時に警告が出る。上側に固定表示される画像には loading="eager" を付ける。
  */
 export function ArticlesSidebar({
   recentPosts,
@@ -52,11 +55,12 @@ export function ArticlesSidebar({
         </h2>
         <figure className="mx-auto mt-2 w-45">
           <Image
-            src="/img/profile-image.webp"
+            src="/images/common/profile-image.webp"
             alt="プロフィール"
             width={180}
             height={162}
             className="h-auto w-full object-contain"
+            loading="eager"
           />
         </figure>
         <p className="mt-2 text-center text-2xl font-bold tracking-widest">
@@ -71,7 +75,7 @@ export function ArticlesSidebar({
       <section className="mt-10" aria-labelledby="sidebar-search-heading">
         <SidebarSectionHeading
           id="sidebar-search-heading"
-          icon="/img/sidebar-search-icon.svg"
+          icon="/images/articles/sidebar-search-icon.svg"
           iconClassName="h-[1.3rem] w-[1.3rem]"
         >
           検索
@@ -105,7 +109,7 @@ export function ArticlesSidebar({
       <section className="mt-10" aria-labelledby="sidebar-recent-heading">
         <SidebarSectionHeading
           id="sidebar-recent-heading"
-          icon="/img/sidebar-recent-icon.svg"
+          icon="/images/articles/sidebar-recent-icon.svg"
         >
           新着記事
         </SidebarSectionHeading>
@@ -122,7 +126,7 @@ export function ArticlesSidebar({
                 <div className="relative aspect-square w-[35%] max-w-20 shrink-0 overflow-hidden">
                   <Image
                     src={
-                      post.featuredImage?.node.sourceUrl ?? "/img/no-image.webp"
+                      post.featuredImage?.node.sourceUrl ?? "/images/common/no-image.webp"
                     }
                     alt={post.featuredImage?.node.altText || post.title}
                     fill
@@ -163,7 +167,7 @@ export function ArticlesSidebar({
         <section className="mt-10" aria-labelledby="sidebar-cat-heading">
           <SidebarSectionHeading
             id="sidebar-cat-heading"
-            icon="/img/category-icon.svg"
+            icon="/images/articles/category-icon.svg"
           >
             カテゴリー
           </SidebarSectionHeading>
@@ -186,7 +190,7 @@ export function ArticlesSidebar({
         <section className="mt-10" aria-labelledby="sidebar-tags-heading">
           <SidebarSectionHeading
             id="sidebar-tags-heading"
-            icon="/img/tag-icon.svg"
+            icon="/images/articles/tag-icon.svg"
           >
             タグ
           </SidebarSectionHeading>
@@ -209,7 +213,7 @@ export function ArticlesSidebar({
         <section className="mt-10" aria-labelledby="sidebar-archive-heading">
           <SidebarSectionHeading
             id="sidebar-archive-heading"
-            icon="/img/archive-icon.svg"
+            icon="/images/articles/archive-icon.svg"
           >
             アーカイブ
           </SidebarSectionHeading>

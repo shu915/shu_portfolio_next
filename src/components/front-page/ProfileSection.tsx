@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import sectionsStyles from "@/styles/front-page/sections.module.css";
 
 /**
  * フロントページ Profile セクション
@@ -33,7 +34,7 @@ export function ProfileSection() {
             {/* プロフィール画像 */}
             <figure className="w-60 shrink-0 max-[799px]:order-2">
               <Image
-                src="/img/profile-image.webp"
+                src="/images/common/profile-image.webp"
                 alt="プロフィール画像"
                 width={497}
                 height={446}
@@ -51,7 +52,7 @@ export function ProfileSection() {
             {/* セクションタイトル */}
             <h2
               id="profile-section-title"
-              className="section-title text-[2.25rem] font-bold font-(family-name:--font-cormorant) tracking-[0.15em] max-[1239px]:order-1 max-[1239px]:mx-auto"
+              className={`${sectionsStyles.sectionTitle} text-[2.25rem] font-bold font-(family-name:--font-cormorant) tracking-[0.15em] max-[1239px]:order-1 max-[1239px]:mx-auto`}
             >
               Profile
             </h2>
@@ -66,7 +67,7 @@ export function ProfileSection() {
             <div className="max-[1239px]:order-3 max-[1239px]:flex max-[1239px]:justify-evenly max-[1239px]:w-full max-[799px]:order-4 max-[799px]:flex-col max-[799px]:items-center max-[799px]:ml-auto max-[799px]:w-fit max-[767px]:mx-auto">
 
               <div className="mt-14 max-[767px]:mt-6">
-                <Link href="/profile" className="arrow-button">
+                <Link href="/profile" className={sectionsStyles.arrowButton}>
                   Details
                 </Link>
                 <p className="text-[0.875rem] leading-none mt-2 tracking-[0.05em]">
@@ -75,7 +76,7 @@ export function ProfileSection() {
               </div>
 
               <div className="mt-14 max-[767px]:mt-6">
-                <Link href="/contact" className="arrow-button">
+                <Link href="/contact" className={sectionsStyles.arrowButton}>
                   Contact
                 </Link>
                 <p className="text-[0.875rem] leading-none mt-2 tracking-[0.05em]">
