@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ArchivePostNode, TaxonomyNode } from "@/lib/articles-archive";
 import { groupPostDatesByYearMonth } from "@/lib/articles-archive";
+import { formatDateJa } from "@/lib/format-date-ja";
 
 type Props = {
   /** 新着は `posts` の先頭（日付降順想定）から最大3件 */
@@ -12,16 +13,6 @@ type Props = {
   /** アーカイブ集計用（取得済み投稿の date のみ使用） */
   postDates: string[];
 };
-
-function formatDateShort(dateStr: string): string {
-  return new Date(dateStr)
-    .toLocaleDateString("ja-JP", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    })
-    .replace(/\//g, ".");
-}
 
 function trimTitle(title: string, maxChars = 36): string {
   const t = title.trim();
@@ -149,10 +140,10 @@ export function ArticlesSidebar({
                       </span>
                     ) : null}
                     <time
-                      dateTime={new Date(post.date).toISOString()}
+                      dateTime={post.date}
                       className="block text-[0.8rem] tracking-[0.05em] text-[#333] max-md:ml-4"
                     >
-                      {formatDateShort(post.date)}
+                      {formatDateJa(post.date)}
                     </time>
                   </div>
                 </div>

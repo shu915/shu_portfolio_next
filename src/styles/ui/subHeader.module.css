@@ -11,3 +11,17 @@
     background-image: url("/images/articles/sub-header-articles-sp-800.webp");
   }
 }
+
+/* レガシー .p-sub-header--works と同じアセット */
+.bgWorks {
+  background-image: image-set(
+    url("/images/works/sub-header-works-pc-1920.webp") 1x,
+    url("/images/works/sub-header-works-pc-3840.webp") 2x
+  );
+}
+
+@media (max-width: 767px) {
+  .bgWorks {
+    background-image: url("/images/works/sub-header-works-sp-800.webp");
+  }
+}

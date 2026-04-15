@@ -5,11 +5,26 @@ type Props = {
   totalPages: number;
   /** 例: /articles … ?page= は 2 ページ目以降のみ付与 */
   pathname: string;
+  /** `?page=` 以外に維持するクエリ（例: `service`） */
+  searchParams?: Record<string, string>;
 };
 
-function buildHref(pathname: string, page: number): string {
-  if (page <= 1) return pathname;
-  return `${pathname}?page=${page}`;
+function buildHref(
+  pathname: string,
+  page: number,
+  extra?: Record<string, string>
+): string {
+  const params = new URLSearchParams();
+  if (extra) {
+    for (const [k, v] of Object.entries(extra)) {
+      if (v) params.set(k, v);
+    }
+  }
+  if (page > 1) {
+    params.set("page", String(page));
+  }
+  const q = params.toString();
+  return q ? `${pathname}?${q}` : pathname;
 }
 
 /**
@@ -64,7 +79,12 @@ const disabledNavClass =
  * `searchParams` 付きの動的 URL では Link の prefetch が誤った RSC を引くことがあるため、
  * ページ送りの Link は prefetch しない。
  */
-export function Pagination({ currentPage, totalPages, pathname }: Props) {
+export function Pagination({
+  currentPage,
+  totalPages,
+  pathname,
+  searchParams: extraSearchParams,
+}: Props) {
   if (totalPages <= 1) return null;
 
   const slots = buildPageSlots(currentPage, totalPages);
@@ -78,7 +98,7 @@ export function Pagination({ currentPage, totalPages, pathname }: Props) {
         <li>
           {currentPage > 1 ? (
             <Link
-              href={buildHref(pathname, currentPage - 1)}
+              href={buildHref(pathname, currentPage - 1, extraSearchParams)}
               prefetch={false}
               className={`${numberBtnClass} w-[50px]`}
               aria-label="前のページへ"
@@ -112,7 +132,7 @@ export function Pagination({ currentPage, totalPages, pathname }: Props) {
                 </span>
               ) : (
                 <Link
-                  href={buildHref(pathname, slot)}
+                  href={buildHref(pathname, slot, extraSearchParams)}
                   prefetch={false}
                   className={numberBtnClass}
                   aria-label={`${slot} ページ目へ`}
@@ -126,7 +146,7 @@ export function Pagination({ currentPage, totalPages, pathname }: Props) {
         <li>
           {currentPage < totalPages ? (
             <Link
-              href={buildHref(pathname, currentPage + 1)}
+              href={buildHref(pathname, currentPage + 1, extraSearchParams)}
               prefetch={false}
               className={`${numberBtnClass} w-[50px]`}
               aria-label="次のページへ"

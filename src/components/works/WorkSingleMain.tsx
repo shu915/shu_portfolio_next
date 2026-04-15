@@ -2,49 +2,40 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArticleBodyHtml } from "@/components/articles/ArticleBodyHtml";
 import { ArticleToc } from "@/components/articles/ArticleToc";
-import type { ArticleSinglePost } from "@/lib/article-single";
+import type { WorkSingle } from "@/lib/work-single";
 import { formatDateJa } from "@/lib/format-date-ja";
 import { prepareArticleBodyHtml } from "@/lib/article-body-html";
 import articleBodyStyles from "@/styles/articles/articleBody.module.css";
 
 type Props = {
-  post: ArticleSinglePost;
+  work: WorkSingle;
 };
 
 /**
- * 記事本文エリア（タイトル・メタ・サムネ・the_content 相当）
+ * 制作実績シングル（サービスタグ・本文。記事と異なりサイドバーなし想定）
  */
-export function ArticleSingleMain({ post }: Props) {
-  const category = post.categories?.nodes[0];
-  const tags = post.tags?.nodes ?? [];
+export function WorkSingleMain({ work }: Props) {
+  const services = work.services?.nodes ?? [];
 
-  const prepared: ReturnType<typeof prepareArticleBodyHtml> = post.content
-    ? prepareArticleBodyHtml(post.content)
+  const prepared: ReturnType<typeof prepareArticleBodyHtml> = work.content
+    ? prepareArticleBodyHtml(work.content)
     : { html: "", tocItems: [] };
 
   return (
     <article className="min-w-0">
       <h1 className="text-2xl font-bold tracking-wide max-md:text-xl md:text-[2rem] md:tracking-[0.075rem]">
-        {post.title}
+        {work.title}
       </h1>
 
       <div className="mt-4 flex flex-col gap-4 max-md:gap-3 md:flex-row md:flex-wrap md:items-start md:justify-between">
         <div className="flex flex-wrap items-center gap-2">
-          {category && (
+          {services.map((s) => (
             <Link
-              href={`/articles/category/${category.slug}`}
+              key={s.slug}
+              href={`/works?service=${encodeURIComponent(s.slug)}`}
               className="inline-block rounded-sm bg-secondary px-1.5 py-0.5 text-sm font-semibold tracking-widest transition-colors hover:bg-primary hover:text-white"
             >
-              {category.name}
-            </Link>
-          )}
-          {tags.map((tag) => (
-            <Link
-              key={tag.slug}
-              href={`/articles/tag/${tag.slug}`}
-              className="inline-block rounded-sm bg-[#eee] px-1.5 py-0.5 text-sm font-semibold tracking-widest transition-colors hover:bg-primary hover:text-white"
-            >
-              {tag.name}
+              {s.name}
             </Link>
           ))}
         </div>
@@ -56,9 +47,9 @@ export function ArticleSingleMain({ post }: Props) {
             </span>
             <time
               className="inline-block min-w-20 tabular-nums"
-              dateTime={post.date}
+              dateTime={work.date}
             >
-              {formatDateJa(post.date)}
+              {formatDateJa(work.date)}
             </time>
           </span>
           <span className="inline-flex items-center gap-1">
@@ -71,19 +62,19 @@ export function ArticleSingleMain({ post }: Props) {
             </span>
             <time
               className="inline-block min-w-20 tabular-nums"
-              dateTime={post.modified}
+              dateTime={work.modified}
             >
-              {formatDateJa(post.modified)}
+              {formatDateJa(work.modified)}
             </time>
           </span>
         </div>
       </div>
 
-      {post.featuredImage?.node.sourceUrl && (
+      {work.featuredImage?.node.sourceUrl && (
         <figure className="relative mt-6 aspect-[1.618/1] w-full overflow-hidden border border-border-subtle bg-secondary">
           <Image
-            src={post.featuredImage.node.sourceUrl}
-            alt={post.featuredImage.node.altText || post.title}
+            src={work.featuredImage.node.sourceUrl}
+            alt={work.featuredImage.node.altText || work.title}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1232px) calc(100vw - 4rem), 900px"
@@ -92,7 +83,7 @@ export function ArticleSingleMain({ post }: Props) {
         </figure>
       )}
 
-      {post.content ? (
+      {work.content ? (
         <div className="mt-8 min-w-0 space-y-8">
           {prepared.tocItems.length > 0 && (
             <ArticleToc items={prepared.tocItems} />
@@ -108,7 +99,6 @@ export function ArticleSingleMain({ post }: Props) {
   );
 }
 
-/** レガシー fa-regular fa-calendar-days 相当 */
 function CalendarIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -128,7 +118,6 @@ function CalendarIcon({ className }: { className?: string }) {
   );
 }
 
-/** レガシー fa-solid fa-pen-to-square 相当 */
 function PencilSquareIcon({ className }: { className?: string }) {
   return (
     <svg
