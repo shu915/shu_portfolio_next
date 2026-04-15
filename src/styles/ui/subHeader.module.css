@@ -25,3 +25,17 @@
     background-image: url("/images/works/sub-header-works-sp-800.webp");
   }
 }
+
+/* レガシー .p-sub-header--profile */
+.bgProfile {
+  background-image: image-set(
+    url("/images/profile/sub-header-profile-pc-1920.webp") 1x,
+    url("/images/profile/sub-header-profile-pc-3840.webp") 2x
+  );
+}
+
+@media (max-width: 767px) {
+  .bgProfile {
+    background-image: url("/images/profile/sub-header-profile-sp-800.webp");
+  }
+}
