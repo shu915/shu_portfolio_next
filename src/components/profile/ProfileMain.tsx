@@ -7,7 +7,7 @@ import profileItemStyles from "@/styles/profile/profileItem.module.css";
  */
 export function ProfileMain() {
   return (
-    <main className={profilePageStyles.main}>
+    <div className={profilePageStyles.main}>
       <div className={profilePageStyles.container}>
         <figure className={profilePageStyles.imageFigure}>
           <Image
@@ -133,6 +133,6 @@ export function ProfileMain() {
           </ul>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
