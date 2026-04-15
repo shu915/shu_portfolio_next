@@ -1,0 +1,16 @@
+/**
+ * レガシー `.p-contact__wrap`（ページ全体の背景）
+ */
+.shell {
+  background-image: url("/images/contact/bg-contact.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+@media (max-width: 767px) {
+  .shell {
+    background-attachment: scroll;
+  }
+}
