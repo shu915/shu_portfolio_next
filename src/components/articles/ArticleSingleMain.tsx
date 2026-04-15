@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArticleBodyHtml } from "@/components/articles/ArticleBodyHtml";
-import { ArticleToc } from "@/components/articles/ArticleToc";
+import { ContentBodyHtml } from "@/components/content/ContentBodyHtml";
+import { ContentToc } from "@/components/content/ContentToc";
 import type { ArticleSinglePost } from "@/lib/article-single";
+import { prepareContentBodyHtml } from "@/lib/content-body-html";
 import { formatDateJa } from "@/lib/format-date-ja";
-import { prepareArticleBodyHtml } from "@/lib/article-body-html";
 import articleBodyStyles from "@/styles/articles/articleBody.module.css";
 
 type Props = {
@@ -18,8 +18,8 @@ export function ArticleSingleMain({ post }: Props) {
   const category = post.categories?.nodes[0];
   const tags = post.tags?.nodes ?? [];
 
-  const prepared: ReturnType<typeof prepareArticleBodyHtml> = post.content
-    ? prepareArticleBodyHtml(post.content)
+  const prepared: ReturnType<typeof prepareContentBodyHtml> = post.content
+    ? prepareContentBodyHtml(post.content)
     : { html: "", tocItems: [] };
 
   return (
@@ -95,10 +95,10 @@ export function ArticleSingleMain({ post }: Props) {
       {post.content ? (
         <div className="mt-8 min-w-0 space-y-8">
           {prepared.tocItems.length > 0 && (
-            <ArticleToc items={prepared.tocItems} />
+            <ContentToc items={prepared.tocItems} />
           )}
           <div className={articleBodyStyles.articleBody}>
-            <ArticleBodyHtml html={prepared.html} />
+            <ContentBodyHtml html={prepared.html} />
           </div>
         </div>
       ) : (

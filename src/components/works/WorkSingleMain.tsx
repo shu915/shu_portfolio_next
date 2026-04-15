@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArticleBodyHtml } from "@/components/articles/ArticleBodyHtml";
-import { ArticleToc } from "@/components/articles/ArticleToc";
+import { ContentBodyHtml } from "@/components/content/ContentBodyHtml";
+import { ContentToc } from "@/components/content/ContentToc";
 import type { WorkSingle } from "@/lib/work-single";
+import { prepareContentBodyHtml } from "@/lib/content-body-html";
 import { formatDateJa } from "@/lib/format-date-ja";
-import { prepareArticleBodyHtml } from "@/lib/article-body-html";
 import articleBodyStyles from "@/styles/articles/articleBody.module.css";
 
 type Props = {
@@ -17,8 +17,8 @@ type Props = {
 export function WorkSingleMain({ work }: Props) {
   const services = work.services?.nodes ?? [];
 
-  const prepared: ReturnType<typeof prepareArticleBodyHtml> = work.content
-    ? prepareArticleBodyHtml(work.content)
+  const prepared: ReturnType<typeof prepareContentBodyHtml> = work.content
+    ? prepareContentBodyHtml(work.content)
     : { html: "", tocItems: [] };
 
   return (
@@ -86,10 +86,10 @@ export function WorkSingleMain({ work }: Props) {
       {work.content ? (
         <div className="mt-8 min-w-0 space-y-8">
           {prepared.tocItems.length > 0 && (
-            <ArticleToc items={prepared.tocItems} />
+            <ContentToc items={prepared.tocItems} />
           )}
           <div className={articleBodyStyles.articleBody}>
-            <ArticleBodyHtml html={prepared.html} />
+            <ContentBodyHtml html={prepared.html} />
           </div>
         </div>
       ) : (
