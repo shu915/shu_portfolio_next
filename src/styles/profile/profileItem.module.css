@@ -1,0 +1,79 @@
+/**
+ * レガシー `.p-profile-item` 系
+ */
+.title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  border-bottom: 0.1rem solid var(--color-primary);
+  position: relative;
+  padding-left: 1rem;
+  margin-top: 3.5rem;
+  letter-spacing: 0.05rem;
+}
+
+.title::before {
+  content: "";
+  width: 0.5rem;
+  height: 80%;
+  background-color: var(--color-primary);
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+@media (max-width: 430px) {
+  .title {
+    font-size: 1.2rem;
+  }
+}
+
+.detail {
+  margin-top: 1rem;
+  letter-spacing: 0.05rem;
+  padding-inline: 1rem;
+}
+
+@media (max-width: 430px) {
+  .detail {
+    padding-inline: 0;
+    font-size: 0.9rem;
+  }
+}
+
+.career {
+  display: flex;
+  flex-direction: column;
+}
+
+.careerRow {
+  display: flex;
+  justify-content: flex-start;
+  padding-bottom: 0.2rem;
+  padding-inline: 1rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 899px) {
+  .careerRow {
+    flex-direction: column;
+    border-bottom: 0.01rem solid var(--color-primary);
+  }
+}
+
+.careerYear {
+  width: 7rem;
+  flex-shrink: 0;
+}
+
+.list {
+  list-style: disc;
+  margin-left: 2rem;
+  line-height: 1.8;
+}
+
+@media (max-width: 430px) {
+  .list {
+    margin-left: 1rem;
+  }
+}
