@@ -6,12 +6,18 @@ import { ArticlesSidebar } from "@/components/articles/ArticlesSidebar";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
 import {
-  ARTICLES_PER_PAGE,
-  getArticlesArchivePageData,
+  getArticlesArchiveOffsetPage,
+  getArticlesSidebarBundle,
 } from "@/lib/articles-archive";
 
-/** ISR: 1時間ごとに再検証（gqlFetch のフォールバックと揃える） */
-export const revalidate = 3600;
+/** `?page=` のたびにサーバーで取り直す（一覧キャッシュとクエリの取り違え防止） */
+export const dynamic = "force-dynamic";
+
+/*
+ * `export const revalidate` は付けない。Next.js 16 では動的ルート（ƒ）と併用すると
+ * 「Invalid segment configuration export」でビルドが失敗する。
+ * 鮮度のフォールバックは gqlFetch（`@/lib/default-revalidate`）に任せる。
+ */
 
 function parsePage(raw: string | string[] | undefined): number {
   const v = Array.isArray(raw) ? raw[0] : raw;
@@ -45,30 +51,27 @@ export default async function ArticlesPage({
   const sp = await searchParams;
   const page = parsePage(sp.page);
 
-  const { posts: allPosts, categories, tags } =
-    await getArticlesArchivePageData();
+  const [sidebar, archive] = await Promise.all([
+    getArticlesSidebarBundle(),
+    getArticlesArchiveOffsetPage(page),
+  ]);
 
-  const totalPages = Math.max(1, Math.ceil(allPosts.length / ARTICLES_PER_PAGE));
+  if (archive === null) {
+    notFound();
+  }
+
+  const { posts: pagePosts, totalPages } = archive;
 
   if (page > totalPages) {
     notFound();
   }
 
-  const start = (page - 1) * ARTICLES_PER_PAGE;
-  const pagePosts = allPosts.slice(start, start + ARTICLES_PER_PAGE);
-
-  const recentPosts = allPosts.slice(0, 3);
-  const postDates = allPosts.map((p) => p.date);
-
   return (
     <>
       <SubHeader variant="articles" title="Articles" subtitle="投稿記事" />
-      <div className="max-w-[1232px] mx-auto px-8 md:px-6 max-md:px-4 pb-32">
+      <div className="mx-auto max-w-[1232px] px-8 pb-32 max-md:px-4 md:px-6">
         <Breadcrumbs
-          items={[
-            { label: "Top", href: "/" },
-            { label: "Articles" },
-          ]}
+          items={[{ label: "Top", href: "/" }, { label: "Articles" }]}
         />
         <ArticlesArchiveLayout
           main={
@@ -80,10 +83,10 @@ export default async function ArticlesPage({
           }
           sidebar={
             <ArticlesSidebar
-              recentPosts={recentPosts}
-              categories={categories}
-              tags={tags}
-              postDates={postDates}
+              recentPosts={sidebar.recentPosts}
+              categories={sidebar.categories}
+              tags={sidebar.tags}
+              postDates={sidebar.postDates}
             />
           }
         />

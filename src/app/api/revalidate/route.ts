@@ -1,14 +1,9 @@
+import {
+  DATA_CACHE_TAG_BY_POST_TYPE,
+  singleEntryDataCacheTag,
+} from "@/lib/cache-tags";
 import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
-
-/**
- * WordPress の post_type → 再検証する Next.js キャッシュタグのマッピング
- * 個別ページタグ（post-[slug] / works-[slug]）は postSlug から動的生成する
- */
-const POST_TYPE_LIST_TAGS: Record<string, string[]> = {
-  post:  ["posts"],
-  works: ["works"],
-};
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const configuredSecret = process.env.NEXTJS_REVALIDATE_SECRET;
@@ -24,30 +19,38 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   let postType: string;
   let postSlug: string | undefined;
   try {
-    const body = await req.json();
-    postType = body.postType;
-    postSlug = body.postSlug;
+    const body: { postType?: string; postSlug?: string } = await req.json();
+    postType = body.postType ?? "";
+    postSlug =
+      typeof body.postSlug === "string" && body.postSlug.length > 0
+        ? body.postSlug
+        : undefined;
   } catch {
     return NextResponse.json({ message: "Invalid JSON body" }, { status: 400 });
   }
 
-  const listTags = POST_TYPE_LIST_TAGS[postType];
-  if (!listTags) {
+  const tag = DATA_CACHE_TAG_BY_POST_TYPE[postType];
+  if (!tag) {
     return NextResponse.json(
       { message: `Unknown postType: ${postType}` },
       { status: 400 }
     );
   }
 
-  // 一覧・フロントページのタグ
-  const tags = [...listTags];
+  /** 一覧・フロントのリスト等（`tags: ["posts"]` 系） */
+  revalidateTag(tag, { expire: 0 });
 
-  // 個別ページのタグ（例: works-my-slug）
+  /** 個別記事の fetch（`posts:{slug}`）。`postSlug` があるときだけ明示的に落とす */
+  let slugTag: string | null = null;
   if (postSlug) {
-    tags.push(`${postType}-${postSlug}`);
+    slugTag = singleEntryDataCacheTag(postType, postSlug);
+    revalidateTag(slugTag, { expire: 0 });
   }
 
-  tags.forEach((tag) => revalidateTag(tag, {}));
-
-  return NextResponse.json({ revalidated: true, tags });
+  return NextResponse.json({
+    revalidated: true,
+    tag,
+    slugTag,
+    postSlug: postSlug ?? null,
+  });
 }

@@ -19,7 +19,7 @@ export function ArticlesArchiveMain({ posts, currentPage, totalPages }: Props) {
         <>
           <ul className="grid w-full grid-cols-[16.6rem] place-content-center gap-6 min-[620px]:grid-cols-[repeat(2,16.6rem)] min-[930px]:grid-cols-[repeat(3,16.6rem)]">
             {posts.map((post, index) => (
-              <li key={post.id} className="justify-self-center">
+              <li key={post.id} className="w-full min-w-0 justify-self-center">
                 <ArticleListItem
                   href={`/articles/${post.slug}`}
                   title={post.title}

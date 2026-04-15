@@ -34,6 +34,7 @@ function formatDate(dateStr: string): string {
  * - h-full でグリッドセルの高さを使い切る
  * - タイトルエリアを leading(1.3) × 3行分の固定高さにすることで
  *   日付・抜粋の縦位置をカード間で揃える
+ * - 抜粋は line-clamp-3（最大3行、超過は省略）
  * - 抜粋エリアを flex-1 にすることでカード底面を揃える
  */
 export function ArticleListItem({
@@ -54,7 +55,7 @@ export function ArticleListItem({
       {/* サムネイル：featuredImage 未設定時は no-image.webp を表示 */}
       <div className="relative w-full aspect-[1.618/1] overflow-hidden border-b border-[#eee] bg-secondary">
         <Image
-          src={thumbnailUrl ?? "/img/no-image.webp"}
+          src={thumbnailUrl ?? "/images/common/no-image.webp"}
           alt={thumbnailAlt}
           fill
           priority={priority}
@@ -83,8 +84,8 @@ export function ArticleListItem({
         )}
       </div>
 
-      {/* 抜粋：flex-1 でカード底面を揃える */}
-      <p className="flex-1 mt-3 text-md font-normal leading-relaxed">
+      {/* 抜粋：最大3行、超過は … で省略。flex-1 でカード底面を揃える */}
+      <p className="flex-1 mt-3 text-md font-normal leading-relaxed line-clamp-3">
         {excerpt}
       </p>
     </Link>
