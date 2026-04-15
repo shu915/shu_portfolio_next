@@ -13,7 +13,7 @@ type Props = {
 
 const BG_BY_VARIANT: Record<Props["variant"], string | undefined> = {
   articles: subHeaderStyles.bgArticles,
-  works: undefined,
+  works: subHeaderStyles.bgWorks,
   profile: undefined,
   contact: undefined,
   archive: undefined,
