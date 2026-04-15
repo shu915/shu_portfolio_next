@@ -1,12 +1,12 @@
 import {
   flatTocToTree,
-  type ArticleTocItem,
+  type ContentTocItem,
   type TocTreeNode,
-} from "@/lib/article-toc";
+} from "@/lib/content-toc";
 import tocStyles from "@/styles/articles/articleToc.module.css";
 
 type Props = {
-  items: ArticleTocItem[];
+  items: ContentTocItem[];
 };
 
 function TocBranch({ nodes }: { nodes: TocTreeNode[] }) {
@@ -26,14 +26,14 @@ function TocBranch({ nodes }: { nodes: TocTreeNode[] }) {
 }
 
 /**
- * 記事目次（WP プラグインの HTML ではなく、h2〜h6 から生成したセマンティックな ol）
+ * 記事・Works 共通の目次（WP プラグインの HTML ではなく、h2〜h6 から生成したセマンティックな ol）
  */
-export function ArticleToc({ items }: Props) {
+export function ContentToc({ items }: Props) {
   if (items.length === 0) return null;
   const tree = flatTocToTree(items);
 
   return (
-    <nav className={tocStyles.root} aria-label="記事の目次">
+    <nav className={tocStyles.root} aria-label="目次">
       <p className={tocStyles.title}>目次</p>
       <TocBranch nodes={tree} />
     </nav>

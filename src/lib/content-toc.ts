@@ -1,6 +1,6 @@
 import type { HTMLElement as ParserHTMLElement } from "node-html-parser";
 
-export type ArticleTocItem = {
+export type ContentTocItem = {
   level: number;
   id: string;
   text: string;
@@ -10,9 +10,11 @@ export type ArticleTocItem = {
  * パース済み本文から h2〜h6 を拾い目次用データを作る。
  * id が無い見出しには `toc-heading-n` を付与する（アンカー用）。
  */
-export function extractArticleTocItems(root: ParserHTMLElement): ArticleTocItem[] {
+export function extractContentTocItems(
+  root: ParserHTMLElement
+): ContentTocItem[] {
   const headings = root.querySelectorAll("h2, h3, h4, h5, h6");
-  const tocItems: ArticleTocItem[] = [];
+  const tocItems: ContentTocItem[] = [];
   let autoId = 0;
 
   for (const h of headings) {
@@ -32,18 +34,21 @@ export function extractArticleTocItems(root: ParserHTMLElement): ArticleTocItem[
 }
 
 export type TocTreeNode = {
-  item: ArticleTocItem;
+  item: ContentTocItem;
   children: TocTreeNode[];
 };
 
 /** フラットな見出し一覧からネストしたツリーへ（ネストした ol 用） */
-export function flatTocToTree(items: ArticleTocItem[]): TocTreeNode[] {
+export function flatTocToTree(items: ContentTocItem[]): TocTreeNode[] {
   const root: TocTreeNode[] = [];
   const stack: TocTreeNode[] = [];
 
   for (const item of items) {
     const node: TocTreeNode = { item, children: [] };
-    while (stack.length > 0 && stack[stack.length - 1].item.level >= item.level) {
+    while (
+      stack.length > 0 &&
+      stack[stack.length - 1].item.level >= item.level
+    ) {
       stack.pop();
     }
     if (stack.length === 0) {

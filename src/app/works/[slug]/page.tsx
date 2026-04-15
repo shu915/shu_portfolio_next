@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { WorkSingleMain } from "@/components/works/WorkSingleMain";
-import { WorksPageShell } from "@/components/works/WorksPageShell";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
+import { WorkDetailRelated } from "@/components/works/WorkDetailRelated";
+import { WorkSingleMain } from "@/components/works/WorkSingleMain";
+import { WorksPageShell } from "@/components/works/WorksPageShell";
 import { stripExcerptHtml } from "@/lib/articles-archive";
+import { getRelatedWorks } from "@/lib/work-related";
 import { getWorkBySlug } from "@/lib/work-single";
+import workNoSidebarMainStyles from "@/styles/works/workNoSidebarMain.module.css";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -31,6 +34,8 @@ export default async function WorkSinglePage({ params }: PageProps) {
     notFound();
   }
 
+  const relatedWorks = await getRelatedWorks(work.id);
+
   return (
     <WorksPageShell>
       <SubHeader variant="works" title="Works" subtitle="制作実績" />
@@ -42,7 +47,10 @@ export default async function WorkSinglePage({ params }: PageProps) {
             { label: work.title },
           ]}
         />
-        <WorkSingleMain work={work} />
+        <div className={workNoSidebarMainStyles.noSidebarMain}>
+          <WorkSingleMain work={work} />
+        </div>
+        <WorkDetailRelated works={relatedWorks} />
       </div>
     </WorksPageShell>
   );

@@ -174,7 +174,7 @@
   margin-left: 0;
 }
 
-/* 本文リンク（ArticleBodyHtml が付与する .link） */
+/* 本文リンク（ContentBodyHtml が付与する .link） */
 .link {
   color: var(--color-primary);
   text-decoration: underline;

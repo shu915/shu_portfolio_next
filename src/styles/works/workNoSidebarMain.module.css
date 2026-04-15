@@ -1,0 +1,32 @@
+/**
+ * レガシー `.p-no-sidebar-main`（single-works 本文ラッパー）
+ * 斜線背景の上で読みやすくする白カード
+ */
+.noSidebarMain {
+  background-color: #fff;
+  margin-inline: auto;
+  margin-top: 3rem;
+  border-radius: 1.5rem;
+  padding: 2rem 6rem 6rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 65rem;
+  max-width: 100%;
+}
+
+@media (max-width: 1099px) {
+  .noSidebarMain {
+    padding: 2rem 4rem 4rem;
+  }
+}
+
+@media (max-width: 799px) {
+  .noSidebarMain {
+    padding: 2rem 2rem 2rem;
+  }
+}
+
+@media (max-width: 430px) {
+  .noSidebarMain {
+    padding: 2rem 1rem 1rem;
+  }
+}

@@ -49,7 +49,7 @@ function toInternalHref(href: string): ComponentProps<typeof Link>["href"] {
 }
 
 /**
- * 個別記事の本文: 先頭の img 1 枚だけ eager（アイキャッチ相当の大きい画像想定）。
+ * 個別ページの本文: 先頭の img 1 枚だけ eager（アイキャッチ相当の大きい画像想定）。
  * 2 枚目以降は lazy（WP の loading を上書き）。
  */
 function buildParseOptions(): HTMLReactParserOptions {
@@ -130,6 +130,6 @@ function buildParseOptions(): HTMLReactParserOptions {
  * リンクは内部を next/link、外部は別タブ＋noopener。
  * img は属性をそのまま渡し、先頭 1 枚だけ fetchPriority=high・loading=eager を上書き。
  */
-export function ArticleBodyHtml({ html }: Props) {
+export function ContentBodyHtml({ html }: Props) {
   return <>{parse(html, buildParseOptions())}</>;
 }
