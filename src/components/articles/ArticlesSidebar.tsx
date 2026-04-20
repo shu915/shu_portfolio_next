@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ArchivePostNode, TaxonomyNode } from "@/lib/articles-archive";
 import { groupPostDatesByYearMonth } from "@/lib/articles-archive";
+import { SidebarSearchForm } from "@/components/articles/SidebarSearchForm";
 import { formatDateJa } from "@/lib/format-date-ja";
 
 type Props = {
@@ -71,29 +72,7 @@ export function ArticlesSidebar({
         >
           検索
         </SidebarSectionHeading>
-        <form
-          action="/search"
-          method="get"
-          role="search"
-          className="mt-2 flex flex-col gap-2 sm:flex-row"
-        >
-          <label htmlFor="sidebar-search-q" className="sr-only">
-            キーワードで検索
-          </label>
-          <input
-            id="sidebar-search-q"
-            type="search"
-            name="q"
-            placeholder="キーワードを入力"
-            className="min-w-0 flex-1 rounded-sm border border-[#ccc] bg-white px-3 py-2 text-sm tracking-widest outline-none focus:border-primary"
-          />
-          <button
-            type="submit"
-            className="shrink-0 rounded-sm bg-primary px-4 py-2 text-sm font-semibold tracking-widest text-white transition-colors hover:opacity-90"
-          >
-            検索
-          </button>
-        </form>
+        <SidebarSearchForm />
       </section>
 
       {/* 新着記事 */}
@@ -216,7 +195,7 @@ export function ArticlesSidebar({
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-2 bg-white py-1.5 px-2 text-[1.2rem] text-[#333] [&::-webkit-details-marker]:hidden">
                   <span>{year}年</span>
-                  <ArchiveChevron className="size-4 shrink-0 transition-transform group-open:rotate-180" />
+                  <ArchiveChevron className="size-4 shrink-0 group-open:rotate-180" />
                 </summary>
                 <ul className="pb-1">
                   {months.map(({ month, count }) => (

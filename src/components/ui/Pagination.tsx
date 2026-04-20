@@ -115,7 +115,7 @@ export function Pagination({
           slot === "ellipsis" ? (
             <li
               key={`nav-${i}-ellipsis`}
-              className="flex h-[50px] w-[50px] shrink-0 select-none items-center justify-center text-base leading-none text-[#999]"
+              className="flex h-[50px] w-[50px] shrink-0 select-none items-center justify-center bg-[#f0f0f0] text-base leading-none text-[#999]"
               aria-hidden
             >
               …
