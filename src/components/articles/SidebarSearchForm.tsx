@@ -21,7 +21,7 @@ export function SidebarSearchForm() {
       </label>
       <input
         id="sidebar-search-s"
-        type="text"
+        type="search"
         name="s"
         placeholder="キーワードを入力"
         autoComplete="off"

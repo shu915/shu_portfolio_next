@@ -195,7 +195,9 @@ export function ArticlesSidebar({
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-2 bg-white py-1.5 px-2 text-[1.2rem] text-[#333] [&::-webkit-details-marker]:hidden">
                   <span>{year}年</span>
-                  <ArchiveChevron className="size-4 shrink-0 group-open:rotate-180" />
+                  <span className="inline-flex shrink-0 origin-center transition-transform duration-200 ease-out group-open:rotate-180">
+                    <ArchiveChevron className="size-4" />
+                  </span>
                 </summary>
                 <ul className="pb-1">
                   {months.map(({ month, count }) => (

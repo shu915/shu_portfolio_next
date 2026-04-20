@@ -41,7 +41,7 @@ function buildPageByUriVariantsQuery(variantCount: number): string {
   }
   const varDefs = Array.from(
     { length: variantCount },
-    (_, i) => `$uri${i}: ID!`
+    (_, i) => `$uri${i}: ID!`,
   ).join(", ");
   const selections = Array.from({ length: variantCount }, (_, i) => {
     return `  p${i}: page(id: $uri${i}, idType: URI) {${WP_PAGE_FIELDS}
@@ -67,7 +67,7 @@ export type WpPage = {
  * `cache` で `generateMetadata` とページ本体の二重フェッチを避ける。
  */
 export const getPageBySlug = cache(async function getPageBySlug(
-  slug: string
+  slug: string,
 ): Promise<WpPage | null> {
   const uriVariants = pageUriQueryVariants(slug);
   if (uriVariants.length === 0) {
@@ -78,7 +78,7 @@ export const getPageBySlug = cache(async function getPageBySlug(
 
   const query = buildPageByUriVariantsQuery(uriVariants.length);
   const variables = Object.fromEntries(
-    uriVariants.map((u, i) => [`uri${i}`, u])
+    uriVariants.map((u, i) => [`uri${i}`, u]),
   ) as Record<string, string>;
 
   const tags = [
