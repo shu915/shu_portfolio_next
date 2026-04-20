@@ -65,7 +65,6 @@ const GET_CATEGORY_ARCHIVE_PAGE = `
 const GET_TAG_BY_SLUG = `
   query GetTagBySlug($slug: ID!) {
     tag(id: $slug, idType: SLUG) {
-      id
       databaseId
       name
       slug
@@ -75,7 +74,7 @@ const GET_TAG_BY_SLUG = `
 
 const GET_POSTS_OFFSET_PAGE_BY_TAG_IN = `
   query GetPostsOffsetPageByTagIn(
-    $tagId: ID!
+    $tagId: Int!
     $size: Int!
     $offset: Int!
   ) {
@@ -291,7 +290,6 @@ function normalizeTaxonomySlugParam(raw: string): string {
 }
 
 type TagNodeForArchive = {
-  id: string;
   databaseId: number;
   name: string;
   slug: string;
@@ -403,7 +401,7 @@ export const getTagArchivePage = cache(async function getTagArchivePage(
 
   const data = await gqlFetch<OffsetPageResult>(GET_POSTS_OFFSET_PAGE_BY_TAG_IN, {
     variables: {
-      tagId: t.id,
+      tagId: t.databaseId,
       size: ARTICLES_PER_PAGE,
       offset,
     },
