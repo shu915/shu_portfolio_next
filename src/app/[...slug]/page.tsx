@@ -79,7 +79,7 @@ export default async function WpFixedPageRoute({ params }: PageProps) {
         subtitle={wpPage.title}
       />
       <WpFixedPageShell>
-        <div className="mx-auto max-w-[1232px] px-8 max-md:px-4 md:px-6">
+        <div className="mx-auto max-w-[1232px] px-4 md:px-6 lg:px-8">
           <Breadcrumbs
             items={[{ label: "Top", href: "/" }, { label: wpPage.title }]}
           />

@@ -68,7 +68,7 @@ export async function ArticlesSection() {
       className="py-20 bg-primary"
       aria-labelledby="articles-section-title"
     >
-      <div className="max-w-[1232px] mx-auto px-8 md:px-6 max-md:px-4">
+      <div className="mx-auto max-w-[1232px] px-4 md:px-6 lg:px-8">
         <div className="flex justify-between gap-12 items-start max-[1239px]:flex-col max-[1239px]:items-center max-[1239px]:gap-6">
           {/* 記事カードリスト（3列）*/}
           <ul className="flex justify-between gap-10 max-[1239px]:order-2 max-[1239px]:gap-6 max-[899px]:flex-col max-[899px]:items-center max-[899px]:w-[16.6rem]">

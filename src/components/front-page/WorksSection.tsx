@@ -81,7 +81,7 @@ export async function WorksSection() {
       className="py-20 relative bg-center bg-cover bg-no-repeat max-[900px]:bg-scroll bg-fixed bg-[url('/images/front-page/bg-front.webp')]"
       aria-labelledby="works-section-title"
     >
-      <div className="max-w-[1232px] mx-auto px-8 md:px-6 max-md:px-4">
+      <div className="mx-auto max-w-[1232px] px-4 md:px-6 lg:px-8">
         {/* セクションタイトル */}
         <h2
           id="works-section-title"

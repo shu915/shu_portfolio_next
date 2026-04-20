@@ -14,7 +14,7 @@ const CURRENT_YEAR = new Date().getFullYear();
 export function Footer() {
   return (
     <footer className="bg-primary text-white pt-6 min-h-40 max-md:min-h-100">
-      <div className="max-w-[1232px] mx-auto px-8 md:px-6 max-md:px-6">
+      <div className="mx-auto max-w-[1232px] px-4 md:px-6 lg:px-8">
         {/* 上段：サイトタイトル + ナビ */}
         <div className="flex justify-between items-center max-md:flex-col max-md:items-start">
           <h2 className="text-white text-[1.875rem] font-medium tracking-[0.03em] font-(family-name:--font-cormorant)">

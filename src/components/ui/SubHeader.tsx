@@ -29,7 +29,7 @@ export function SubHeader({ variant, title, subtitle }: Props) {
         .filter(Boolean)
         .join(" ")}
     >
-      <div className="max-w-[1232px] mx-auto px-8 md:px-6 max-md:px-4 h-full">
+      <div className="max-w-[1232px] mx-auto px-4 md:px-6 lg:px-8 h-full">
         <div className="flex flex-col justify-center gap-4 h-full">
           <h2
             className="bg-white/70 text-[clamp(3rem,2.781rem+0.933vw,3.5rem)] max-md:text-[2.5rem] font-bold tracking-widest leading-[1.3] w-fit px-2 text-primary"

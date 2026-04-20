@@ -1,4 +1,6 @@
+import { cache } from "react";
 import { gqlFetch } from "@/lib/graphql";
+import { totalPagesFromOffsetPagination } from "@/lib/wp-offset-pagination";
 
 /** 1ページあたり件数（3列グリッドで 12 = 4行そろう） */
 export const ARTICLES_PER_PAGE = 12;
@@ -7,6 +9,55 @@ export const ARTICLES_PER_PAGE = 12;
  * 一覧の投稿取得（WPGraphQL + wp-graphql-offset-pagination）
  * @see https://github.com/valu-digital/wp-graphql-offset-pagination
  */
+/** カテゴリ存在確認 + そのカテゴリの投稿1ページ分を1リクエストで取得 */
+const GET_CATEGORY_ARCHIVE_PAGE = `
+  query GetCategoryArchivePage(
+    $slug: ID!
+    $categorySlug: String!
+    $size: Int!
+    $offset: Int!
+  ) {
+    category(id: $slug, idType: SLUG) {
+      databaseId
+      name
+      slug
+    }
+    posts(
+      where: {
+        categoryName: $categorySlug
+        offsetPagination: { size: $size, offset: $offset }
+      }
+    ) {
+      pageInfo {
+        offsetPagination {
+          hasMore
+          hasPrevious
+          total
+        }
+      }
+      nodes {
+        id
+        title
+        slug
+        date
+        excerpt
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+        categories {
+          nodes {
+            name
+            slug
+          }
+        }
+      }
+    }
+  }
+`;
+
 const GET_POSTS_OFFSET_PAGE = `
   query GetPostsOffsetPage($size: Int!, $offset: Int!) {
     posts(where: { offsetPagination: { size: $size, offset: $offset } }) {
@@ -170,6 +221,70 @@ function filterNonEmptyTaxonomies(nodes: TaxonomyNode[]): TaxonomyNode[] {
   return nodes.filter((n) => n.count == null || n.count > 0);
 }
 
+export type CategoryArchiveMeta = TaxonomyNode & {
+  databaseId: number;
+};
+
+/**
+ * カテゴリ別アーカイブ1ページ分。`category` が無い（スラッグ不正）ときは null → 404。
+ * 1 GraphQL リクエスト（category + posts）。
+ */
+export const getCategoryArchivePage = cache(async function getCategoryArchivePage(
+  slug: string,
+  page: number
+): Promise<{
+  category: CategoryArchiveMeta;
+  posts: ArchivePostNode[];
+  totalPages: number;
+} | null> {
+  const trimmed = slug.trim();
+  if (!trimmed) return null;
+  if (!Number.isInteger(page) || page < 1) return null;
+
+  const offset = (page - 1) * ARTICLES_PER_PAGE;
+
+  const data = await gqlFetch<{
+    category: {
+      databaseId: number;
+      name: string;
+      slug: string;
+    } | null;
+    posts: OffsetPageResult["posts"];
+  }>(GET_CATEGORY_ARCHIVE_PAGE, {
+    variables: {
+      slug: trimmed,
+      categorySlug: trimmed,
+      size: ARTICLES_PER_PAGE,
+      offset,
+    },
+    tags: ["posts"],
+  });
+
+  const cat = data.category;
+  if (!cat) return null;
+
+  const category: CategoryArchiveMeta = {
+    databaseId: cat.databaseId,
+    name: cat.name,
+    slug: cat.slug,
+  };
+
+  const nodes = data.posts?.nodes ?? [];
+  const op = data.posts?.pageInfo?.offsetPagination;
+
+  if (page > 1 && nodes.length === 0) {
+    return null;
+  }
+
+  const totalPages = totalPagesFromOffsetPagination(
+    page,
+    ARTICLES_PER_PAGE,
+    op
+  );
+
+  return { category, posts: nodes, totalPages };
+});
+
 /**
  * 記事一覧の1ページ分（offset は 0 始まり）
  * total を取ると DB で件数計算が走る（プラグイン README の通りやや重い）
@@ -199,21 +314,11 @@ export async function getArticlesArchiveOffsetPage(
     return null;
   }
 
-  const rawTotal = op?.total;
-  const totalNum =
-    typeof rawTotal === "number"
-      ? rawTotal
-      : typeof rawTotal === "string"
-        ? Number.parseInt(rawTotal, 10)
-        : NaN;
-
-  let totalPages: number;
-  if (Number.isFinite(totalNum) && totalNum >= 0) {
-    totalPages = Math.max(1, Math.ceil(totalNum / ARTICLES_PER_PAGE));
-  } else {
-    const hasMore = op?.hasMore ?? false;
-    totalPages = hasMore ? page + 1 : Math.max(1, page);
-  }
+  const totalPages = totalPagesFromOffsetPagination(
+    page,
+    ARTICLES_PER_PAGE,
+    op
+  );
 
   return { posts: nodes, totalPages };
 }

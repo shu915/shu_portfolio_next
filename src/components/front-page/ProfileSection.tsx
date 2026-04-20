@@ -15,7 +15,7 @@ import sectionsStyles from "@/styles/front-page/sections.module.css";
 export function ProfileSection() {
   return (
     <section className="py-20" aria-labelledby="profile-section-title">
-      <div className="max-w-[1232px] mx-auto px-8 md:px-6 max-md:px-4">
+      <div className="mx-auto max-w-[1232px] px-4 md:px-6 lg:px-8">
         <div className="flex justify-between gap-8 items-start max-[1239px]:flex-col max-[1239px]:items-center">
 
           {/* 左カラム：テキスト + プロフィール画像 */}

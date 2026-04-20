@@ -6,8 +6,8 @@ import { ArticlesSidebar } from "@/components/articles/ArticlesSidebar";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
 import {
-  getArticlesArchiveOffsetPage,
   getArticlesSidebarBundle,
+  getCategoryArchivePage,
 } from "@/lib/articles-archive";
 
 function parsePage(raw: string | string[] | undefined): number {
@@ -17,52 +17,71 @@ function parsePage(raw: string | string[] | undefined): number {
   return Math.floor(n);
 }
 
-export async function generateMetadata({
-  searchParams,
-}: {
+type PageProps = {
+  params: Promise<{ slug: string }>;
   searchParams: Promise<{ page?: string | string[] }>;
-}): Promise<Metadata> {
+};
+
+export async function generateMetadata({
+  params,
+  searchParams,
+}: PageProps): Promise<Metadata> {
+  const { slug } = await params;
   const sp = await searchParams;
   const page = parsePage(sp.page);
+  const data = await getCategoryArchivePage(slug, page);
+  if (!data) {
+    return { title: "カテゴリが見つかりません | Shu Digital Works" };
+  }
+  const { category } = data;
+  const base = `${category.name} | Articles | Shu Digital Works`;
   const title =
-    page <= 1
-      ? "Articles | Shu Digital Works"
-      : `Articles（${page}ページ目）| Shu Digital Works`;
+    page <= 1 ? base : `${category.name}（${page}ページ目）| Articles | Shu Digital Works`;
   return {
     title,
-    description: "投稿記事一覧",
+    description: `「${category.name}」の記事一覧`,
   };
 }
 
-export default async function ArticlesPage({
+export default async function ArticlesCategoryArchivePage({
+  params,
   searchParams,
-}: {
-  searchParams: Promise<{ page?: string | string[] }>;
-}) {
+}: PageProps) {
+  const { slug } = await params;
   const sp = await searchParams;
   const page = parsePage(sp.page);
 
   const [sidebar, archive] = await Promise.all([
     getArticlesSidebarBundle(),
-    getArticlesArchiveOffsetPage(page),
+    getCategoryArchivePage(slug, page),
   ]);
 
   if (archive === null) {
     notFound();
   }
 
-  const { posts: pagePosts, totalPages } = archive;
+  const { category, posts: pagePosts, totalPages } = archive;
 
   if (page > totalPages) {
     notFound();
   }
 
+  const paginationPath = `/articles/category/${category.slug}`;
+
   return (
     <>
-      <SubHeader variant="articles" title="Articles" subtitle="投稿記事" />
+      <SubHeader
+        variant="articles"
+        title="Articles"
+        subtitle={category.name}
+      />
       <div className="mx-auto max-w-[1232px] px-4 pb-32 md:px-6 lg:px-8">
         <Breadcrumbs
-          items={[{ label: "Top", href: "/" }, { label: "Articles" }]}
+          items={[
+            { label: "Top", href: "/" },
+            { label: "Articles", href: "/articles" },
+            { label: category.name },
+          ]}
         />
         <ArticlesArchiveLayout
           main={
@@ -70,6 +89,7 @@ export default async function ArticlesPage({
               posts={pagePosts}
               currentPage={page}
               totalPages={totalPages}
+              paginationPathname={paginationPath}
             />
           }
           sidebar={

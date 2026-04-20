@@ -7,10 +7,17 @@ type Props = {
   posts: ArchivePostNode[];
   currentPage: number;
   totalPages: number;
+  /** ページネーションのベース URL（デフォルト `/articles`） */
+  paginationPathname?: string;
 };
 
 /** 一覧グリッド + ページネーション（見出しは SubHeader に任せる） */
-export function ArticlesArchiveMain({ posts, currentPage, totalPages }: Props) {
+export function ArticlesArchiveMain({
+  posts,
+  currentPage,
+  totalPages,
+  paginationPathname = "/articles",
+}: Props) {
   return (
     <div>
       {posts.length === 0 ? (
@@ -36,7 +43,7 @@ export function ArticlesArchiveMain({ posts, currentPage, totalPages }: Props) {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            pathname="/articles"
+            pathname={paginationPathname}
           />
         </>
       )}

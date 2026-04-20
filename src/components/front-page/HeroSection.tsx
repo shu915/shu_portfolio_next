@@ -20,7 +20,7 @@ export function HeroSection() {
       aria-label="メインビジュアル"
     >
       {/* 内側コンテナ */}
-      <div className="relative h-full max-w-[1232px] mx-auto px-8 md:px-6 max-md:flex max-md:items-center max-md:px-4">
+      <div className="relative mx-auto h-full max-w-[1232px] px-4 max-md:flex max-md:items-center md:px-6 lg:px-8">
         {/* キャッチコピーブロック：PC は右寄せ中段、SP は中央 */}
         <div
           className={[
@@ -67,7 +67,7 @@ export function HeroSection() {
 
       {/* ボトムバー：「Shu Digital Works」大文字テキスト（SP では非表示） */}
       <div className="absolute bottom-0 left-0 w-full bg-black/40 max-md:hidden">
-        <div className="max-w-[1232px] mx-auto px-8 md:px-6">
+        <div className="mx-auto max-w-[1232px] px-4 md:px-6 lg:px-8">
           <p
             className={[
               "font-semibold text-white tracking-[0.03em] leading-none select-none overflow-hidden",
