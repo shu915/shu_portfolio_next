@@ -40,7 +40,7 @@ export function Header() {
   return (
     <header className="bg-primary fixed top-0 left-0 w-full h-15 z-35">
       {/* 内側コンテナ */}
-      <div className="flex justify-between items-center h-15 max-w-[1232px] mx-auto px-8 md:px-6 max-md:px-4">
+      <div className="flex justify-between items-center h-15 max-w-[1232px] mx-auto px-4 md:px-6 lg:px-8">
         <SiteTitleTag className={SITE_TITLE_CLASS}>
           <Link href="/">Shu Digital Works</Link>
         </SiteTitleTag>

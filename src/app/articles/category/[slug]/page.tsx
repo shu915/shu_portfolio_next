@@ -75,7 +75,7 @@ export default async function ArticlesCategoryArchivePage({
         title="Articles"
         subtitle={category.name}
       />
-      <div className="mx-auto max-w-[1232px] px-8 pb-32 max-md:px-4 md:px-6">
+      <div className="mx-auto max-w-[1232px] px-4 pb-32 md:px-6 lg:px-8">
         <Breadcrumbs
           items={[
             { label: "Top", href: "/" },

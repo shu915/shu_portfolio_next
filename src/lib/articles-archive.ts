@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { gqlFetch } from "@/lib/graphql";
+import { totalPagesFromOffsetPagination } from "@/lib/wp-offset-pagination";
 
 /** 1ページあたり件数（3列グリッドで 12 = 4行そろう） */
 export const ARTICLES_PER_PAGE = 12;
@@ -275,21 +276,11 @@ export const getCategoryArchivePage = cache(async function getCategoryArchivePag
     return null;
   }
 
-  const rawTotal = op?.total;
-  const totalNum =
-    typeof rawTotal === "number"
-      ? rawTotal
-      : typeof rawTotal === "string"
-        ? Number.parseInt(rawTotal, 10)
-        : NaN;
-
-  let totalPages: number;
-  if (Number.isFinite(totalNum) && totalNum >= 0) {
-    totalPages = Math.max(1, Math.ceil(totalNum / ARTICLES_PER_PAGE));
-  } else {
-    const hasMore = op?.hasMore ?? false;
-    totalPages = hasMore ? page + 1 : Math.max(1, page);
-  }
+  const totalPages = totalPagesFromOffsetPagination(
+    page,
+    ARTICLES_PER_PAGE,
+    op
+  );
 
   return { category, posts: nodes, totalPages };
 });
@@ -323,21 +314,11 @@ export async function getArticlesArchiveOffsetPage(
     return null;
   }
 
-  const rawTotal = op?.total;
-  const totalNum =
-    typeof rawTotal === "number"
-      ? rawTotal
-      : typeof rawTotal === "string"
-        ? Number.parseInt(rawTotal, 10)
-        : NaN;
-
-  let totalPages: number;
-  if (Number.isFinite(totalNum) && totalNum >= 0) {
-    totalPages = Math.max(1, Math.ceil(totalNum / ARTICLES_PER_PAGE));
-  } else {
-    const hasMore = op?.hasMore ?? false;
-    totalPages = hasMore ? page + 1 : Math.max(1, page);
-  }
+  const totalPages = totalPagesFromOffsetPagination(
+    page,
+    ARTICLES_PER_PAGE,
+    op
+  );
 
   return { posts: nodes, totalPages };
 }

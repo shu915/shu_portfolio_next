@@ -43,7 +43,7 @@ export default async function ArticleSinglePage({ params }: PageProps) {
   return (
     <>
       <SubHeader variant="articles" title="Articles" subtitle="投稿記事" />
-      <div className="max-w-[1232px] mx-auto px-8 md:px-6 max-md:px-4 pb-32">
+      <div className="mx-auto max-w-[1232px] px-4 pb-32 md:px-6 lg:px-8">
         <Breadcrumbs
           items={[
             { label: "Top", href: "/" },
