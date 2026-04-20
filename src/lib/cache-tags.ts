@@ -5,6 +5,7 @@
 export const DATA_CACHE_TAG_BY_POST_TYPE: Record<string, string> = {
   post: "posts",
   works: "works",
+  page: "pages",
 };
 
 /**

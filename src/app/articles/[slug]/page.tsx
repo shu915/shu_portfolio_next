@@ -11,12 +11,6 @@ import {
   stripExcerptHtml,
 } from "@/lib/articles-archive";
 
-/*
- * `export const revalidate` は付けない。Next.js 16 では動的ルート（ƒ）と併用すると
- * 「Invalid segment configuration export」でビルドが失敗する。
- * 鮮度のフォールバックは gqlFetch（`@/lib/default-revalidate`）に任せる。
- */
-
 type PageProps = {
   params: Promise<{ slug: string }>;
 };

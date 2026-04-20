@@ -31,7 +31,7 @@ export function Breadcrumbs({ items }: Props) {
                 <>
                   {" "}
                   <span className="text-[#333]" aria-hidden="true">
-                    /
+                    {">"}
                   </span>{" "}
                 </>
               ) : null}

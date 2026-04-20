@@ -10,15 +10,6 @@ import {
   getArticlesSidebarBundle,
 } from "@/lib/articles-archive";
 
-/** `?page=` のたびにサーバーで取り直す（一覧キャッシュとクエリの取り違え防止） */
-export const dynamic = "force-dynamic";
-
-/*
- * `export const revalidate` は付けない。Next.js 16 では動的ルート（ƒ）と併用すると
- * 「Invalid segment configuration export」でビルドが失敗する。
- * 鮮度のフォールバックは gqlFetch（`@/lib/default-revalidate`）に任せる。
- */
-
 function parsePage(raw: string | string[] | undefined): number {
   const v = Array.isArray(raw) ? raw[0] : raw;
   const n = parseInt(v ?? "1", 10);

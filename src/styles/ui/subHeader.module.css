@@ -53,3 +53,17 @@
     background-image: url("/images/contact/sub-header-contact-sp-800.webp");
   }
 }
+
+/* レガシー .p-sub-header--page（テーマ assets/img/sub-header-page-* と同アセット） */
+.bgPage {
+  background-image: image-set(
+    url("/images/page/sub-header-page-pc-1920.webp") 1x,
+    url("/images/page/sub-header-page-pc-3840.webp") 2x
+  );
+}
+
+@media (max-width: 767px) {
+  .bgPage {
+    background-image: url("/images/page/sub-header-page-sp-800.webp");
+  }
+}

@@ -1,0 +1,45 @@
+/**
+ * レガシー `.p-page__main.p-no-sidebar-main`
+ * WordPress 固定ページ（static page）— 斜線背景の上に載る白いコンテンツラッパー
+ */
+.noSidebarMain {
+  box-sizing: border-box;
+  margin-inline: auto;
+  margin-top: 3rem;
+  width: 65rem;
+  max-width: 100%;
+  border-radius: 1.5rem;
+  padding: 2rem 6rem 6rem;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 1099px) {
+  .noSidebarMain {
+    padding: 2rem 4rem 4rem;
+  }
+}
+
+@media (max-width: 799px) {
+  .noSidebarMain {
+    padding: 2rem 2rem 2rem;
+  }
+}
+
+@media (max-width: 430px) {
+  .noSidebarMain {
+    padding: 2rem 1rem 1rem;
+  }
+}
+
+/* `.p-page__article` */
+.article {
+  min-width: 0;
+  padding-top: 3rem;
+}
+
+/* `.p-page__content` 相当（見出し直下〜本文ブロック） */
+.content {
+  min-width: 0;
+  padding-top: 2rem;
+}

@@ -9,8 +9,6 @@ import {
   getWorksServiceTerms,
 } from "@/lib/works-archive";
 
-export const dynamic = "force-dynamic";
-
 function parsePage(raw: string | string[] | undefined): number {
   const v = Array.isArray(raw) ? raw[0] : raw;
   const n = parseInt(v ?? "1", 10);

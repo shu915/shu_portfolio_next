@@ -8,6 +8,7 @@ import subHeaderStyles from "@/styles/ui/subHeader.module.css";
 type Props = {
   variant: "works" | "articles" | "profile" | "contact" | "archive" | "page";
   title: string;
+  /** 英字見出しの下に出す日本語など（固定ページでは WP タイトル） */
   subtitle: string;
 };
 
@@ -17,7 +18,7 @@ const BG_BY_VARIANT: Record<Props["variant"], string | undefined> = {
   profile: subHeaderStyles.bgProfile,
   contact: subHeaderStyles.bgContact,
   archive: undefined,
-  page: undefined,
+  page: subHeaderStyles.bgPage,
 };
 
 export function SubHeader({ variant, title, subtitle }: Props) {
@@ -35,10 +36,8 @@ export function SubHeader({ variant, title, subtitle }: Props) {
           >
             {title}
           </h2>
-          <p
-            className="bg-white/70 w-fit text-[clamp(1.25rem,1.141rem+0.467vw,1.5rem)] tracking-widest leading-relaxed font-bold px-2 text-primary"
-          >
-            {subtitle}
+          <p className="bg-white/70 w-fit text-[clamp(1.25rem,1.141rem+0.467vw,1.5rem)] tracking-widest leading-relaxed font-bold px-2 text-primary">
+            {subtitle.trim()}
           </p>
         </div>
       </div>
