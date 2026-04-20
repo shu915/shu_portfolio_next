@@ -1,0 +1,91 @@
+/**
+ * レガシー `dev/src/assets/scss/project/_p-404.scss` 相当
+ * （`--color-primary` は globals @theme）
+ */
+.root {
+  height: calc(100vh - 13.75rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+@media (max-width: 767px) {
+  .root {
+    height: auto;
+    /* layout の main に mt-15(3.75rem) があるため、合計 13.75rem になるよう 10rem を追加 */
+    margin-top: 10rem;
+    margin-bottom: 10rem;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 767px) {
+  .title {
+    font-size: 2rem;
+  }
+}
+
+.textWrapper {
+  margin-top: 2rem;
+}
+
+.text {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.text br {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .text br {
+    display: block;
+  }
+
+  .text {
+    font-size: 1rem;
+  }
+}
+
+.link {
+  margin-top: 3rem;
+  font-weight: 700;
+  border-radius: 3rem;
+  background-color: var(--color-primary);
+  color: #fff;
+  padding: 1rem 2rem;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+  width: 20rem;
+  text-align: center;
+  letter-spacing: 0.1em;
+  box-sizing: border-box;
+}
+
+.link:hover {
+  opacity: 0.85;
+}
+
+@media (max-width: 767px) {
+  .link {
+    width: 12rem;
+  }
+}
