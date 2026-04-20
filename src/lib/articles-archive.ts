@@ -58,6 +58,62 @@ const GET_CATEGORY_ARCHIVE_PAGE = `
   }
 `;
 
+/**
+ * タグをスラッグで解決（`where.tag` 文字列は環境によって無視され全件になることがあるため、
+ * 投稿側は `tagIn` で term を指定する）
+ */
+const GET_TAG_BY_SLUG = `
+  query GetTagBySlug($slug: ID!) {
+    tag(id: $slug, idType: SLUG) {
+      databaseId
+      name
+      slug
+    }
+  }
+`;
+
+const GET_POSTS_OFFSET_PAGE_BY_TAG_IN = `
+  query GetPostsOffsetPageByTagIn(
+    $tagId: Int!
+    $size: Int!
+    $offset: Int!
+  ) {
+    posts(
+      where: {
+        tagIn: [$tagId]
+        offsetPagination: { size: $size, offset: $offset }
+      }
+    ) {
+      pageInfo {
+        offsetPagination {
+          hasMore
+          hasPrevious
+          total
+        }
+      }
+      nodes {
+        id
+        title
+        slug
+        date
+        excerpt
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+        categories {
+          nodes {
+            name
+            slug
+          }
+        }
+      }
+    }
+  }
+`;
+
 const GET_POSTS_OFFSET_PAGE = `
   query GetPostsOffsetPage($size: Int!, $offset: Int!) {
     posts(where: { offsetPagination: { size: $size, offset: $offset } }) {
@@ -110,14 +166,14 @@ const GET_POST_DATES_OFFSET_CHUNK = `
 /** サイドバー：タクソノミー + 新着（月別用日付は別途全件フェッチ） */
 const GET_ARTICLES_SIDEBAR_BUNDLE = `
   query GetArticlesSidebarBundle {
-    categories(first: 100) {
+    categories(first: 100, where: { hideEmpty: true }) {
       nodes {
         name
         slug
         count
       }
     }
-    tags(first: 100) {
+    tags(first: 100, where: { hideEmpty: true }) {
       nodes {
         name
         slug
@@ -217,11 +273,49 @@ async function fetchAllPostDatesForSidebar(): Promise<string[]> {
   return nodes.map((n) => n.date);
 }
 
+/** WP が count を返さない場合のみ残す。0 件は `hideEmpty` 側で除外済み想定 */
 function filterNonEmptyTaxonomies(nodes: TaxonomyNode[]): TaxonomyNode[] {
   return nodes.filter((n) => n.count == null || n.count > 0);
 }
 
+/** ルートの `[slug]` を WP の SLUG 照合に寄せる */
+function normalizeTaxonomySlugParam(raw: string): string {
+  const t = raw.trim();
+  if (!t) return t;
+  try {
+    return decodeURIComponent(t.replace(/\+/g, " "));
+  } catch {
+    return t;
+  }
+}
+
+type TagNodeForArchive = {
+  databaseId: number;
+  name: string;
+  slug: string;
+};
+
+const fetchTagForArchive = cache(async function fetchTagForArchive(
+  slug: string
+): Promise<TagNodeForArchive | null> {
+  const normalized = normalizeTaxonomySlugParam(slug);
+  if (!normalized) return null;
+
+  const data = await gqlFetch<{
+    tag: TagNodeForArchive | null;
+  }>(GET_TAG_BY_SLUG, {
+    variables: { slug: normalized },
+    tags: ["posts"],
+  });
+
+  return data.tag ?? null;
+});
+
 export type CategoryArchiveMeta = TaxonomyNode & {
+  databaseId: number;
+};
+
+export type TagArchiveMeta = TaxonomyNode & {
   databaseId: number;
 };
 
@@ -283,6 +377,57 @@ export const getCategoryArchivePage = cache(async function getCategoryArchivePag
   );
 
   return { category, posts: nodes, totalPages };
+});
+
+/**
+ * タグ別アーカイブ1ページ分。`tag` が無い（スラッグ不正）ときは null → 404。
+ * タグ解決後に `tagIn` で絞る（`where.tag` 文字列より確実）。
+ */
+export const getTagArchivePage = cache(async function getTagArchivePage(
+  slug: string,
+  page: number
+): Promise<{
+  tag: TagArchiveMeta;
+  posts: ArchivePostNode[];
+  totalPages: number;
+} | null> {
+  if (!slug.trim()) return null;
+  if (!Number.isInteger(page) || page < 1) return null;
+
+  const t = await fetchTagForArchive(slug);
+  if (!t) return null;
+
+  const offset = (page - 1) * ARTICLES_PER_PAGE;
+
+  const data = await gqlFetch<OffsetPageResult>(GET_POSTS_OFFSET_PAGE_BY_TAG_IN, {
+    variables: {
+      tagId: t.databaseId,
+      size: ARTICLES_PER_PAGE,
+      offset,
+    },
+    tags: ["posts"],
+  });
+
+  const tag: TagArchiveMeta = {
+    databaseId: t.databaseId,
+    name: t.name,
+    slug: t.slug,
+  };
+
+  const nodes = data.posts?.nodes ?? [];
+  const op = data.posts?.pageInfo?.offsetPagination;
+
+  if (page > 1 && nodes.length === 0) {
+    return null;
+  }
+
+  const totalPages = totalPagesFromOffsetPagination(
+    page,
+    ARTICLES_PER_PAGE,
+    op
+  );
+
+  return { tag, posts: nodes, totalPages };
 });
 
 /**
