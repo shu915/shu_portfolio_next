@@ -25,3 +25,20 @@ export type ArticlesSidebarBundle = {
   recentPosts: ArchivePostNode[];
   postDates: string[];
 };
+
+/**
+ * WPGraphQL `posts` + wp-graphql-offset-pagination の 1 レスポンス形
+ *（ルート一覧・タクソノミー・月別・検索などで共通）
+ */
+export type ArticlesPostsOffsetQueryResult = {
+  posts: {
+    nodes: ArchivePostNode[];
+    pageInfo: {
+      offsetPagination: {
+        hasMore: boolean;
+        hasPrevious: boolean;
+        total: number | null;
+      } | null;
+    } | null;
+  };
+};

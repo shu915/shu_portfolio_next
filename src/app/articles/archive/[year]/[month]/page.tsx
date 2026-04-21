@@ -10,14 +10,8 @@ import {
   getArticlesSidebarBundle,
   getArticlesYearMonthArchivePage,
   parseYearMonthRouteParams,
-} from "@/lib/articles-archive";
-
-function parsePage(raw: string | string[] | undefined): number {
-  const v = Array.isArray(raw) ? raw[0] : raw;
-  const n = parseInt(v ?? "1", 10);
-  if (!Number.isFinite(n) || n < 1) return 1;
-  return Math.floor(n);
-}
+} from "@/lib/articles-sidebar";
+import { parsePaginationPage } from "@/lib/parse-pagination-page";
 
 type PageProps = {
   params: Promise<{ year: string; month: string }>;
@@ -30,7 +24,7 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { year: yStr, month: mStr } = await params;
   const sp = await searchParams;
-  const page = parsePage(sp.page);
+  const page = parsePaginationPage(sp.page);
   const ym = parseYearMonthRouteParams(yStr, mStr);
   if (!ym) {
     return { title: "記事一覧 | Shu Digital Works" };
@@ -56,7 +50,7 @@ export default async function ArticlesYearMonthArchivePage({
 }: PageProps) {
   const { year: yStr, month: mStr } = await params;
   const sp = await searchParams;
-  const page = parsePage(sp.page);
+  const page = parsePaginationPage(sp.page);
 
   const ym = parseYearMonthRouteParams(yStr, mStr);
   if (!ym) {
