@@ -9,15 +9,11 @@ if (!GRAPHQL_URL) {
   );
 }
 
-function graphqlRequestHeaders(): Record<string, string> {
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-  };
-  if (GRAPHQL_SECRET) {
-    headers["X-GraphQL-Secret"] = GRAPHQL_SECRET;
-  }
-  return headers;
-}
+/** 環境変数はプロセス起動時に固定のため、ヘッダーもモジュール読み込み時に一度だけ組み立てる */
+const GRAPHQL_REQUEST_HEADERS: Record<string, string> = {
+  "Content-Type": "application/json",
+  ...(GRAPHQL_SECRET ? { "X-GraphQL-Secret": GRAPHQL_SECRET } : {}),
+};
 
 type GraphQLResponse<T> = {
   data: T;
@@ -42,7 +38,7 @@ export async function gqlFetch<T>(
 ): Promise<T> {
   const res = await fetch(GRAPHQL_URL!, {
     method: "POST",
-    headers: graphqlRequestHeaders(),
+    headers: GRAPHQL_REQUEST_HEADERS,
     body: JSON.stringify(variables ? { query, variables } : { query }),
     ...(cache === "no-store"
       ? { cache: "no-store" as const }
@@ -86,7 +82,7 @@ export async function gqlFetchRaw(
 
   const res = await fetch(GRAPHQL_URL, {
     method: "POST",
-    headers: graphqlRequestHeaders(),
+    headers: GRAPHQL_REQUEST_HEADERS,
     body: JSON.stringify(variables ? { query, variables } : { query }),
     cache: "no-store",
   });
