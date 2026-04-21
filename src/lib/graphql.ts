@@ -1,12 +1,19 @@
 import { DEFAULT_REVALIDATE } from "@/lib/default-revalidate";
 
 const GRAPHQL_URL = process.env.NEXTJS_WORDPRESS_GRAPHQL_URL;
+const GRAPHQL_SECRET = process.env.NEXTJS_WORDPRESS_GRAPHQL_SECRET;
 
 if (!GRAPHQL_URL) {
   throw new Error(
     "NEXTJS_WORDPRESS_GRAPHQL_URL が環境変数に設定されていません"
   );
 }
+
+/** 環境変数はプロセス起動時に固定のため、ヘッダーもモジュール読み込み時に一度だけ組み立てる */
+const GRAPHQL_REQUEST_HEADERS: Record<string, string> = {
+  "Content-Type": "application/json",
+  ...(GRAPHQL_SECRET ? { "X-GraphQL-Secret": GRAPHQL_SECRET } : {}),
+};
 
 type GraphQLResponse<T> = {
   data: T;
@@ -31,7 +38,7 @@ export async function gqlFetch<T>(
 ): Promise<T> {
   const res = await fetch(GRAPHQL_URL!, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: GRAPHQL_REQUEST_HEADERS,
     body: JSON.stringify(variables ? { query, variables } : { query }),
     ...(cache === "no-store"
       ? { cache: "no-store" as const }
@@ -75,7 +82,7 @@ export async function gqlFetchRaw(
 
   const res = await fetch(GRAPHQL_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: GRAPHQL_REQUEST_HEADERS,
     body: JSON.stringify(variables ? { query, variables } : { query }),
     cache: "no-store",
   });
