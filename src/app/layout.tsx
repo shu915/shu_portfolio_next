@@ -19,7 +19,7 @@ const notoSerifJP = Noto_Serif_JP({
 export const metadata: Metadata = {
   title: "Shu Digital Works",
   description:
-    "Shuのポートフォリオサイトです。技術系の情報発信や過去の実績を掲載しています。",
+    "フルスタックエンジニア Shu のポートフォリオサイトです。開発実務の知見やプロジェクト実績、技術ブログを掲載しています。",
 };
 
 export default function RootLayout({

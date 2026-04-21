@@ -6,7 +6,8 @@ import { SubHeader } from "@/components/ui/SubHeader";
 
 export const metadata: Metadata = {
   title: "Contact | Shu Digital Works",
-  description: "お問い合わせ",
+  description:
+    "Shu Digital Works（フルスタックエンジニア Shu）のお問い合わせページです。お仕事のご依頼やご相談は、フォームからお送りください。",
 };
 
 export default function ContactPage() {

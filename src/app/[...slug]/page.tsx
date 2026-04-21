@@ -4,13 +4,22 @@ import { WpFixedPageMain } from "@/components/fixed-page/WpFixedPageMain";
 import { WpFixedPageShell } from "@/components/fixed-page/WpFixedPageShell";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
-import { stripExcerptHtml } from "@/lib/articles-archive";
 import { getPageBySlug } from "@/lib/wp-page";
 import staticPageStyles from "@/styles/static-page/staticPage.module.css";
 
 type PageProps = {
   params: Promise<{ slug: string[] }>;
 };
+
+const WP_MISC_META_MAX = 160;
+const WP_MISC_META_AFTER_TITLE =
+  "Shu Digital Works（フルスタックエンジニア Shu）のサイトで公開している案内・説明です。";
+
+function wpMiscPageMetaDescription(title: string): string {
+  const s = `「${title}」。${WP_MISC_META_AFTER_TITLE}`;
+  if (s.length <= WP_MISC_META_MAX) return s;
+  return s.slice(0, WP_MISC_META_MAX - 1).trimEnd() + "…";
+}
 
 /**
  * サブヘッダー英語行用。生の slug は出さず、URL 最終セグメントを見出し風にする。
@@ -52,14 +61,15 @@ export async function generateMetadata({
   const path = slug.join("/");
   const wpPage = await getPageBySlug(path);
   if (!wpPage) {
-    return { title: "ページが見つかりません | Shu Digital Works" };
+    return {
+      title: "ページが見つかりません | Shu Digital Works",
+      description:
+        "お探しのページは Shu Digital Works 上に見つかりませんでした。URL をご確認のうえ、トップまたはメニューからお進みください。",
+    };
   }
-  const raw = wpPage.content ? stripExcerptHtml(wpPage.content) : "";
-  const description =
-    raw.length > 0 ? raw.slice(0, 160) : `${wpPage.title} | Shu Digital Works`;
   return {
     title: `${wpPage.title} | Shu Digital Works`,
-    description,
+    description: wpMiscPageMetaDescription(wpPage.title),
   };
 }
 

@@ -24,7 +24,8 @@ export async function generateMetadata({
       : `Articles（${page}ページ目）| Shu Digital Works`;
   return {
     title,
-    description: "投稿記事一覧",
+    description:
+      "Shu Digital Works（フルスタックエンジニア Shu）が公開する技術ブログ記事です。フルスタック開発の実務で得た知見を中心に、Next.js・Rails・API・データベースなど、フロントからサーバーまでのメモを掲載しています。",
   };
 }
 
