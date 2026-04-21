@@ -23,8 +23,11 @@ export function WorksArchiveMain({
   serviceTerms,
 }: Props) {
   const basePath = "/works";
-  const withService = (slug?: string) =>
-    slug ? `${basePath}?service=${encodeURIComponent(slug)}` : basePath;
+  const withService = (slug?: string) => {
+    const s = slug?.trim();
+    if (!s) return basePath;
+    return `${basePath}?service=${encodeURIComponent(s)}`;
+  };
 
   return (
     <div>

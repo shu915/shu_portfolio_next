@@ -23,17 +23,12 @@ const WORK_ARCHIVE_NODE_FIELDS = `
         }
 `;
 
-/** `services` タクソノミー（レガシー archive のジャンルタブ用） */
-const GET_WORKS_SERVICE_TERMS = `
-  query GetWorksServiceTerms {
-    services(first: 100) {
-      nodes {
-        name
-        slug
-      }
-    }
-  }
-`;
+/** Works ジャンルタブ（WP の `services` スラッグと一致させる。GraphQL でターム一覧は取らない） */
+export const WORKS_SERVICE_TAB_TERMS: { name: string; slug: string }[] = [
+  { name: "ランディングページ", slug: "landing" },
+  { name: "WordPress", slug: "wordpress" },
+  { name: "システム開発", slug: "system" },
+];
 
 const GET_WORKS_OFFSET_PAGE = `
   query GetWorksOffsetPage($size: Int!, $offset: Int!) {
@@ -52,31 +47,23 @@ const GET_WORKS_OFFSET_PAGE = `
 `;
 
 /**
- * ジャンル（services）で絞り込み。WPGraphQL の `taxQuery` / `SERVICES` はサイトのスキーマに依存。
+ * ジャンル（services）で絞り込み。
+ * ルート `works(where:)` に `taxQuery` が無い環境があるため `services` ターム → `works` 接続を使う。
+ * ネスト接続では `offsetPagination` が効かないことが多いので、
+ * `first: page * perPage + 1` で多めに取り、表示は slice。+1 で「次ページあり」を件数からも判定する。
  */
-const GET_WORKS_OFFSET_PAGE_BY_SERVICE = `
-  query GetWorksOffsetPageByService($size: Int!, $offset: Int!, $serviceSlug: [String]!) {
-    works(where: {
-      offsetPagination: { size: $size, offset: $offset }
-      taxQuery: {
-        taxArray: [
-          {
-            taxonomy: SERVICES
-            field: SLUG
-            terms: $serviceSlug
-            operator: IN
+const GET_WORKS_BY_SERVICE_PREFIX = `
+  query GetWorksByServicePrefix($slugs: [String]!, $first: Int!) {
+    services(where: { slug: $slugs }, first: 1) {
+      nodes {
+        works(first: $first) {
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
           }
-        ]
-      }
-    }) {
-      pageInfo {
-        offsetPagination {
-          hasMore
-          hasPrevious
-          total
+          nodes {${WORK_ARCHIVE_NODE_FIELDS}
+          }
         }
-      }
-      nodes {${WORK_ARCHIVE_NODE_FIELDS}
       }
     }
   }
@@ -109,14 +96,19 @@ type OffsetPageResult = {
   };
 };
 
-export async function getWorksServiceTerms(): Promise<
-  { name: string; slug: string }[]
-> {
-  const data = await gqlFetch<{
-    services: { nodes: { name: string; slug: string }[] };
-  }>(GET_WORKS_SERVICE_TERMS, { tags: ["works"] });
-  return data.services?.nodes ?? [];
-}
+type ServiceFilteredWorksResult = {
+  services: {
+    nodes: Array<{
+      works: {
+        nodes: WorksArchiveNode[];
+        pageInfo: {
+          hasNextPage: boolean;
+          hasPreviousPage?: boolean;
+        } | null;
+      } | null;
+    } | null>;
+  } | null;
+};
 
 export async function getWorksArchiveOffsetPage(
   page: number,
@@ -130,30 +122,48 @@ export async function getWorksArchiveOffsetPage(
   const offset = (page - 1) * WORKS_PER_PAGE;
   const serviceSlug = options?.serviceSlug?.trim();
 
-  const query =
-    serviceSlug && serviceSlug.length > 0
-      ? GET_WORKS_OFFSET_PAGE_BY_SERVICE
-      : GET_WORKS_OFFSET_PAGE;
+  if (serviceSlug && serviceSlug.length > 0) {
+    const fetchFirst = page * WORKS_PER_PAGE + 1;
+    const data = await gqlFetch<ServiceFilteredWorksResult>(
+      GET_WORKS_BY_SERVICE_PREFIX,
+      {
+        variables: { slugs: [serviceSlug], first: fetchFirst },
+        tags: ["works"],
+      }
+    );
 
-  const variables =
-    serviceSlug && serviceSlug.length > 0
-      ? {
-          size: WORKS_PER_PAGE,
-          offset,
-          serviceSlug: [serviceSlug],
-        }
-      : {
-          size: WORKS_PER_PAGE,
-          offset,
-        };
+    const conn = data.services?.nodes?.[0]?.works;
+    const prefixNodes = conn?.nodes ?? [];
+    const hasNextFromApi = conn?.pageInfo?.hasNextPage ?? false;
+    /** ネスト接続で hasNextPage が常に false になりがちなため、取得件数でも次ページを推定する */
+    const hasMore =
+      prefixNodes.length > page * WORKS_PER_PAGE || hasNextFromApi;
+    const nodes = prefixNodes.slice(
+      (page - 1) * WORKS_PER_PAGE,
+      page * WORKS_PER_PAGE
+    );
 
-  const data = await gqlFetch<OffsetPageResult>(query, {
-    variables,
+    if (page > 1 && nodes.length === 0) {
+      return null;
+    }
+
+    const totalPages = hasMore
+      ? Math.max(page + 1, Math.ceil(prefixNodes.length / WORKS_PER_PAGE))
+      : Math.max(1, Math.ceil(prefixNodes.length / WORKS_PER_PAGE));
+
+    return { works: nodes, totalPages };
+  }
+
+  const data = await gqlFetch<OffsetPageResult>(GET_WORKS_OFFSET_PAGE, {
+    variables: {
+      size: WORKS_PER_PAGE,
+      offset,
+    },
     tags: ["works"],
   });
 
   const nodes = data.works?.nodes ?? [];
-  const op = data.works?.pageInfo?.offsetPagination;
+  const op = data.works?.pageInfo?.offsetPagination ?? null;
 
   if (page > 1 && nodes.length === 0) {
     return null;

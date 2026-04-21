@@ -6,7 +6,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
 import {
   getWorksArchiveOffsetPage,
-  getWorksServiceTerms,
+  WORKS_SERVICE_TAB_TERMS,
 } from "@/lib/works-archive";
 
 function parsePage(raw: string | string[] | undefined): number {
@@ -34,9 +34,8 @@ export async function generateMetadata({
   const sp = await searchParams;
   const page = parsePage(sp.page);
   const serviceSlug = parseService(sp.service);
-  const terms = await getWorksServiceTerms();
   const serviceName = serviceSlug
-    ? terms.find((t) => t.slug === serviceSlug)?.name
+    ? WORKS_SERVICE_TAB_TERMS.find((t) => t.slug === serviceSlug)?.name
     : undefined;
 
   const titleParts = ["Works"];
@@ -65,13 +64,10 @@ export default async function WorksPage({
   const page = parsePage(sp.page);
   const serviceSlug = parseService(sp.service);
 
-  const [terms, archive] = await Promise.all([
-    getWorksServiceTerms(),
-    getWorksArchiveOffsetPage(page, { serviceSlug }),
-  ]);
+  const archive = await getWorksArchiveOffsetPage(page, { serviceSlug });
 
   if (serviceSlug) {
-    const slugOk = terms.some((t) => t.slug === serviceSlug);
+    const slugOk = WORKS_SERVICE_TAB_TERMS.some((t) => t.slug === serviceSlug);
     if (!slugOk) {
       notFound();
     }
@@ -97,7 +93,7 @@ export default async function WorksPage({
           currentPage={page}
           totalPages={totalPages}
           activeServiceSlug={serviceSlug}
-          serviceTerms={terms}
+          serviceTerms={WORKS_SERVICE_TAB_TERMS}
         />
       </div>
     </WorksPageShell>
