@@ -1,11 +1,22 @@
 import { DEFAULT_REVALIDATE } from "@/lib/default-revalidate";
 
 const GRAPHQL_URL = process.env.NEXTJS_WORDPRESS_GRAPHQL_URL;
+const GRAPHQL_SECRET = process.env.NEXTJS_WORDPRESS_GRAPHQL_SECRET;
 
 if (!GRAPHQL_URL) {
   throw new Error(
     "NEXTJS_WORDPRESS_GRAPHQL_URL が環境変数に設定されていません"
   );
+}
+
+function graphqlRequestHeaders(): Record<string, string> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (GRAPHQL_SECRET) {
+    headers["X-GraphQL-Secret"] = GRAPHQL_SECRET;
+  }
+  return headers;
 }
 
 type GraphQLResponse<T> = {
@@ -31,7 +42,7 @@ export async function gqlFetch<T>(
 ): Promise<T> {
   const res = await fetch(GRAPHQL_URL!, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: graphqlRequestHeaders(),
     body: JSON.stringify(variables ? { query, variables } : { query }),
     ...(cache === "no-store"
       ? { cache: "no-store" as const }
@@ -75,7 +86,7 @@ export async function gqlFetchRaw(
 
   const res = await fetch(GRAPHQL_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: graphqlRequestHeaders(),
     body: JSON.stringify(variables ? { query, variables } : { query }),
     cache: "no-store",
   });
