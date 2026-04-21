@@ -17,7 +17,7 @@ export function Footer() {
       <div className="mx-auto max-w-[1232px] px-4 md:px-6 lg:px-8">
         {/* 上段：サイトタイトル + ナビ */}
         <div className="flex justify-between items-center max-md:flex-col max-md:items-start">
-          <h2 className="text-white text-[1.875rem] font-medium tracking-[0.03em] font-(family-name:--font-cormorant)">
+          <h2 className="text-white text-[1.875rem] font-medium tracking-[0.03em] font-cormorant">
             <Link href="/">Shu Digital Works</Link>
           </h2>
           <nav aria-label="フッターナビゲーション">
@@ -26,7 +26,7 @@ export function Footer() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className={`${navStyles.navUnderline} text-white text-[1.25rem] font-medium tracking-[0.03em] font-(family-name:--font-cormorant)`}
+                    className={`${navStyles.navUnderline} text-white text-[1.25rem] font-medium tracking-[0.03em] font-cormorant`}
                   >
                     {label}
                   </Link>

@@ -11,10 +11,10 @@ const PROFILE_IMAGE_FIGURE = "m-0 w-[16.625rem] max-w-full";
 const PROFILE_CONTENT = "w-[32rem] max-w-full";
 
 const PROFILE_NAME =
-  "text-5xl font-bold tracking-[0.1em] leading-none max-[1099px]:text-center max-[1099px]:text-[2rem]";
+  "text-5xl font-bold tracking-widest leading-none max-[1099px]:text-center max-[1099px]:text-[2rem]";
 
 const PROFILE_INTRO =
-  "mt-6 max-w-xl text-lg leading-relaxed tracking-[0.1em] text-justify max-[899px]:text-base max-[430px]:text-base";
+  "mt-6 max-w-xl text-lg leading-relaxed tracking-widest text-justify max-[899px]:text-base max-[430px]:text-base";
 
 const SECTION_TITLE =
   "relative mt-14 border-b border-primary pl-4 text-2xl font-medium tracking-[0.05rem] before:absolute before:left-0 before:top-1/2 before:h-[80%] before:w-2 before:-translate-y-1/2 before:bg-primary before:content-[''] max-[430px]:text-xl";

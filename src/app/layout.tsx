@@ -54,7 +54,7 @@ export default function RootLayout({
         <link rel="stylesheet" href={GOOGLE_FONTS_STYLESHEET} />
       </head>
       <body
-        className="flex min-h-screen flex-col bg-white font-(family-name:--font-noto-serif-jp) text-base leading-[1.6] text-body"
+        className="flex min-h-screen flex-col bg-white font-noto-serif-jp text-base leading-[1.6] text-body"
       >
         <Header />
         {/* ヘッダーが fixed のため、コンテンツ上部に同じ高さの余白を確保 */}

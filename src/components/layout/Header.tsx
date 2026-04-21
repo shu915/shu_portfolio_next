@@ -14,11 +14,11 @@ const NAV_LINKS = [
 ] as const;
 
 const SITE_TITLE_CLASS =
-  "text-white text-[1.875rem] font-medium tracking-[0.03em] font-(family-name:--font-cormorant)";
+  "text-white text-[1.875rem] font-medium tracking-[0.03em] font-cormorant";
 
 const NAV_LINK_CLASS = [
   navStyles.navUnderline,
-  "text-white text-[1.25rem] font-medium tracking-[0.03em] font-(family-name:--font-cormorant)",
+  "text-white text-[1.25rem] font-medium tracking-[0.03em] font-cormorant",
 ].join(" ");
 
 /**
@@ -80,7 +80,7 @@ export function Header() {
             />
           </span>
           {!isMenuOpen && (
-            <span className="text-[0.75rem] inline-block leading-none relative top-[-0.3rem] font-(family-name:--font-cormorant) text-white">
+            <span className="text-[0.75rem] inline-block leading-none relative top-[-0.3rem] font-cormorant text-white">
               MENU
             </span>
           )}
@@ -100,7 +100,7 @@ export function Header() {
             <li key={href} className="not-last:border-b not-last:border-white/20">
               <Link
                 href={href}
-                className="text-[1.25rem] inline-block py-4 px-4 w-full tracking-[0.15rem] font-(family-name:--font-cormorant) text-white text-center transition-colors duration-300 hover:text-white/70"
+                className="text-[1.25rem] inline-block py-4 px-4 w-full tracking-[0.15rem] font-cormorant text-white text-center transition-colors duration-300 hover:text-white/70"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {label}

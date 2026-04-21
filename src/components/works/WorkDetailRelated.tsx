@@ -16,12 +16,12 @@ export function WorkDetailRelated({ works }: Props) {
 
   return (
     <section
-      className="mx-auto mt-32 w-full max-w-[65rem] rounded-lg border border-[var(--color-border-subtle)] bg-[#fafafa] p-8 shadow-[0_0_10px_rgba(0,0,0,0.1)] max-[929px]:mt-24 max-[929px]:max-w-full max-[430px]:p-4"
+      className="mx-auto mt-32 w-full max-w-260 rounded-lg border border-border-subtle bg-neutral-50 p-8 shadow-[0_0_10px_rgba(0,0,0,0.1)] max-[929px]:mt-24 max-[929px]:max-w-full max-[430px]:p-4"
       aria-labelledby="work-related-heading"
     >
       <h2
         id="work-related-heading"
-        className="mx-auto w-fit text-center text-2xl font-bold tracking-[0.1em] text-primary after:block after:h-1 after:w-full after:bg-primary after:content-['']"
+        className="mx-auto w-fit border-b-4 border-primary pb-1 text-center text-2xl font-bold tracking-widest text-primary"
       >
         関連記事
       </h2>

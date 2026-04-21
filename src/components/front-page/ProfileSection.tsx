@@ -23,7 +23,7 @@ export function ProfileSection() {
 
             {/* テキストブロック */}
             <div className="max-[799px]:order-3">
-              <p className="text-[2.5rem] font-bold tracking-widest font-(family-name:--font-cormorant) text-center leading-none">
+              <p className="text-[2.5rem] font-bold tracking-widest font-cormorant text-center leading-none">
                 Shu
               </p>
               <p className="text-xl tracking-widest leading-normal mt-6 max-w-xl max-[899px]:text-base">
@@ -52,7 +52,7 @@ export function ProfileSection() {
             {/* セクションタイトル */}
             <h2
               id="profile-section-title"
-              className={`${sectionsStyles.sectionTitle} text-[2.25rem] font-bold font-(family-name:--font-cormorant) tracking-[0.15em] max-[1239px]:order-1 max-[1239px]:mx-auto`}
+              className={`${sectionsStyles.sectionTitle} text-[2.25rem] font-bold font-cormorant tracking-[0.15em] max-[1239px]:order-1 max-[1239px]:mx-auto`}
             >
               Profile
             </h2>

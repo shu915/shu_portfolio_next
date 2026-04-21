@@ -15,7 +15,7 @@ export default function NotFound() {
       <div className="flex flex-col items-center justify-center">
         <h1
           id="not-found-heading"
-          className="text-4xl font-bold tracking-[0.1em] text-primary max-md:text-2xl"
+          className="text-4xl font-bold tracking-widest text-primary max-md:text-2xl"
         >
           404 Not Found
         </h1>
@@ -31,7 +31,7 @@ export default function NotFound() {
         </div>
         <Link
           href="/"
-          className="mt-12 box-border w-80 rounded-[3rem] bg-primary px-8 py-4 text-center text-base font-bold tracking-[0.1em] text-white no-underline transition-opacity duration-300 hover:opacity-85 max-md:w-48"
+          className="mt-12 box-border w-80 rounded-full bg-primary px-8 py-4 text-center text-base font-bold tracking-widest text-white no-underline transition-opacity duration-300 hover:opacity-85 max-md:w-48"
         >
           トップへ戻る
         </Link>

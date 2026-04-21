@@ -85,7 +85,7 @@ export async function WorksSection() {
         {/* セクションタイトル */}
         <h2
           id="works-section-title"
-          className={`${sectionsStyles.sectionTitle} mx-auto text-[2.25rem] font-bold font-(family-name:--font-cormorant) tracking-[0.15em]`}
+          className={`${sectionsStyles.sectionTitle} mx-auto text-[2.25rem] font-bold font-cormorant tracking-[0.15em]`}
         >
           Works
         </h2>

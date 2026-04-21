@@ -30,9 +30,9 @@ export function WorksArchiveMain({
 
   /** 競合（text-primary / text-white）を避けるため、非アクティブとアクティブでクラスを分ける */
   const tabInactive =
-    "inline-block rounded px-[0.7rem] py-1 text-base font-semibold tracking-[0.1em] text-primary no-underline transition-colors duration-300 bg-secondary hover:bg-primary hover:text-white";
+    "inline-block rounded px-3 py-1 text-base font-semibold tracking-widest text-primary no-underline transition-colors duration-300 bg-secondary hover:bg-primary hover:text-white";
   const tabActive =
-    "inline-block rounded px-[0.7rem] py-1 text-base font-semibold tracking-[0.1em] text-white no-underline transition-colors duration-300 bg-primary hover:bg-primary hover:text-white";
+    "inline-block rounded px-3 py-1 text-base font-semibold tracking-widest text-white no-underline transition-colors duration-300 bg-primary hover:bg-primary hover:text-white";
 
   return (
     <div>
