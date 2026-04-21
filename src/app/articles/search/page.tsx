@@ -12,6 +12,10 @@ import {
 } from "@/lib/articles-sidebar";
 import { parsePaginationPage } from "@/lib/parse-pagination-page";
 
+/** 検索フォームのみ・キーワードなしのときの説明（このファイル内ベタ書き） */
+const ARTICLES_SEARCH_INDEX_DESCRIPTION =
+  "Shu Digital Works（フルスタックエンジニア Shu）が公開する技術ブログ記事をキーワードで検索できます。フルスタック開発やバックエンド・インフラに関する記事からお探しください。";
+
 type PageProps = {
   searchParams: Promise<{ s?: string | string[]; page?: string | string[] }>;
 };
@@ -23,18 +27,24 @@ export async function generateMetadata({
   const q = articlesSearchQueryFromSearchParams(sp.s);
   const page = parsePaginationPage(sp.page);
   if (!q && page > 1) {
-    return { title: "検索 | Shu Digital Works" };
+    return {
+      title: "検索 | Shu Digital Works",
+      description: ARTICLES_SEARCH_INDEX_DESCRIPTION,
+    };
   }
 
   const data = await getArticlesSearchPage(q, page);
   if (data === null) {
-    return { title: "検索 | Shu Digital Works" };
+    return {
+      title: "検索 | Shu Digital Works",
+      description: ARTICLES_SEARCH_INDEX_DESCRIPTION,
+    };
   }
 
   if (!data.query) {
     return {
       title: "検索 | Articles | Shu Digital Works",
-      description: "記事キーワード検索",
+      description: ARTICLES_SEARCH_INDEX_DESCRIPTION,
     };
   }
 
@@ -46,7 +56,7 @@ export async function generateMetadata({
 
   return {
     title,
-    description: `「${data.query}」に一致する記事一覧`,
+    description: `「${data.query}」を含む記事の検索結果です。Shu Digital Works（フルスタックエンジニア Shu）が公開する技術ブログ記事の該当投稿を一覧しています。`,
   };
 }
 

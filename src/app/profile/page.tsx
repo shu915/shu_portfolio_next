@@ -5,7 +5,8 @@ import { SubHeader } from "@/components/ui/SubHeader";
 
 export const metadata: Metadata = {
   title: "Profile | Shu Digital Works",
-  description: "プロフィール",
+  description:
+    "フルスタックエンジニア Shu のプロフィールページです。経歴やスキル、Shu Digital Works（フルスタックエンジニア Shu）のポートフォリオサイトに関する自己紹介を掲載しています。",
 };
 
 export default function ProfilePage() {

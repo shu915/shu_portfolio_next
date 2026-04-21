@@ -40,7 +40,7 @@ export async function generateMetadata({
     page <= 1 ? base : `${heading}（${page}ページ目）| Articles | Shu Digital Works`;
   return {
     title,
-    description: `${heading}の記事一覧`,
+    description: `${year}年${month}月に公開した記事のアーカイブです。Shu Digital Works（フルスタックエンジニア Shu）が公開する技術ブログ記事の投稿を時系列で参照できます。`,
   };
 }
 

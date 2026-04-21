@@ -40,9 +40,19 @@ export async function generateMetadata({
       ? `${titleParts.join(" · ")} | Shu Digital Works`
       : "Works | Shu Digital Works";
 
+  const site =
+    "Shu Digital Works（フルスタックエンジニア Shu）のポートフォリオサイト";
+  const worksIndexIntro =
+    "フルスタックな開発案件をジャンル別に紹介しています。API・データ層・フロントまで一貫した事例に加え、CMS 連携や画面中心のプロジェクトも含みます。";
+  const worksIndexBase = `${site}の開発実績一覧です。${worksIndexIntro}`;
+  const pageNote = page > 1 ? `（${page}ページ目）` : "";
+  const description = !serviceName
+    ? `${worksIndexBase}${pageNote}`
+    : `「${serviceName}」分類の開発実績一覧です。${site}の Works 掲載事例から、該当ジャンルをまとめています。${pageNote}`;
+
   return {
     title,
-    description: "制作実績一覧",
+    description,
   };
 }
 

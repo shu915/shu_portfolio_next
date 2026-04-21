@@ -33,7 +33,7 @@ export async function generateMetadata({
     page <= 1 ? base : `${category.name}（${page}ページ目）| Articles | Shu Digital Works`;
   return {
     title,
-    description: `「${category.name}」の記事一覧`,
+    description: `カテゴリ「${category.name}」の記事一覧です。Shu Digital Works（フルスタックエンジニア Shu）が公開する技術ブログ記事から、${category.name}に関する投稿をまとめています。`,
   };
 }
 

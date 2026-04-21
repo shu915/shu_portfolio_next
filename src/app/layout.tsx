@@ -16,10 +16,31 @@ const notoSerifJP = Noto_Serif_JP({
   weight: ["200", "300", "400", "500", "600", "700", "900"],
 });
 
+const siteUrlRaw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+const metadataBaseUrl =
+  siteUrlRaw && /^https?:\/\//i.test(siteUrlRaw)
+    ? siteUrlRaw.replace(/\/$/, "")
+    : "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(metadataBaseUrl),
   title: "Shu Digital Works",
   description:
-    "Shuのポートフォリオサイトです。技術系の情報発信や過去の実績を掲載しています。",
+    "フルスタックエンジニア Shu のポートフォリオサイトです。開発実務の知見やプロジェクト実績、技術ブログを掲載しています。",
+  openGraph: {
+    type: "website",
+    locale: "ja_JP",
+    siteName: "Shu Digital Works",
+    images: [
+      {
+        url: "/images/front-page/front-page-main-visual-pc-1920.webp",
+        alt: "Shu Digital Works",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({
