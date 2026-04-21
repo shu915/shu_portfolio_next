@@ -2,8 +2,10 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ArchivePostNode, TaxonomyNode } from "@/lib/articles-types";
-import { groupPostDatesByYearMonth } from "@/lib/articles-sidebar";
-import { articlesYearMonthArchivePath } from "@/lib/articles-archive";
+import {
+  articlesYearMonthArchivePath,
+  groupPostDatesByYearMonth,
+} from "@/lib/articles-sidebar";
 import { SidebarSearchForm } from "@/components/articles/SidebarSearchForm";
 import { formatDateJa } from "@/lib/format-date-ja";
 

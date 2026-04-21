@@ -6,7 +6,14 @@ import subHeaderStyles from "@/styles/ui/subHeader.module.css";
  * 背景が必要な variant は `src/styles/ui/subHeader.module.css` に追加する
  */
 type Props = {
-  variant: "works" | "articles" | "profile" | "contact" | "archive" | "page";
+  variant:
+    | "works"
+    | "articles"
+    | "search"
+    | "profile"
+    | "contact"
+    | "archive"
+    | "page";
   title: string;
   /** 英字見出しの下に出す日本語など（固定ページでは WP タイトル） */
   subtitle: string;
@@ -14,6 +21,7 @@ type Props = {
 
 const BG_BY_VARIANT: Record<Props["variant"], string | undefined> = {
   articles: subHeaderStyles.bgArticles,
+  search: subHeaderStyles.bgSearch,
   works: subHeaderStyles.bgWorks,
   profile: subHeaderStyles.bgProfile,
   contact: subHeaderStyles.bgContact,

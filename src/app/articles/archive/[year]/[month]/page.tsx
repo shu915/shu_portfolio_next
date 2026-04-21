@@ -10,7 +10,7 @@ import {
   getArticlesSidebarBundle,
   getArticlesYearMonthArchivePage,
   parseYearMonthRouteParams,
-} from "@/lib/articles-archive";
+} from "@/lib/articles-sidebar";
 
 function parsePage(raw: string | string[] | undefined): number {
   const v = Array.isArray(raw) ? raw[0] : raw;

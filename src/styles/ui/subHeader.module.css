@@ -12,6 +12,20 @@
   }
 }
 
+/* レガシー .p-sub-header--search（テーマ assets/img/sub-header-search-* と同アセット） */
+.bgSearch {
+  background-image: image-set(
+    url("/images/search/sub-header-search-pc-1920.webp") 1x,
+    url("/images/search/sub-header-search-pc-3840.webp") 2x
+  );
+}
+
+@media (max-width: 767px) {
+  .bgSearch {
+    background-image: url("/images/search/sub-header-search-sp-800.webp");
+  }
+}
+
 /* レガシー .p-sub-header--works と同じアセット */
 .bgWorks {
   background-image: image-set(

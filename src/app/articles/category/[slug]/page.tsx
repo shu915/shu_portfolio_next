@@ -8,7 +8,7 @@ import { SubHeader } from "@/components/ui/SubHeader";
 import {
   getArticlesSidebarBundle,
   getCategoryArchivePage,
-} from "@/lib/articles-archive";
+} from "@/lib/articles-sidebar";
 
 function parsePage(raw: string | string[] | undefined): number {
   const v = Array.isArray(raw) ? raw[0] : raw;

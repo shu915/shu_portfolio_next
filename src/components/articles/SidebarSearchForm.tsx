@@ -2,16 +2,12 @@ import sidebarSearchStyles from "@/styles/articles/sidebarSearch.module.css";
 
 /**
  * レガシー `searchform.php` + `.c-search-form` 相当。
- * `NEXT_PUBLIC_SITE_URL` が WP のオリジンなら `/?s=` に送り、テーマの `search.php` と同じ挙動になる。
+ * GET `/articles/search?s=` で Next 側の検索結果ページへ（WP の `s` と同じパラメータ名）。
  */
 export function SidebarSearchForm() {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim() ?? "";
-  const base = raw.replace(/\/+$/, "");
-  const action = base.length > 0 ? `${base}/` : "/";
-
   return (
     <form
-      action={action}
+      action="/articles/search"
       method="get"
       role="search"
       className={sidebarSearchStyles.form}

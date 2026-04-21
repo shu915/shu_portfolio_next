@@ -1,0 +1,143 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { ArticlesArchiveLayout } from "@/components/articles/ArticlesArchiveLayout";
+import { ArticlesArchiveMain } from "@/components/articles/ArticlesArchiveMain";
+import { ArticlesSidebar } from "@/components/articles/ArticlesSidebar";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { SubHeader } from "@/components/ui/SubHeader";
+import {
+  articlesSearchQueryFromSearchParams,
+  getArticlesSearchPage,
+  getArticlesSidebarBundle,
+} from "@/lib/articles-sidebar";
+
+function parsePage(raw: string | string[] | undefined): number {
+  const v = Array.isArray(raw) ? raw[0] : raw;
+  const n = parseInt(v ?? "1", 10);
+  if (!Number.isFinite(n) || n < 1) return 1;
+  return Math.floor(n);
+}
+
+function rawSearchParam(s: string | string[] | undefined): string {
+  const v = Array.isArray(s) ? s[0] : s;
+  return typeof v === "string" ? v : "";
+}
+
+type PageProps = {
+  searchParams: Promise<{ s?: string | string[]; page?: string | string[] }>;
+};
+
+export async function generateMetadata({
+  searchParams,
+}: PageProps): Promise<Metadata> {
+  const sp = await searchParams;
+  const q = articlesSearchQueryFromSearchParams(sp.s);
+  const page = parsePage(sp.page);
+  if (!q && page > 1) {
+    return { title: "検索 | Shu Digital Works" };
+  }
+
+  const data = await getArticlesSearchPage(rawSearchParam(sp.s), page);
+  if (data === null) {
+    return { title: "検索 | Shu Digital Works" };
+  }
+
+  if (!data.query) {
+    return {
+      title: "検索 | Articles | Shu Digital Works",
+      description: "記事キーワード検索",
+    };
+  }
+
+  const withCount = `「${data.query}」の検索結果（${data.totalCount}件）`;
+  const title =
+    page <= 1
+      ? `${withCount} | Articles | Shu Digital Works`
+      : `${withCount}（${page}ページ目）| Articles | Shu Digital Works`;
+
+  return {
+    title,
+    description: `「${data.query}」に一致する記事一覧`,
+  };
+}
+
+export default async function ArticlesSearchPage({ searchParams }: PageProps) {
+  const sp = await searchParams;
+  const q = articlesSearchQueryFromSearchParams(sp.s);
+  const page = parsePage(sp.page);
+
+  if (!q && page > 1) {
+    notFound();
+  }
+
+  const [sidebar, data] = await Promise.all([
+    getArticlesSidebarBundle(),
+    getArticlesSearchPage(rawSearchParam(sp.s), page),
+  ]);
+
+  if (data === null) {
+    notFound();
+  }
+
+  const { query, posts, totalPages, totalCount } = data;
+
+  const paginationPath = "/articles/search";
+  const paginationSearchParams = query ? { s: query } : undefined;
+
+  const leading = query ? (
+    <h3 className="mb-6 flex flex-wrap items-center gap-1 text-2xl font-bold tracking-[0.075em] text-primary max-md:text-xl max-[430px]:text-lg max-[360px]:text-[1.1rem]">
+      {/* eslint-disable-next-line @next/next/no-img-element -- サイドバー「検索」と同じ装飾 SVG */}
+      <img
+        src="/images/articles/sidebar-search-icon.svg"
+        alt=""
+        width={20}
+        height={20}
+        className="h-5 w-5 shrink-0"
+        aria-hidden
+      />
+      <span className="max-[430px]:hidden">検索結果：</span>
+      <span className="break-all">{query}</span>
+      <span className="whitespace-nowrap">（{totalCount}件）</span>
+    </h3>
+  ) : null;
+
+  const emptyMessage = query
+    ? "検索結果がありません。"
+    : "キーワードを入力して検索してください。";
+
+  return (
+    <>
+      <SubHeader variant="search" title="Search" subtitle="検索" />
+      <div className="mx-auto max-w-[1232px] px-4 pb-32 md:px-6 lg:px-8">
+        <Breadcrumbs
+          items={[
+            { label: "Top", href: "/" },
+            { label: "Articles", href: "/articles" },
+            { label: "検索" },
+          ]}
+        />
+        <ArticlesArchiveLayout
+          main={
+            <ArticlesArchiveMain
+              posts={posts}
+              currentPage={page}
+              totalPages={totalPages}
+              paginationPathname={paginationPath}
+              paginationSearchParams={paginationSearchParams}
+              leading={leading}
+              emptyMessage={emptyMessage}
+            />
+          }
+          sidebar={
+            <ArticlesSidebar
+              recentPosts={sidebar.recentPosts}
+              categories={sidebar.categories}
+              tags={sidebar.tags}
+              postDates={sidebar.postDates}
+            />
+          }
+        />
+      </div>
+    </>
+  );
+}
