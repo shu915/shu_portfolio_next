@@ -1,35 +1,14 @@
 import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { ArticlesArchiveLayout } from "@/components/articles/ArticlesArchiveLayout";
 import { ArticlesArchiveMain } from "@/components/articles/ArticlesArchiveMain";
 import { ArticlesSidebar } from "@/components/articles/ArticlesSidebar";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
 import {
-  articlesYearMonthArchivePath,
   getArticlesArchiveOffsetPage,
   getArticlesSidebarBundle,
-  parseYearMonthRouteParams,
 } from "@/lib/articles-archive";
-
-/** 旧 `?ym=YYYY-MM` → 正規パス（`page` は 2 以上だけ引き継ぎ） */
-function legacyYmRedirectPath(
-  sp: Record<string, string | string[] | undefined>
-): string | null {
-  const rawYm = Array.isArray(sp.ym) ? sp.ym[0] : sp.ym;
-  if (!rawYm || typeof rawYm !== "string") return null;
-  const matched = /^(\d{4})-(\d{1,2})$/.exec(rawYm.trim());
-  if (!matched) return null;
-  const ym = parseYearMonthRouteParams(matched[1], matched[2]);
-  if (!ym) return null;
-  const base = articlesYearMonthArchivePath(ym.year, ym.month);
-  const rawPage = Array.isArray(sp.page) ? sp.page[0] : sp.page;
-  const pageNum = rawPage != null ? parseInt(String(rawPage), 10) : NaN;
-  if (Number.isFinite(pageNum) && pageNum > 1) {
-    return `${base}?page=${pageNum}`;
-  }
-  return base;
-}
 
 function parsePage(raw: string | string[] | undefined): number {
   const v = Array.isArray(raw) ? raw[0] : raw;
@@ -41,13 +20,9 @@ function parsePage(raw: string | string[] | undefined): number {
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string | string[]; ym?: string | string[] }>;
+  searchParams: Promise<{ page?: string | string[] }>;
 }): Promise<Metadata> {
   const sp = await searchParams;
-  const ymPath = legacyYmRedirectPath(sp);
-  if (ymPath) {
-    redirect(ymPath);
-  }
   const page = parsePage(sp.page);
   const title =
     page <= 1
@@ -62,13 +37,9 @@ export async function generateMetadata({
 export default async function ArticlesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string | string[]; ym?: string | string[] }>;
+  searchParams: Promise<{ page?: string | string[] }>;
 }) {
   const sp = await searchParams;
-  const ymPath = legacyYmRedirectPath(sp);
-  if (ymPath) {
-    redirect(ymPath);
-  }
   const page = parsePage(sp.page);
 
   const [sidebar, archive] = await Promise.all([
