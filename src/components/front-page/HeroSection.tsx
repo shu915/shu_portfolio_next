@@ -1,5 +1,3 @@
-import sectionsStyles from "@/styles/front-page/sections.module.css";
-
 /**
  * フロントページのメインビジュアル（ヒーローセクション）
  * WordPress テーマの .p-front-page__main-visual を移植
@@ -71,7 +69,7 @@ export function HeroSection() {
           <p
             className={[
               "font-semibold text-white tracking-[0.03em] leading-none select-none overflow-hidden",
-              "font-(family-name:--font-cormorant)",
+              "font-cormorant",
               "text-[clamp(2.5rem,-3.5rem+12.5vw,7.75rem)]",
               "relative bottom-[calc(clamp(0.5rem,-0.529rem+2.143vw,1.4rem)*-0.4)]",
               "max-[899px]:text-center",
@@ -89,7 +87,7 @@ export function HeroSection() {
           Scroll
         </span>
         <div
-          className={`w-[2px] h-[60px] bg-primary mx-auto relative -bottom-16 ${sectionsStyles.heroScrollLine}`}
+          className="relative -bottom-16 mx-auto h-[60px] w-[2px] animate-[scrollLine_2.2s_cubic-bezier(0.76,0,0.3,1)_infinite] bg-primary"
           aria-hidden="true"
         />
       </div>

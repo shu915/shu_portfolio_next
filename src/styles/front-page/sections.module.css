@@ -1,21 +1,4 @@
-/* スクロールガイドのライン流下アニメーション */
-@keyframes scrollLine {
-  0% {
-    transform: translateY(-60px);
-  }
-  75% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(60px);
-  }
-}
-
-.heroScrollLine {
-  animation: scrollLine 2.2s cubic-bezier(0.76, 0, 0.3, 1) infinite;
-}
-
-/* セクションタイトル（両端に三角形を持つリボン形状） */
+/* セクションタイトル（両端に三角形を持つリボン形状） — アニメは globals.css の @keyframes scrollLine */
 .sectionTitle {
   position: relative;
   width: 14rem;

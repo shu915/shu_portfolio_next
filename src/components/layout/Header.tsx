@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import headerStyles from "@/styles/layout/header.module.css";
 import navStyles from "@/styles/layout/navUnderline.module.css";
 
 const NAV_LINKS = [
@@ -15,11 +14,11 @@ const NAV_LINKS = [
 ] as const;
 
 const SITE_TITLE_CLASS =
-  "text-white text-[1.875rem] font-medium tracking-[0.03em] font-(family-name:--font-cormorant)";
+  "text-white text-[1.875rem] font-medium tracking-[0.03em] font-cormorant";
 
 const NAV_LINK_CLASS = [
   navStyles.navUnderline,
-  "text-white text-[1.25rem] font-medium tracking-[0.03em] font-(family-name:--font-cormorant)",
+  "text-white text-[1.25rem] font-medium tracking-[0.03em] font-cormorant",
 ].join(" ");
 
 /**
@@ -68,20 +67,20 @@ export function Header() {
           {/* バー2本 */}
           <span className="relative block h-[0.6rem] w-7.5">
             <span
-              className={`${headerStyles.bar} left-0 w-full ${
-                isMenuOpen ? "top-1/2 -translate-y-1/2 rotate-45" : "top-0"
+              className={`absolute left-0 block h-0.5 bg-white transition-[transform,width,top] duration-300 ease-in-out ${
+                isMenuOpen ? "top-1/2 w-full -translate-y-1/2 rotate-45" : "top-0 w-full"
               }`}
             />
             <span
-              className={`${headerStyles.bar} left-0 ${
+              className={`absolute left-0 block h-0.5 bg-white transition-[transform,width,top] duration-300 ease-in-out ${
                 isMenuOpen
-                  ? "w-full top-1/2 -translate-y-1/2 -rotate-45"
-                  : "w-[66%] bottom-0"
+                  ? "top-1/2 w-full -translate-y-1/2 -rotate-45"
+                  : "bottom-0 w-[66%]"
               }`}
             />
           </span>
           {!isMenuOpen && (
-            <span className="text-[0.75rem] inline-block leading-none relative top-[-0.3rem] font-(family-name:--font-cormorant) text-white">
+            <span className="text-[0.75rem] inline-block leading-none relative top-[-0.3rem] font-cormorant text-white">
               MENU
             </span>
           )}
@@ -101,7 +100,7 @@ export function Header() {
             <li key={href} className="not-last:border-b not-last:border-white/20">
               <Link
                 href={href}
-                className="text-[1.25rem] inline-block py-4 px-4 w-full tracking-[0.15rem] font-(family-name:--font-cormorant) text-white text-center transition-colors duration-300 hover:text-white/70"
+                className="text-[1.25rem] inline-block py-4 px-4 w-full tracking-[0.15rem] font-cormorant text-white text-center transition-colors duration-300 hover:text-white/70"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {label}

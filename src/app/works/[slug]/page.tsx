@@ -8,7 +8,7 @@ import { WorksPageShell } from "@/components/works/WorksPageShell";
 import { stripExcerptHtml } from "@/lib/articles-archive";
 import { getRelatedWorks } from "@/lib/work-related";
 import { getWorkBySlug } from "@/lib/work-single";
-import workNoSidebarMainStyles from "@/styles/works/workNoSidebarMain.module.css";
+import { noSidebarMainClassName } from "@/lib/no-sidebar-main";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -47,7 +47,7 @@ export default async function WorkSinglePage({ params }: PageProps) {
             { label: work.title },
           ]}
         />
-        <div className={workNoSidebarMainStyles.noSidebarMain}>
+        <div className={noSidebarMainClassName}>
           <WorkSingleMain work={work} />
         </div>
         <WorkDetailRelated works={relatedWorks} />

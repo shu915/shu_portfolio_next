@@ -1,8 +1,0 @@
-/* ハンバーガーのトランジション（open/close 両方向に効かせるため共通定義） */
-.bar {
-  display: block;
-  position: absolute;
-  height: 0.125rem;
-  background-color: #fff;
-  transition: transform 0.3s ease, width 0.3s ease, top 0.3s ease;
-}

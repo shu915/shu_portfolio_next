@@ -104,7 +104,7 @@ export function ContactForm() {
 
   return (
     <div className="mx-auto mt-20 w-200 max-w-full rounded-[1.25rem] border border-solid border-[#e0e0e0] bg-[#fafafa] px-30 py-16 max-[899px]:mt-12 max-[899px]:px-8 max-[899px]:py-12 max-[430px]:mt-8 max-[430px]:px-4 max-[430px]:py-8">
-      <h3 className="text-center font-(family-name:--font-cormorant) text-[2rem] font-bold tracking-[0.05em] max-md:text-2xl">
+      <h3 className="text-center font-cormorant text-[2rem] font-bold tracking-[0.05em] max-md:text-2xl">
         Contact Form
       </h3>
       <p className="mt-2 text-center font-bold tracking-widest [&>br]:hidden max-[599px]:[&>br]:block">

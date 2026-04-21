@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 @theme {
+  /* `<head>` の Google Fonts と同名（font-cormorant / font-noto-serif-jp ユーティリティ） */
+  --font-cormorant: "Cormorant Garamond", serif;
+  --font-noto-serif-jp: "Noto Serif JP", serif;
   --color-primary: #211E55;
   --color-secondary: #E4EBF7;
   --color-accent: #d7003a;
@@ -10,18 +13,99 @@
   --color-border-subtle: #eeeeee;
 }
 
-body {
-  background-color: #ffffff;
-  color: var(--color-body);
-  font-family: var(--font-noto-serif-jp), serif;
-  font-size: 1rem;
-  line-height: 1.6;
+/* ベースの body / html の見た目は app/layout.tsx の className（Tailwind）へ */
+
+/* ヒーロー「Scroll」ガイド（HeroSection） */
+@keyframes scrollLine {
+  0% {
+    transform: translateY(-60px);
+  }
+  75% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(60px);
+  }
 }
 
 /*
- * fixed ヘッダー（h-15 = 3.75rem）＋見出しまわりの余白
- * アンカー（#toc-heading-n・本文内リンク）でスクロールしたときにピタッとしすぎないようにする
+ * サブヘッダー背景（image-set / メディアクエリは Tailwind では冗長なためここに集約）
+ * — SubHeader の variant と対応
  */
-html {
-  scroll-padding-top: calc(3.75rem + 0.75rem);
+.sub-header-bg-articles {
+  background-image: image-set(
+    url("/images/articles/sub-header-articles-pc-1920.webp") 1x,
+    url("/images/articles/sub-header-articles-pc-3150.webp") 2x
+  );
+}
+
+@media (max-width: 767px) {
+  .sub-header-bg-articles {
+    background-image: url("/images/articles/sub-header-articles-sp-800.webp");
+  }
+}
+
+.sub-header-bg-search {
+  background-image: image-set(
+    url("/images/search/sub-header-search-pc-1920.webp") 1x,
+    url("/images/search/sub-header-search-pc-3840.webp") 2x
+  );
+}
+
+@media (max-width: 767px) {
+  .sub-header-bg-search {
+    background-image: url("/images/search/sub-header-search-sp-800.webp");
+  }
+}
+
+.sub-header-bg-works {
+  background-image: image-set(
+    url("/images/works/sub-header-works-pc-1920.webp") 1x,
+    url("/images/works/sub-header-works-pc-3840.webp") 2x
+  );
+}
+
+@media (max-width: 767px) {
+  .sub-header-bg-works {
+    background-image: url("/images/works/sub-header-works-sp-800.webp");
+  }
+}
+
+.sub-header-bg-profile {
+  background-image: image-set(
+    url("/images/profile/sub-header-profile-pc-1920.webp") 1x,
+    url("/images/profile/sub-header-profile-pc-3840.webp") 2x
+  );
+}
+
+@media (max-width: 767px) {
+  .sub-header-bg-profile {
+    background-image: url("/images/profile/sub-header-profile-sp-800.webp");
+  }
+}
+
+.sub-header-bg-contact {
+  background-image: image-set(
+    url("/images/contact/sub-header-contact-pc-1920.webp") 1x,
+    url("/images/contact/sub-header-contact-pc-3840.webp") 2x
+  );
+}
+
+@media (max-width: 767px) {
+  .sub-header-bg-contact {
+    background-image: url("/images/contact/sub-header-contact-sp-800.webp");
+  }
+}
+
+.sub-header-bg-page {
+  background-image: image-set(
+    url("/images/page/sub-header-page-pc-1920.webp") 1x,
+    url("/images/page/sub-header-page-pc-3840.webp") 2x
+  );
+}
+
+@media (max-width: 767px) {
+  .sub-header-bg-page {
+    background-image: url("/images/page/sub-header-page-sp-800.webp");
+  }
 }

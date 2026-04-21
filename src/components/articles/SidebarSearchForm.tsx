@@ -1,5 +1,3 @@
-import sidebarSearchStyles from "@/styles/articles/sidebarSearch.module.css";
-
 /**
  * レガシー `searchform.php` + `.c-search-form` 相当。
  * GET `/articles/search?s=` で Next 側の検索結果ページへ（WP の `s` と同じパラメータ名）。
@@ -10,7 +8,7 @@ export function SidebarSearchForm() {
       action="/articles/search"
       method="get"
       role="search"
-      className={sidebarSearchStyles.form}
+      className="mt-4 box-border flex justify-center border border-primary focus-within:shadow-[0_0_0_2px_rgba(33,30,85,0.2)]"
     >
       <label htmlFor="sidebar-search-s" className="sr-only">
         キーワードで検索
@@ -21,11 +19,11 @@ export function SidebarSearchForm() {
         name="s"
         placeholder="キーワードを入力"
         autoComplete="off"
-        className={sidebarSearchStyles.input}
+        className="box-border min-w-0 w-full border-0 bg-white p-2 text-base tracking-[0.05em] text-[#333] outline-none"
       />
       <button
         type="submit"
-        className={sidebarSearchStyles.button}
+        className="inline-flex w-16 shrink-0 cursor-pointer items-center justify-center border-0 bg-primary p-0 text-white transition-[background-color,color] duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         aria-label="検索"
       >
         <SearchIcon className="size-[1.1rem]" />

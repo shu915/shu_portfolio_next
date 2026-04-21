@@ -100,13 +100,13 @@ export async function ArticlesSection() {
             <div className="max-[1239px]:order-1">
               <h2
                 id="articles-section-title"
-                className={`${sectionsStyles.sectionTitle} ${sectionsStyles.sectionTitleSecondary} text-[2.25rem] font-bold font-(family-name:--font-cormorant) tracking-[0.15em] max-[1239px]:mx-auto`}
+                className={`${sectionsStyles.sectionTitle} ${sectionsStyles.sectionTitleSecondary} text-[2.25rem] font-bold font-cormorant tracking-[0.15em] max-[1239px]:mx-auto`}
               >
                 Articles
               </h2>
 
               <div className="mt-6">
-                <h3 className="text-[1.25rem] font-bold tracking-widest text-white font-(family-name:--font-cormorant) max-[1239px]:text-center">
+                <h3 className="text-[1.25rem] font-bold tracking-widest text-white font-cormorant max-[1239px]:text-center">
                   Category
                 </h3>
                 <ul className="mt-3 flex flex-col gap-4 max-[1239px]:flex-row max-[767px]:flex-col max-[767px]:items-start max-[767px]:w-fit max-[767px]:mx-auto">
