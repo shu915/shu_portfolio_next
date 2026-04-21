@@ -1,6 +1,9 @@
 import { ARTICLES_PER_PAGE } from "@/lib/articles-constants";
 import { gqlFetch } from "@/lib/graphql";
-import type { ArchivePostNode } from "@/lib/articles-types";
+import type {
+  ArchivePostNode,
+  ArticlesPostsOffsetQueryResult,
+} from "@/lib/articles-types";
 import { totalPagesFromOffsetPagination } from "@/lib/wp-offset-pagination";
 
 /**
@@ -43,19 +46,6 @@ const GET_POSTS_OFFSET_PAGE = `
   }
 `;
 
-type OffsetPageResult = {
-  posts: {
-    nodes: ArchivePostNode[];
-    pageInfo: {
-      offsetPagination: {
-        hasMore: boolean;
-        hasPrevious: boolean;
-        total: number | null;
-      } | null;
-    } | null;
-  };
-};
-
 /**
  * 記事一覧の1ページ分（offset は 0 始まり）
  * total を取ると DB で件数計算が走る（プラグイン README の通りやや重い）
@@ -70,7 +60,7 @@ export async function getArticlesArchiveOffsetPage(
 
   const offset = (page - 1) * ARTICLES_PER_PAGE;
 
-  const data = await gqlFetch<OffsetPageResult>(GET_POSTS_OFFSET_PAGE, {
+  const data = await gqlFetch<ArticlesPostsOffsetQueryResult>(GET_POSTS_OFFSET_PAGE, {
     variables: {
       size: ARTICLES_PER_PAGE,
       offset,

@@ -9,13 +9,7 @@ import {
   getArticlesArchiveOffsetPage,
   getArticlesSidebarBundle,
 } from "@/lib/articles-archive";
-
-function parsePage(raw: string | string[] | undefined): number {
-  const v = Array.isArray(raw) ? raw[0] : raw;
-  const n = parseInt(v ?? "1", 10);
-  if (!Number.isFinite(n) || n < 1) return 1;
-  return Math.floor(n);
-}
+import { parsePaginationPage } from "@/lib/parse-pagination-page";
 
 export async function generateMetadata({
   searchParams,
@@ -23,7 +17,7 @@ export async function generateMetadata({
   searchParams: Promise<{ page?: string | string[] }>;
 }): Promise<Metadata> {
   const sp = await searchParams;
-  const page = parsePage(sp.page);
+  const page = parsePaginationPage(sp.page);
   const title =
     page <= 1
       ? "Articles | Shu Digital Works"
@@ -40,7 +34,7 @@ export default async function ArticlesPage({
   searchParams: Promise<{ page?: string | string[] }>;
 }) {
   const sp = await searchParams;
-  const page = parsePage(sp.page);
+  const page = parsePaginationPage(sp.page);
 
   const [sidebar, archive] = await Promise.all([
     getArticlesSidebarBundle(),

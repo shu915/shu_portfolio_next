@@ -10,18 +10,7 @@ import {
   getArticlesSearchPage,
   getArticlesSidebarBundle,
 } from "@/lib/articles-sidebar";
-
-function parsePage(raw: string | string[] | undefined): number {
-  const v = Array.isArray(raw) ? raw[0] : raw;
-  const n = parseInt(v ?? "1", 10);
-  if (!Number.isFinite(n) || n < 1) return 1;
-  return Math.floor(n);
-}
-
-function rawSearchParam(s: string | string[] | undefined): string {
-  const v = Array.isArray(s) ? s[0] : s;
-  return typeof v === "string" ? v : "";
-}
+import { parsePaginationPage } from "@/lib/parse-pagination-page";
 
 type PageProps = {
   searchParams: Promise<{ s?: string | string[]; page?: string | string[] }>;
@@ -32,12 +21,12 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const sp = await searchParams;
   const q = articlesSearchQueryFromSearchParams(sp.s);
-  const page = parsePage(sp.page);
+  const page = parsePaginationPage(sp.page);
   if (!q && page > 1) {
     return { title: "検索 | Shu Digital Works" };
   }
 
-  const data = await getArticlesSearchPage(rawSearchParam(sp.s), page);
+  const data = await getArticlesSearchPage(q, page);
   if (data === null) {
     return { title: "検索 | Shu Digital Works" };
   }
@@ -64,7 +53,7 @@ export async function generateMetadata({
 export default async function ArticlesSearchPage({ searchParams }: PageProps) {
   const sp = await searchParams;
   const q = articlesSearchQueryFromSearchParams(sp.s);
-  const page = parsePage(sp.page);
+  const page = parsePaginationPage(sp.page);
 
   if (!q && page > 1) {
     notFound();
@@ -72,7 +61,7 @@ export default async function ArticlesSearchPage({ searchParams }: PageProps) {
 
   const [sidebar, data] = await Promise.all([
     getArticlesSidebarBundle(),
-    getArticlesSearchPage(rawSearchParam(sp.s), page),
+    getArticlesSearchPage(q, page),
   ]);
 
   if (data === null) {

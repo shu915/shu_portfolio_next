@@ -8,13 +8,7 @@ import {
   getWorksArchiveOffsetPage,
   WORKS_SERVICE_TAB_TERMS,
 } from "@/lib/works-archive";
-
-function parsePage(raw: string | string[] | undefined): number {
-  const v = Array.isArray(raw) ? raw[0] : raw;
-  const n = parseInt(v ?? "1", 10);
-  if (!Number.isFinite(n) || n < 1) return 1;
-  return Math.floor(n);
-}
+import { parsePaginationPage } from "@/lib/parse-pagination-page";
 
 function parseService(raw: string | string[] | undefined): string | undefined {
   const v = Array.isArray(raw) ? raw[0] : raw;
@@ -32,7 +26,7 @@ export async function generateMetadata({
   }>;
 }): Promise<Metadata> {
   const sp = await searchParams;
-  const page = parsePage(sp.page);
+  const page = parsePaginationPage(sp.page);
   const serviceSlug = parseService(sp.service);
   const serviceName = serviceSlug
     ? WORKS_SERVICE_TAB_TERMS.find((t) => t.slug === serviceSlug)?.name
@@ -61,7 +55,7 @@ export default async function WorksPage({
   }>;
 }) {
   const sp = await searchParams;
-  const page = parsePage(sp.page);
+  const page = parsePaginationPage(sp.page);
   const serviceSlug = parseService(sp.service);
 
   const archive = await getWorksArchiveOffsetPage(page, { serviceSlug });

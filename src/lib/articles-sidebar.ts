@@ -3,26 +3,11 @@ import { ARTICLES_PER_PAGE } from "@/lib/articles-constants";
 import { gqlFetch } from "@/lib/graphql";
 import type {
   ArchivePostNode,
+  ArticlesPostsOffsetQueryResult,
   ArticlesSidebarBundle,
   TaxonomyNode,
 } from "@/lib/articles-types";
 import { totalPagesFromOffsetPagination } from "@/lib/wp-offset-pagination";
-
-/* -------------------------------------------------------------------------- */
-/* 共通：posts + offsetPagination（タクソノミー・月別・検索の一覧クエリ） */
-
-type ArchivePostsOffsetResult = {
-  posts: {
-    nodes: ArchivePostNode[];
-    pageInfo: {
-      offsetPagination: {
-        hasMore: boolean;
-        hasPrevious: boolean;
-        total: number | null;
-      } | null;
-    } | null;
-  };
-};
 
 /* -------------------------------------------------------------------------- */
 /* サイドバー用データ（カテゴリ・タグ・新着・月集計用日付） */
@@ -340,7 +325,7 @@ export const getCategoryArchivePage = cache(async function getCategoryArchivePag
       name: string;
       slug: string;
     } | null;
-    posts: ArchivePostsOffsetResult["posts"];
+    posts: ArticlesPostsOffsetQueryResult["posts"];
   }>(GET_CATEGORY_ARCHIVE_PAGE, {
     variables: {
       slug: trimmed,
@@ -395,7 +380,7 @@ export const getTagArchivePage = cache(async function getTagArchivePage(
 
   const offset = (page - 1) * ARTICLES_PER_PAGE;
 
-  const data = await gqlFetch<ArchivePostsOffsetResult>(
+  const data = await gqlFetch<ArticlesPostsOffsetQueryResult>(
     GET_POSTS_OFFSET_PAGE_BY_TAG_IN,
     {
       variables: {
@@ -532,7 +517,7 @@ export const getArticlesYearMonthArchivePage = cache(
 
     const offset = (page - 1) * ARTICLES_PER_PAGE;
 
-    const data = await gqlFetch<ArchivePostsOffsetResult>(
+    const data = await gqlFetch<ArticlesPostsOffsetQueryResult>(
       GET_POSTS_OFFSET_PAGE_BY_YEAR_MONTH,
       {
         variables: {
@@ -648,7 +633,7 @@ export const getArticlesSearchPage = cache(async function getArticlesSearchPage(
 
   const offset = (page - 1) * ARTICLES_PER_PAGE;
 
-  const data = await gqlFetch<ArchivePostsOffsetResult>(
+  const data = await gqlFetch<ArticlesPostsOffsetQueryResult>(
     GET_POSTS_OFFSET_PAGE_BY_SEARCH,
     {
       variables: {

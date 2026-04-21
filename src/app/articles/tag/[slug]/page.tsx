@@ -9,13 +9,7 @@ import {
   getArticlesSidebarBundle,
   getTagArchivePage,
 } from "@/lib/articles-sidebar";
-
-function parsePage(raw: string | string[] | undefined): number {
-  const v = Array.isArray(raw) ? raw[0] : raw;
-  const n = parseInt(v ?? "1", 10);
-  if (!Number.isFinite(n) || n < 1) return 1;
-  return Math.floor(n);
-}
+import { parsePaginationPage } from "@/lib/parse-pagination-page";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -28,7 +22,7 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const sp = await searchParams;
-  const page = parsePage(sp.page);
+  const page = parsePaginationPage(sp.page);
   const data = await getTagArchivePage(slug, page);
   if (!data) {
     return { title: "タグが見つかりません | Shu Digital Works" };
@@ -49,7 +43,7 @@ export default async function ArticlesTagArchivePage({
 }: PageProps) {
   const { slug } = await params;
   const sp = await searchParams;
-  const page = parsePage(sp.page);
+  const page = parsePaginationPage(sp.page);
 
   const [sidebar, archive] = await Promise.all([
     getArticlesSidebarBundle(),
