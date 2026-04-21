@@ -1,8 +1,9 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import type { ArchivePostNode, TaxonomyNode } from "@/lib/articles-archive";
-import { groupPostDatesByYearMonth } from "@/lib/articles-archive";
+import type { ArchivePostNode, TaxonomyNode } from "@/lib/articles-types";
+import { groupPostDatesByYearMonth } from "@/lib/articles-sidebar";
+import { articlesYearMonthArchivePath } from "@/lib/articles-archive";
 import { SidebarSearchForm } from "@/components/articles/SidebarSearchForm";
 import { formatDateJa } from "@/lib/format-date-ja";
 
@@ -206,7 +207,7 @@ export function ArticlesSidebar({
                       className="block border-b border-dotted border-[#ccc] py-1.5 pl-6 pr-2 text-base text-[#333] last:border-b-0"
                     >
                       <Link
-                        href={`/articles?ym=${year}-${String(month).padStart(2, "0")}`}
+                        href={articlesYearMonthArchivePath(year, month)}
                         className="block w-full hover:text-primary"
                       >
                         {month}月({count})
