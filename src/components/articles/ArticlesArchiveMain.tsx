@@ -1,6 +1,6 @@
 import { ArticleListItem } from "@/components/ui/ArticleListItem";
 import { Pagination } from "@/components/ui/Pagination";
-import type { ArchivePostNode } from "@/lib/articles-archive";
+import type { ArchivePostNode } from "@/lib/articles-types";
 import { stripExcerptHtml } from "@/lib/articles-archive";
 
 type Props = {

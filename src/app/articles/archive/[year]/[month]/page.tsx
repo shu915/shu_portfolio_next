@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { ArticlesArchiveLayout } from "@/components/articles/ArticlesArchiveLayout";
 import { ArticlesArchiveMain } from "@/components/articles/ArticlesArchiveMain";
 import { ArticlesSidebar } from "@/components/articles/ArticlesSidebar";
@@ -7,29 +7,10 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
 import {
   articlesYearMonthArchivePath,
-  getArticlesArchiveOffsetPage,
   getArticlesSidebarBundle,
+  getArticlesYearMonthArchivePage,
   parseYearMonthRouteParams,
 } from "@/lib/articles-archive";
-
-/** 旧 `?ym=YYYY-MM` → 正規パス（`page` は 2 以上だけ引き継ぎ） */
-function legacyYmRedirectPath(
-  sp: Record<string, string | string[] | undefined>
-): string | null {
-  const rawYm = Array.isArray(sp.ym) ? sp.ym[0] : sp.ym;
-  if (!rawYm || typeof rawYm !== "string") return null;
-  const matched = /^(\d{4})-(\d{1,2})$/.exec(rawYm.trim());
-  if (!matched) return null;
-  const ym = parseYearMonthRouteParams(matched[1], matched[2]);
-  if (!ym) return null;
-  const base = articlesYearMonthArchivePath(ym.year, ym.month);
-  const rawPage = Array.isArray(sp.page) ? sp.page[0] : sp.page;
-  const pageNum = rawPage != null ? parseInt(String(rawPage), 10) : NaN;
-  if (Number.isFinite(pageNum) && pageNum > 1) {
-    return `${base}?page=${pageNum}`;
-  }
-  return base;
-}
 
 function parsePage(raw: string | string[] | undefined): number {
   const v = Array.isArray(raw) ? raw[0] : raw;
@@ -38,60 +19,79 @@ function parsePage(raw: string | string[] | undefined): number {
   return Math.floor(n);
 }
 
+type PageProps = {
+  params: Promise<{ year: string; month: string }>;
+  searchParams: Promise<{ page?: string | string[] }>;
+};
+
 export async function generateMetadata({
+  params,
   searchParams,
-}: {
-  searchParams: Promise<{ page?: string | string[]; ym?: string | string[] }>;
-}): Promise<Metadata> {
+}: PageProps): Promise<Metadata> {
+  const { year: yStr, month: mStr } = await params;
   const sp = await searchParams;
-  const ymPath = legacyYmRedirectPath(sp);
-  if (ymPath) {
-    redirect(ymPath);
-  }
   const page = parsePage(sp.page);
+  const ym = parseYearMonthRouteParams(yStr, mStr);
+  if (!ym) {
+    return { title: "記事一覧 | Shu Digital Works" };
+  }
+  const data = await getArticlesYearMonthArchivePage(ym.year, ym.month, page);
+  if (!data) {
+    return { title: "記事一覧 | Shu Digital Works" };
+  }
+  const { year, month } = data;
+  const heading = `${year}年${month}月`;
+  const base = `${heading} | Articles | Shu Digital Works`;
   const title =
-    page <= 1
-      ? "Articles | Shu Digital Works"
-      : `Articles（${page}ページ目）| Shu Digital Works`;
+    page <= 1 ? base : `${heading}（${page}ページ目）| Articles | Shu Digital Works`;
   return {
     title,
-    description: "投稿記事一覧",
+    description: `${heading}の記事一覧`,
   };
 }
 
-export default async function ArticlesPage({
+export default async function ArticlesYearMonthArchivePage({
+  params,
   searchParams,
-}: {
-  searchParams: Promise<{ page?: string | string[]; ym?: string | string[] }>;
-}) {
+}: PageProps) {
+  const { year: yStr, month: mStr } = await params;
   const sp = await searchParams;
-  const ymPath = legacyYmRedirectPath(sp);
-  if (ymPath) {
-    redirect(ymPath);
-  }
   const page = parsePage(sp.page);
+
+  const ym = parseYearMonthRouteParams(yStr, mStr);
+  if (!ym) {
+    notFound();
+  }
 
   const [sidebar, archive] = await Promise.all([
     getArticlesSidebarBundle(),
-    getArticlesArchiveOffsetPage(page),
+    getArticlesYearMonthArchivePage(ym.year, ym.month, page),
   ]);
 
   if (archive === null) {
     notFound();
   }
 
-  const { posts: pagePosts, totalPages } = archive;
+  const { posts: pagePosts, totalPages, year, month } = archive;
+  const heading = `${year}年${month}月`;
 
   if (page > totalPages) {
     notFound();
   }
 
+  const paginationPath = articlesYearMonthArchivePath(year, month);
+
   return (
     <>
-      <SubHeader variant="articles" title="Articles" subtitle="投稿記事" />
+      <SubHeader variant="articles" title="Articles" subtitle={heading} />
       <div className="mx-auto max-w-[1232px] px-4 pb-32 md:px-6 lg:px-8">
         <Breadcrumbs
-          items={[{ label: "Top", href: "/" }, { label: "Articles" }]}
+          items={[
+            { label: "Top", href: "/" },
+            { label: "Articles", href: "/articles" },
+            { label: "アーカイブ" },
+            { label: heading },
+          ]}
         />
         <ArticlesArchiveLayout
           main={
@@ -99,6 +99,7 @@ export default async function ArticlesPage({
               posts={pagePosts}
               currentPage={page}
               totalPages={totalPages}
+              paginationPathname={paginationPath}
             />
           }
           sidebar={
