@@ -48,19 +48,19 @@ const SERVICE_ITEMS = [
     title: "ランディングページ",
     imageSrc: "/images/front-page/front-page-works-service-item1.svg",
     text: "レスポンシブデザイン、SEO対策、GA4などを駆使し、効果的なランディングページを構築します。ユーザーの関心を引き、コンバージョン率を向上させることで、売上アップに貢献します。",
-    href: "/works?service=landing",
+    serviceSlug: "landing",
   },
   {
     title: "WordPress",
     imageSrc: "/images/front-page/front-page-works-service-item2.svg",
     text: "WordPressを活用して、企業のブランディングを強化するコーポレートサイトを構築します。ブログ投稿機能、問い合わせフォーム、SEO対策を標準装備。企業の魅力を最大限に引き出します。",
-    href: "/works?service=wordpress",
+    serviceSlug: "wordpress",
   },
   {
     title: "WEBシステム開発",
     imageSrc: "/images/front-page/front-page-works-service-item3.svg",
     text: "モダンな技術スタックを用い、業務用ツールからWEBサービスまで幅広く開発を行います。ECサイト、SNS機能、その他カスタム仕様にも柔軟に対応します。",
-    href: "/works?service=system",
+    serviceSlug: "system",
   },
 ] as const;
 
@@ -112,7 +112,7 @@ export async function WorksSection() {
               <p className="mt-5 text-justify">{item.text}</p>
               <div className="mt-5 w-31 mx-auto">
                 <Link
-                  href={item.href}
+                  href={`/works?service=${encodeURIComponent(item.serviceSlug)}`}
                   className="block text-base font-bold text-white bg-primary px-4 py-2 rounded-3xl w-full text-center tracking-widest transition-colors duration-300 hover:bg-secondary hover:text-black"
                 >
                   More
