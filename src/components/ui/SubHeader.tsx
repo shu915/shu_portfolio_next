@@ -1,9 +1,7 @@
-import subHeaderStyles from "@/styles/ui/subHeader.module.css";
-
 /**
  * 各ページ上部のサブヘッダー（背景画像 + タイトル + サブタイトル）
  *
- * 背景が必要な variant は `src/styles/ui/subHeader.module.css` に追加する
+ * 背景クラスは `src/styles/globals.css` の `.sub-header-bg-*`
  */
 type Props = {
   variant:
@@ -20,13 +18,13 @@ type Props = {
 };
 
 const BG_BY_VARIANT: Record<Props["variant"], string | undefined> = {
-  articles: subHeaderStyles.bgArticles,
-  search: subHeaderStyles.bgSearch,
-  works: subHeaderStyles.bgWorks,
-  profile: subHeaderStyles.bgProfile,
-  contact: subHeaderStyles.bgContact,
+  articles: "sub-header-bg-articles",
+  search: "sub-header-bg-search",
+  works: "sub-header-bg-works",
+  profile: "sub-header-bg-profile",
+  contact: "sub-header-bg-contact",
   archive: undefined,
-  page: subHeaderStyles.bgPage,
+  page: "sub-header-bg-page",
 };
 
 export function SubHeader({ variant, title, subtitle }: Props) {

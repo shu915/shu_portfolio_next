@@ -3,7 +3,6 @@ import { ArticleListItem } from "@/components/ui/ArticleListItem";
 import { Pagination } from "@/components/ui/Pagination";
 import type { WorksArchiveNode } from "@/lib/works-archive";
 import { stripExcerptHtml } from "@/lib/articles-archive";
-import worksGenreStyles from "@/styles/works/worksGenre.module.css";
 
 type Props = {
   works: WorksArchiveNode[];
@@ -29,13 +28,22 @@ export function WorksArchiveMain({
     return `${basePath}?service=${encodeURIComponent(s)}`;
   };
 
+  /** 競合（text-primary / text-white）を避けるため、非アクティブとアクティブでクラスを分ける */
+  const tabInactive =
+    "inline-block rounded px-[0.7rem] py-1 text-base font-semibold tracking-[0.1em] text-primary no-underline transition-colors duration-300 bg-secondary hover:bg-primary hover:text-white";
+  const tabActive =
+    "inline-block rounded px-[0.7rem] py-1 text-base font-semibold tracking-[0.1em] text-white no-underline transition-colors duration-300 bg-primary hover:bg-primary hover:text-white";
+
   return (
     <div>
-      <nav className={worksGenreStyles.genre} aria-label="制作実績のジャンル">
+      <nav
+        className="mx-auto mt-8 flex w-fit flex-col items-start gap-4 md:flex-row md:items-center md:justify-center"
+        aria-label="制作実績のジャンル"
+      >
         <Link
           href={withService()}
           prefetch={false}
-          className={`${worksGenreStyles.link} ${!activeServiceSlug ? worksGenreStyles.linkActive : ""}`}
+          className={!activeServiceSlug ? tabActive : tabInactive}
           aria-current={!activeServiceSlug ? "page" : undefined}
         >
           All
@@ -45,7 +53,9 @@ export function WorksArchiveMain({
             key={t.slug}
             href={withService(t.slug)}
             prefetch={false}
-            className={`${worksGenreStyles.link} ${activeServiceSlug === t.slug ? worksGenreStyles.linkActive : ""}`}
+            className={
+              activeServiceSlug === t.slug ? tabActive : tabInactive
+            }
             aria-current={activeServiceSlug === t.slug ? "page" : undefined}
           >
             {t.name}

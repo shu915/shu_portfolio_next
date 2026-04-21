@@ -1,7 +1,6 @@
 import { ArticleListItem } from "@/components/ui/ArticleListItem";
 import { stripExcerptHtml } from "@/lib/articles-archive";
 import type { WorksArchiveNode } from "@/lib/works-archive";
-import workDetailRelatedStyles from "@/styles/works/workDetailRelated.module.css";
 
 type Props = {
   works: WorksArchiveNode[];
@@ -17,16 +16,16 @@ export function WorkDetailRelated({ works }: Props) {
 
   return (
     <section
-      className={workDetailRelatedStyles.related}
+      className="mx-auto mt-32 w-full max-w-[65rem] rounded-lg border border-[var(--color-border-subtle)] bg-[#fafafa] p-8 shadow-[0_0_10px_rgba(0,0,0,0.1)] max-[929px]:mt-24 max-[929px]:max-w-full max-[430px]:p-4"
       aria-labelledby="work-related-heading"
     >
       <h2
         id="work-related-heading"
-        className={workDetailRelatedStyles.title}
+        className="mx-auto w-fit text-center text-2xl font-bold tracking-[0.1em] text-primary after:block after:h-1 after:w-full after:bg-primary after:content-['']"
       >
         関連記事
       </h2>
-      <ul className={workDetailRelatedStyles.items}>
+      <ul className="mx-auto mt-8 grid w-fit grid-cols-[repeat(3,16.6rem)] gap-4 max-[929px]:grid-cols-[16.6rem] max-[929px]:justify-center max-[929px]:gap-8 max-[430px]:w-full max-[430px]:grid-cols-1">
         {works.map((item, index) => (
           <li key={item.id}>
             <ArticleListItem

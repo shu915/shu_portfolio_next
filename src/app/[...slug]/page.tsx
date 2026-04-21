@@ -5,7 +5,7 @@ import { WpFixedPageShell } from "@/components/fixed-page/WpFixedPageShell";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
 import { getPageBySlug } from "@/lib/wp-page";
-import staticPageStyles from "@/styles/static-page/staticPage.module.css";
+import { noSidebarMainClassName } from "@/lib/no-sidebar-main";
 
 type PageProps = {
   params: Promise<{ slug: string[] }>;
@@ -93,7 +93,7 @@ export default async function WpFixedPageRoute({ params }: PageProps) {
           <Breadcrumbs
             items={[{ label: "Top", href: "/" }, { label: wpPage.title }]}
           />
-          <main className={staticPageStyles.noSidebarMain}>
+          <main className={noSidebarMainClassName}>
             <WpFixedPageMain page={wpPage} />
           </main>
         </div>

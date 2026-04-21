@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import headerStyles from "@/styles/layout/header.module.css";
 import navStyles from "@/styles/layout/navUnderline.module.css";
 
 const NAV_LINKS = [
@@ -68,15 +67,15 @@ export function Header() {
           {/* バー2本 */}
           <span className="relative block h-[0.6rem] w-7.5">
             <span
-              className={`${headerStyles.bar} left-0 w-full ${
-                isMenuOpen ? "top-1/2 -translate-y-1/2 rotate-45" : "top-0"
+              className={`absolute left-0 block h-0.5 bg-white transition-[transform,width,top] duration-300 ease-in-out ${
+                isMenuOpen ? "top-1/2 w-full -translate-y-1/2 rotate-45" : "top-0 w-full"
               }`}
             />
             <span
-              className={`${headerStyles.bar} left-0 ${
+              className={`absolute left-0 block h-0.5 bg-white transition-[transform,width,top] duration-300 ease-in-out ${
                 isMenuOpen
-                  ? "w-full top-1/2 -translate-y-1/2 -rotate-45"
-                  : "w-[66%] bottom-0"
+                  ? "top-1/2 w-full -translate-y-1/2 -rotate-45"
+                  : "bottom-0 w-[66%]"
               }`}
             />
           </span>

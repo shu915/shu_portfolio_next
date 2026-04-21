@@ -2,7 +2,6 @@ import { ContentBodyHtml } from "@/components/content/ContentBodyHtml";
 import { ContentToc } from "@/components/content/ContentToc";
 import { prepareContentBodyHtml } from "@/lib/content-body-html";
 import type { WpPage } from "@/lib/wp-page";
-import staticPageStyles from "@/styles/static-page/staticPage.module.css";
 import articleBodyStyles from "@/styles/articles/articleBody.module.css";
 
 type Props = {
@@ -19,12 +18,12 @@ export function WpFixedPageMain({ page }: Props) {
     : { html: "", tocItems: [] };
 
   return (
-    <article className={staticPageStyles.article}>
+    <article className="min-w-0 pt-12">
       <h1 className="text-center text-2xl font-bold tracking-wide text-primary max-md:text-xl md:text-[2rem] md:tracking-[0.075rem]">
         {page.title}
       </h1>
       {prepared.html ? (
-        <div className={`${staticPageStyles.content} space-y-8`}>
+        <div className="min-w-0 space-y-8 pt-8">
           {prepared.tocItems.length > 0 && (
             <ContentToc items={prepared.tocItems} />
           )}
@@ -33,7 +32,7 @@ export function WpFixedPageMain({ page }: Props) {
           </div>
         </div>
       ) : (
-        <p className={`${staticPageStyles.content} text-base text-body`}>
+        <p className="min-w-0 pt-8 text-base text-body">
           本文がありません。
         </p>
       )}

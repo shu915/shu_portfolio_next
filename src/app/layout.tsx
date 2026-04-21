@@ -1,20 +1,11 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Noto_Serif_JP } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
 
-const cormorantGaramond = Cormorant_Garamond({
-  variable: "--font-cormorant",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
-
-const notoSerifJP = Noto_Serif_JP({
-  variable: "--font-noto-serif-jp",
-  subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700", "900"],
-});
+/** Google Fonts を `<head>` で読み込み（preconnect で接続を先行）。フォント名は globals.css の :root と一致 */
+const GOOGLE_FONTS_STYLESHEET =
+  "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@200;300;400;500;600;700;900&display=swap";
 
 const siteUrlRaw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
 const metadataBaseUrl =
@@ -51,9 +42,20 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className={`${cormorantGaramond.variable} ${notoSerifJP.variable}`}
+      className="scroll-pt-[calc(3.75rem+0.75rem)]"
     >
-      <body className="min-h-screen flex flex-col">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link rel="stylesheet" href={GOOGLE_FONTS_STYLESHEET} />
+      </head>
+      <body
+        className="flex min-h-screen flex-col bg-white font-(family-name:--font-noto-serif-jp) text-base leading-[1.6] text-body"
+      >
         <Header />
         {/* ヘッダーが fixed のため、コンテンツ上部に同じ高さの余白を確保 */}
         <main className="flex-1 mt-15">{children}</main>
