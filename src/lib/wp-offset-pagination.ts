@@ -10,6 +10,14 @@ export type WpGraphqlOffsetPagination = {
   total?: number | string | null;
 };
 
+function parseWpOffsetTotalRaw(
+  rawTotal: number | string | null | undefined
+): number {
+  if (typeof rawTotal === "number") return rawTotal;
+  if (typeof rawTotal === "string") return Number.parseInt(rawTotal, 10);
+  return NaN;
+}
+
 /**
  * 現在ページ番号（1 始まり）と 1 ページあたり件数から総ページ数を推定する。
  * `total` が取れるときは件数ベース。無い・不正なときは `hasMore` と現在ページで推定。
@@ -19,13 +27,7 @@ export function totalPagesFromOffsetPagination(
   perPage: number,
   op: WpGraphqlOffsetPagination | null | undefined
 ): number {
-  const rawTotal = op?.total;
-  const totalNum =
-    typeof rawTotal === "number"
-      ? rawTotal
-      : typeof rawTotal === "string"
-        ? Number.parseInt(rawTotal, 10)
-        : NaN;
+  const totalNum = parseWpOffsetTotalRaw(op?.total);
 
   if (Number.isFinite(totalNum) && totalNum >= 0) {
     return Math.max(1, Math.ceil(totalNum / perPage));
@@ -33,4 +35,15 @@ export function totalPagesFromOffsetPagination(
 
   const hasMore = op?.hasMore ?? false;
   return hasMore ? page + 1 : Math.max(1, page);
+}
+
+/** 一覧の総件数（`total` が無い・不正なときは 0） */
+export function offsetPaginationTotalCount(
+  op: WpGraphqlOffsetPagination | null | undefined
+): number {
+  const totalNum = parseWpOffsetTotalRaw(op?.total);
+  if (Number.isFinite(totalNum) && totalNum >= 0) {
+    return totalNum;
+  }
+  return 0;
 }

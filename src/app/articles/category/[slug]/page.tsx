@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticlesArchiveLayout } from "@/components/articles/ArticlesArchiveLayout";
+import { ArticlesArchiveLeading } from "@/components/articles/ArticlesArchiveLeading";
 import { ArticlesArchiveMain } from "@/components/articles/ArticlesArchiveMain";
 import { ArticlesSidebar } from "@/components/articles/ArticlesSidebar";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -54,13 +55,22 @@ export default async function ArticlesCategoryArchivePage({
     notFound();
   }
 
-  const { category, posts: pagePosts, totalPages } = archive;
+  const { category, posts: pagePosts, totalPages, totalCount } = archive;
 
   if (page > totalPages) {
     notFound();
   }
 
   const paginationPath = `/articles/category/${category.slug}`;
+
+  const leading = (
+    <ArticlesArchiveLeading
+      iconSrc="/images/articles/category-icon.svg"
+      prefixLabel="カテゴリー："
+      title={category.name}
+      totalCount={totalCount}
+    />
+  );
 
   return (
     <>
@@ -84,6 +94,7 @@ export default async function ArticlesCategoryArchivePage({
               currentPage={page}
               totalPages={totalPages}
               paginationPathname={paginationPath}
+              leading={leading}
             />
           }
           sidebar={

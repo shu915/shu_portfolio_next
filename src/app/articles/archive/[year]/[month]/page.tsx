@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticlesArchiveLayout } from "@/components/articles/ArticlesArchiveLayout";
+import { ArticlesArchiveLeading } from "@/components/articles/ArticlesArchiveLeading";
 import { ArticlesArchiveMain } from "@/components/articles/ArticlesArchiveMain";
 import { ArticlesSidebar } from "@/components/articles/ArticlesSidebar";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -66,7 +67,7 @@ export default async function ArticlesYearMonthArchivePage({
     notFound();
   }
 
-  const { posts: pagePosts, totalPages, year, month } = archive;
+  const { posts: pagePosts, totalPages, totalCount, year, month } = archive;
   const heading = `${year}年${month}月`;
 
   if (page > totalPages) {
@@ -74,6 +75,15 @@ export default async function ArticlesYearMonthArchivePage({
   }
 
   const paginationPath = articlesYearMonthArchivePath(year, month);
+
+  const leading = (
+    <ArticlesArchiveLeading
+      iconSrc="/images/articles/archive-icon.svg"
+      prefixLabel="アーカイブ："
+      title={heading}
+      totalCount={totalCount}
+    />
+  );
 
   return (
     <>
@@ -94,6 +104,7 @@ export default async function ArticlesYearMonthArchivePage({
               currentPage={page}
               totalPages={totalPages}
               paginationPathname={paginationPath}
+              leading={leading}
             />
           }
           sidebar={

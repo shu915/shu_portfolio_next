@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticlesArchiveLayout } from "@/components/articles/ArticlesArchiveLayout";
+import { ArticlesArchiveLeading } from "@/components/articles/ArticlesArchiveLeading";
 import { ArticlesArchiveMain } from "@/components/articles/ArticlesArchiveMain";
 import { ArticlesSidebar } from "@/components/articles/ArticlesSidebar";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -54,13 +55,22 @@ export default async function ArticlesTagArchivePage({
     notFound();
   }
 
-  const { tag, posts: pagePosts, totalPages } = archive;
+  const { tag, posts: pagePosts, totalPages, totalCount } = archive;
 
   if (page > totalPages) {
     notFound();
   }
 
   const paginationPath = `/articles/tag/${tag.slug}`;
+
+  const leading = (
+    <ArticlesArchiveLeading
+      iconSrc="/images/articles/tag-icon.svg"
+      prefixLabel="タグ："
+      title={tag.name}
+      totalCount={totalCount}
+    />
+  );
 
   return (
     <>
@@ -84,6 +94,7 @@ export default async function ArticlesTagArchivePage({
               currentPage={page}
               totalPages={totalPages}
               paginationPathname={paginationPath}
+              leading={leading}
             />
           }
           sidebar={

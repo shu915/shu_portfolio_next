@@ -42,7 +42,7 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className="scroll-pt-[calc(3.75rem+0.75rem)]"
+      className="scroll-pt-18"
     >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
