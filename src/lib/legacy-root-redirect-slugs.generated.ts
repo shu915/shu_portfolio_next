@@ -1,6 +1,6 @@
 /**
- * 自動生成（scripts/generate-legacy-root-slugs.mjs）— 手編集しない
- * 旧パス `/{slug}` を `/articles/{slug}` / `/works/{slug}` へ寄せる middleware 用
+ * 旧パス `/{slug}` を `/articles/{slug}` / `/works/{slug}` へ寄せる middleware 用のスラッグ一覧。
+ * 記事・Works・直下固定ページを増やしたら、該当する Set にスラッグを追加する。
  */
 export const LEGACY_ROOT_PAGE_URI_SEGMENTS = new Set<string>([
   "contact",
