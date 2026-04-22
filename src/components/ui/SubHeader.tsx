@@ -19,33 +19,34 @@ type Props = {
   subtitle: string;
 };
 
+/** PC は `public` にある最大幅（旧 image-set 2x 相当）。SP は *-sp-800 のみ */
 const BG_BY_VARIANT: Record<
   Props["variant"],
   { pc: string; sp: string } | null
 > = {
   articles: {
-    pc: "/images/articles/sub-header-articles-pc-1920.webp",
+    pc: "/images/articles/sub-header-articles-pc-3150.webp",
     sp: "/images/articles/sub-header-articles-sp-800.webp",
   },
   search: {
-    pc: "/images/search/sub-header-search-pc-1920.webp",
+    pc: "/images/search/sub-header-search-pc-3840.webp",
     sp: "/images/search/sub-header-search-sp-800.webp",
   },
   works: {
-    pc: "/images/works/sub-header-works-pc-1920.webp",
+    pc: "/images/works/sub-header-works-pc-3840.webp",
     sp: "/images/works/sub-header-works-sp-800.webp",
   },
   profile: {
-    pc: "/images/profile/sub-header-profile-pc-1920.webp",
+    pc: "/images/profile/sub-header-profile-pc-3840.webp",
     sp: "/images/profile/sub-header-profile-sp-800.webp",
   },
   contact: {
-    pc: "/images/contact/sub-header-contact-pc-1920.webp",
+    pc: "/images/contact/sub-header-contact-pc-3840.webp",
     sp: "/images/contact/sub-header-contact-sp-800.webp",
   },
   archive: null,
   page: {
-    pc: "/images/page/sub-header-page-pc-1920.webp",
+    pc: "/images/page/sub-header-page-pc-3840.webp",
     sp: "/images/page/sub-header-page-sp-800.webp",
   },
 };

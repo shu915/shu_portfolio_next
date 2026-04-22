@@ -1,7 +1,8 @@
 import Image from "next/image";
 
-const HERO_PC = "/images/front-page/front-page-main-visual-pc-1920.webp";
-const HERO_SP = "/images/front-page/front-page-main-visual-sp-767.webp";
+/** `src` は利用可能な最大解像度（旧 image-set の 2x 相当）。`sizes` と最適化で端末に合わせて配信 */
+const HERO_PC = "/images/front-page/front-page-main-visual-pc-3840.webp";
+const HERO_SP = "/images/front-page/front-page-main-visual-sp-1500.webp";
 
 /**
  * フロントページのメインビジュアル（ヒーローセクション）
