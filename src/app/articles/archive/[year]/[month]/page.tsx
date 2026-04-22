@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticlesArchiveLayout } from "@/components/articles/ArticlesArchiveLayout";
+import { ArticlesArchiveLeading } from "@/components/articles/ArticlesArchiveLeading";
 import { ArticlesArchiveMain } from "@/components/articles/ArticlesArchiveMain";
 import { ArticlesSidebar } from "@/components/articles/ArticlesSidebar";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -76,20 +77,12 @@ export default async function ArticlesYearMonthArchivePage({
   const paginationPath = articlesYearMonthArchivePath(year, month);
 
   const leading = (
-    <h3 className="mb-4 flex flex-wrap items-center gap-1 text-2xl font-bold tracking-[0.075em] text-black max-md:text-xl max-[430px]:text-lg max-[360px]:text-[1.1rem]">
-      {/* eslint-disable-next-line @next/next/no-img-element -- サイドバー「アーカイブ」と同じ装飾 SVG */}
-      <img
-        src="/images/articles/archive-icon.svg"
-        alt=""
-        width={20}
-        height={20}
-        className="h-5 w-5 shrink-0"
-        aria-hidden
-      />
-      <span className="max-[430px]:hidden">アーカイブ：</span>
-      <span className="break-all">{heading}</span>
-      <span className="whitespace-nowrap">（{totalCount}件）</span>
-    </h3>
+    <ArticlesArchiveLeading
+      iconSrc="/images/articles/archive-icon.svg"
+      prefixLabel="アーカイブ："
+      title={heading}
+      totalCount={totalCount}
+    />
   );
 
   return (
