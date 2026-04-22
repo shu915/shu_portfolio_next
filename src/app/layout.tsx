@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: "Shu Digital Works",
     images: [
       {
-        url: "/images/front-page/front-page-main-visual-pc-1920.webp",
+        url: "/images/front-page/front-page-main-visual-pc-3840.webp",
         alt: "Shu Digital Works",
       },
     ],

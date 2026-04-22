@@ -1,24 +1,45 @@
+import Image from "next/image";
+
+/** `src` は利用可能な最大解像度（旧 image-set の 2x 相当）。`sizes` と最適化で端末に合わせて配信 */
+const HERO_PC = "/images/front-page/front-page-main-visual-pc-3840.webp";
+const HERO_SP = "/images/front-page/front-page-main-visual-sp-1500.webp";
+
 /**
  * フロントページのメインビジュアル（ヒーローセクション）
  * WordPress テーマの .p-front-page__main-visual を移植
+ *
+ * 背景は `next/image` + `priority`（LCP / fetchpriority 用）。PC/SP で画像を切り替え。
  */
 export function HeroSection() {
   return (
     <section
       className={[
-        /* PC: 3:1 アスペクト比、背景は 1x/2x の image-set で高解像度対応 */
-        "relative pt-15 bg-center bg-cover bg-no-repeat aspect-3/1",
-        /* SP: 固定高さ・縦書きレイアウト */
+        "relative overflow-hidden pt-15 aspect-3/1",
         "max-md:pt-0 max-md:aspect-auto max-md:h-140",
-        /* 背景画像（PC） */
-        "bg-[image-set(url('/images/front-page/front-page-main-visual-pc-1920.webp')_1x,url('/images/front-page/front-page-main-visual-pc-3840.webp')_2x)]",
-        /* 背景画像（SP） */
-        "max-md:bg-[image-set(url('/images/front-page/front-page-main-visual-sp-767.webp')_1x,url('/images/front-page/front-page-main-visual-sp-1500.webp')_2x)]",
       ].join(" ")}
       aria-label="メインビジュアル"
     >
+      <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+        <Image
+          src={HERO_PC}
+          alt=""
+          fill
+          priority
+          sizes="(min-width: 768px) 100vw, 0px"
+          className="hidden object-cover object-center md:block"
+        />
+        <Image
+          src={HERO_SP}
+          alt=""
+          fill
+          priority
+          sizes="(max-width: 767px) 100vw, 0px"
+          className="object-cover object-center md:hidden"
+        />
+      </div>
+
       {/* 内側コンテナ */}
-      <div className="relative mx-auto h-full max-w-[1232px] px-4 max-md:flex max-md:items-center md:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto h-full max-w-[1232px] px-4 max-md:flex max-md:items-center md:px-6 lg:px-8">
         {/* キャッチコピーブロック：PC は右寄せ中段、SP は中央 */}
         <div
           className={[
@@ -64,7 +85,7 @@ export function HeroSection() {
       </div>
 
       {/* ボトムバー：「Shu Digital Works」大文字テキスト（SP では非表示） */}
-      <div className="absolute bottom-0 left-0 w-full bg-black/40 max-md:hidden">
+      <div className="absolute bottom-0 left-0 z-10 w-full bg-black/40 max-md:hidden">
         <div className="mx-auto max-w-[1232px] px-4 md:px-6 lg:px-8">
           <p
             className={[
@@ -82,8 +103,8 @@ export function HeroSection() {
       </div>
 
       {/* スクロールガイド（SP のみ表示） */}
-      <div className="hidden max-md:block absolute bottom-0 left-1/2 -translate-x-1/2 w-[100px] h-[100px] text-center z-10">
-        <span className="block text-base text-primary tracking-widest mb-[10px]">
+      <div className="absolute bottom-0 left-1/2 z-10 hidden h-[100px] w-[100px] -translate-x-1/2 text-center max-md:block">
+        <span className="mb-[10px] block text-base tracking-widest text-primary">
           Scroll
         </span>
         <div
