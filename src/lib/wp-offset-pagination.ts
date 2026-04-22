@@ -34,3 +34,20 @@ export function totalPagesFromOffsetPagination(
   const hasMore = op?.hasMore ?? false;
   return hasMore ? page + 1 : Math.max(1, page);
 }
+
+/** 一覧の総件数（`total` が無い・不正なときは 0） */
+export function offsetPaginationTotalCount(
+  op: WpGraphqlOffsetPagination | null | undefined
+): number {
+  const rawTotal = op?.total;
+  const totalNum =
+    typeof rawTotal === "number"
+      ? rawTotal
+      : typeof rawTotal === "string"
+        ? Number.parseInt(rawTotal, 10)
+        : NaN;
+  if (Number.isFinite(totalNum) && totalNum >= 0) {
+    return totalNum;
+  }
+  return 0;
+}

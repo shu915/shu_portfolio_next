@@ -84,7 +84,7 @@ export default async function ArticlesSearchPage({ searchParams }: PageProps) {
   const paginationSearchParams = query ? { s: query } : undefined;
 
   const leading = query ? (
-    <h3 className="mb-6 flex flex-wrap items-center gap-1 text-2xl font-bold tracking-[0.075em] text-primary max-md:text-xl max-[430px]:text-lg max-[360px]:text-[1.1rem]">
+    <h3 className="mb-4 flex flex-wrap items-center gap-1 text-2xl font-bold tracking-[0.075em] text-black max-md:text-xl max-[430px]:text-lg max-[360px]:text-[1.1rem]">
       {/* eslint-disable-next-line @next/next/no-img-element -- サイドバー「検索」と同じ装飾 SVG */}
       <img
         src="/images/articles/sidebar-search-icon.svg"

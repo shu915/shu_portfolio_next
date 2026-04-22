@@ -54,13 +54,30 @@ export default async function ArticlesCategoryArchivePage({
     notFound();
   }
 
-  const { category, posts: pagePosts, totalPages } = archive;
+  const { category, posts: pagePosts, totalPages, totalCount } = archive;
 
   if (page > totalPages) {
     notFound();
   }
 
   const paginationPath = `/articles/category/${category.slug}`;
+
+  const leading = (
+    <h3 className="mb-4 flex flex-wrap items-center gap-1 text-2xl font-bold tracking-[0.075em] text-black max-md:text-xl max-[430px]:text-lg max-[360px]:text-[1.1rem]">
+      {/* eslint-disable-next-line @next/next/no-img-element -- サイドバー「カテゴリー」と同じ装飾 SVG */}
+      <img
+        src="/images/articles/category-icon.svg"
+        alt=""
+        width={20}
+        height={20}
+        className="h-5 w-5 shrink-0"
+        aria-hidden
+      />
+      <span className="max-[430px]:hidden">カテゴリー：</span>
+      <span className="break-all">{category.name}</span>
+      <span className="whitespace-nowrap">（{totalCount}件）</span>
+    </h3>
+  );
 
   return (
     <>
@@ -84,6 +101,7 @@ export default async function ArticlesCategoryArchivePage({
               currentPage={page}
               totalPages={totalPages}
               paginationPathname={paginationPath}
+              leading={leading}
             />
           }
           sidebar={

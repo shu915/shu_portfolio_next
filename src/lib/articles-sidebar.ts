@@ -7,7 +7,10 @@ import type {
   ArticlesSidebarBundle,
   TaxonomyNode,
 } from "@/lib/articles-types";
-import { totalPagesFromOffsetPagination } from "@/lib/wp-offset-pagination";
+import {
+  offsetPaginationTotalCount,
+  totalPagesFromOffsetPagination,
+} from "@/lib/wp-offset-pagination";
 
 /* -------------------------------------------------------------------------- */
 /* サイドバー用データ（カテゴリ・タグ・新着・月集計用日付） */
@@ -312,6 +315,7 @@ export const getCategoryArchivePage = cache(async function getCategoryArchivePag
   category: CategoryArchiveMeta;
   posts: ArchivePostNode[];
   totalPages: number;
+  totalCount: number;
 } | null> {
   const trimmed = slug.trim();
   if (!trimmed) return null;
@@ -357,8 +361,9 @@ export const getCategoryArchivePage = cache(async function getCategoryArchivePag
     ARTICLES_PER_PAGE,
     op
   );
+  const totalCount = offsetPaginationTotalCount(op);
 
-  return { category, posts: nodes, totalPages };
+  return { category, posts: nodes, totalPages, totalCount };
 });
 
 /**
@@ -371,6 +376,7 @@ export const getTagArchivePage = cache(async function getTagArchivePage(
   tag: TagArchiveMeta;
   posts: ArchivePostNode[];
   totalPages: number;
+  totalCount: number;
 } | null> {
   if (!slug.trim()) return null;
   if (!Number.isInteger(page) || page < 1) return null;
@@ -410,8 +416,9 @@ export const getTagArchivePage = cache(async function getTagArchivePage(
     ARTICLES_PER_PAGE,
     op
   );
+  const totalCount = offsetPaginationTotalCount(op);
 
-  return { tag, posts: nodes, totalPages };
+  return { tag, posts: nodes, totalPages, totalCount };
 });
 
 /* -------------------------------------------------------------------------- */
@@ -504,6 +511,7 @@ export const getArticlesYearMonthArchivePage = cache(
     month: number;
     posts: ArchivePostNode[];
     totalPages: number;
+    totalCount: number;
   } | null> {
     if (
       !Number.isInteger(year) ||
@@ -546,8 +554,9 @@ export const getArticlesYearMonthArchivePage = cache(
       ARTICLES_PER_PAGE,
       op
     );
+    const totalCount = offsetPaginationTotalCount(op);
 
-    return { year, month, posts: nodes, totalPages };
+    return { year, month, posts: nodes, totalPages, totalCount };
   }
 );
 
@@ -647,7 +656,7 @@ export const getArticlesSearchPage = cache(async function getArticlesSearchPage(
 
   const nodes = data.posts?.nodes ?? [];
   const op = data.posts?.pageInfo?.offsetPagination;
-  const totalCount = op?.total ?? 0;
+  const totalCount = offsetPaginationTotalCount(op);
 
   if (page > 1 && nodes.length === 0) {
     return null;
