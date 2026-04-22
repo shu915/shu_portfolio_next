@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate:legacy-root-slugs": "node scripts/generate-legacy-root-slugs.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
