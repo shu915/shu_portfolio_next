@@ -87,7 +87,7 @@ export default async function ArticlesYearMonthArchivePage({
 
   return (
     <>
-      <SubHeader variant="articles" title="Articles" subtitle={heading} />
+      <SubHeader variant="articles" title="Articles" subtitle="投稿記事" />
       <div className="mx-auto max-w-[1232px] px-4 pb-32 md:px-6 lg:px-8">
         <Breadcrumbs
           items={[

@@ -9,11 +9,20 @@ if (!GRAPHQL_URL) {
   );
 }
 
-/** 環境変数はプロセス起動時に固定のため、ヘッダーもモジュール読み込み時に一度だけ組み立てる */
-const GRAPHQL_REQUEST_HEADERS: Record<string, string> = {
-  "Content-Type": "application/json",
-  ...(GRAPHQL_SECRET ? { "X-GraphQL-Secret": GRAPHQL_SECRET } : {}),
-};
+/**
+ * `forDraftPreview: true` のときだけ `X-GraphQL-Preview: 1` を付与。
+ * WP 側はこのヘッダーがあるリクエストに限り下書き解決・編集者借用を行う（シークレットだけでは公開取得と同等に扱う）。
+ */
+function buildGraphqlHeaders(forDraftPreview: boolean): Record<string, string> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(GRAPHQL_SECRET ? { "X-GraphQL-Secret": GRAPHQL_SECRET } : {}),
+  };
+  if (forDraftPreview) {
+    headers["X-GraphQL-Preview"] = "1";
+  }
+  return headers;
+}
 
 type GraphQLResponse<T> = {
   data: T;
@@ -29,16 +38,22 @@ export async function gqlFetch<T>(
     variables,
     /** `no-store`: ページ番号ごとに結果が変わるクエリ向け（Next の fetch キャッシュを使わない） */
     cache,
+    /**
+     * ページの有効な preview exp/sig・または `/api/draft` 内のスラッグ解決だけ true。
+     * WP で下書き・非公開の緩和が有効になる。公開ページ・一覧では false のままにすること。
+     */
+    forDraftPreview = false,
   }: {
     tags?: string[];
     revalidate?: number;
     variables?: Record<string, unknown>;
     cache?: RequestCache;
+    forDraftPreview?: boolean;
   } = {}
 ): Promise<T> {
   const res = await fetch(GRAPHQL_URL!, {
     method: "POST",
-    headers: GRAPHQL_REQUEST_HEADERS,
+    headers: buildGraphqlHeaders(forDraftPreview),
     body: JSON.stringify(variables ? { query, variables } : { query }),
     ...(cache === "no-store"
       ? { cache: "no-store" as const }
@@ -56,44 +71,4 @@ export async function gqlFetch<T>(
   }
 
   return json.data;
-}
-
-export type GraphQLRawFetchResult = {
-  httpOk: boolean;
-  httpStatus: number;
-  /** パース済み JSON（GraphQL の `data` / `errors` を含む） */
-  body: unknown;
-};
-
-/**
- * 開発用: レスポンス全体を返す（errors があっても throw しない）。キャッシュしない。
- */
-export async function gqlFetchRaw(
-  query: string,
-  variables?: Record<string, unknown>
-): Promise<GraphQLRawFetchResult> {
-  if (!GRAPHQL_URL) {
-    return {
-      httpOk: false,
-      httpStatus: 0,
-      body: { message: "NEXTJS_WORDPRESS_GRAPHQL_URL が未設定" },
-    };
-  }
-
-  const res = await fetch(GRAPHQL_URL, {
-    method: "POST",
-    headers: GRAPHQL_REQUEST_HEADERS,
-    body: JSON.stringify(variables ? { query, variables } : { query }),
-    cache: "no-store",
-  });
-
-  const text = await res.text();
-  let body: unknown;
-  try {
-    body = JSON.parse(text) as unknown;
-  } catch {
-    body = { _parseError: "JSON でないレスポンス", _rawText: text.slice(0, 8000) };
-  }
-
-  return { httpOk: res.ok, httpStatus: res.status, body };
 }
