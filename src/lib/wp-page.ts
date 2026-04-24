@@ -1,6 +1,11 @@
 import { cache } from "react";
-import { singleEntryDataCacheTag } from "@/lib/cache-tags";
+import { fetchCacheOptionsForSingleEntry } from "@/lib/cache-tags";
+import {
+  isPreviewFetchAllowed,
+  type PreviewContinuationOptions,
+} from "@/lib/draft-signature";
 import { gqlFetch } from "@/lib/graphql";
+import { requirePublishedUnlessPreview } from "@/lib/require-published-unless-preview";
 import { slugQueryVariants } from "@/lib/slug-query-variants";
 
 /** 固定ページ（`page`）単体取得で使うフィールド */
@@ -8,6 +13,7 @@ const WP_PAGE_FIELDS = `
       id
       title
       slug
+      status
       date
       modified
       content(format: RENDERED)
@@ -35,7 +41,33 @@ function pageUriQueryVariants(rawSlug: string): string[] {
   return out;
 }
 
-function buildPageByUriVariantsQuery(variantCount: number): string {
+/**
+ * Draft Mode かつ URL に `preview_id` があるときの取得用。
+ * 公開ページの通常取得は `idType: URI` のまま。こちらは下書き・プレビュー解決と、
+ * 日本語 URI のエンコード差でパスがずれるのを避けるために DATABASE_ID で取る。
+ */
+async function fetchPageByDatabaseId(
+  id: string,
+  asPreview: boolean,
+): Promise<WpPage | null> {
+  const previewArg = asPreview ? ", asPreview: true" : "";
+  const query = `query GetPageByDbId($id: ID!) {
+    page(id: $id, idType: DATABASE_ID${previewArg}) {${WP_PAGE_FIELDS}
+    }
+  }`;
+  const data = await gqlFetch<{ page: WpPage | null }>(query, {
+    variables: { id },
+    cache: "no-store",
+    tags: [],
+    forDraftPreview: asPreview,
+  });
+  return data.page ?? null;
+}
+
+function buildPageByUriVariantsQuery(
+  variantCount: number,
+  asPreview: boolean,
+): string {
   if (variantCount < 1) {
     throw new Error("variantCount must be >= 1");
   }
@@ -43,8 +75,9 @@ function buildPageByUriVariantsQuery(variantCount: number): string {
     { length: variantCount },
     (_, i) => `$uri${i}: ID!`,
   ).join(", ");
+  const previewArg = asPreview ? ", asPreview: true" : "";
   const selections = Array.from({ length: variantCount }, (_, i) => {
-    return `  p${i}: page(id: $uri${i}, idType: URI) {${WP_PAGE_FIELDS}
+    return `  p${i}: page(id: $uri${i}, idType: URI${previewArg}) {${WP_PAGE_FIELDS}
   }`;
   }).join("\n");
   return `query GetPageByUriVariants(${varDefs}) {\n${selections}\n}`;
@@ -54,6 +87,7 @@ export type WpPage = {
   id: string;
   title: string;
   slug: string;
+  status?: string | null;
   date: string;
   modified: string;
   content: string | null;
@@ -68,33 +102,38 @@ export type WpPage = {
  */
 export const getPageBySlug = cache(async function getPageBySlug(
   slug: string,
+  options?: PreviewContinuationOptions,
 ): Promise<WpPage | null> {
+  const previewId = options?.previewDatabaseId?.trim() ?? "";
+  const allowPreview = isPreviewFetchAllowed("page", options);
+
+  if (allowPreview && /^\d+$/.test(previewId)) {
+    const byId = await fetchPageByDatabaseId(previewId, true);
+    if (byId) {
+      return requirePublishedUnlessPreview(byId, allowPreview);
+    }
+  }
+
   const uriVariants = pageUriQueryVariants(slug);
   if (uriVariants.length === 0) {
     return null;
   }
 
-  const slugTags = slugQueryVariants(slug);
-
-  const query = buildPageByUriVariantsQuery(uriVariants.length);
+  const query = buildPageByUriVariantsQuery(uriVariants.length, allowPreview);
   const variables = Object.fromEntries(
     uriVariants.map((u, i) => [`uri${i}`, u]),
   ) as Record<string, string>;
 
-  const tags = [
-    "pages",
-    ...slugTags.map((v) => singleEntryDataCacheTag("page", v)),
-  ];
-
   const data = await gqlFetch<Record<string, WpPage | null>>(query, {
     variables,
-    tags,
+    ...fetchCacheOptionsForSingleEntry(allowPreview, "page", uriVariants),
+    forDraftPreview: allowPreview,
   });
 
   for (let i = 0; i < uriVariants.length; i++) {
     const page = data[`p${i}`];
     if (page) {
-      return page;
+      return requirePublishedUnlessPreview(page, allowPreview);
     }
   }
   return null;

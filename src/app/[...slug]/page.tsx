@@ -4,11 +4,15 @@ import { WpFixedPageMain } from "@/components/fixed-page/WpFixedPageMain";
 import { WpFixedPageShell } from "@/components/fixed-page/WpFixedPageShell";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
+import { previewOptionsFromSearchParams } from "@/lib/draft-signature";
 import { getPageBySlug } from "@/lib/wp-page";
 import { noSidebarMainClassName } from "@/lib/no-sidebar-main";
 
+export const dynamic = "force-dynamic";
+
 type PageProps = {
   params: Promise<{ slug: string[] }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
 const WP_MISC_META_MAX = 160;
@@ -56,10 +60,14 @@ function subHeaderEnglishFromSegments(segments: string[]): string {
  */
 export async function generateMetadata({
   params,
+  searchParams,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const path = slug.join("/");
-  const wpPage = await getPageBySlug(path);
+  const wpPage = await getPageBySlug(
+    path,
+    previewOptionsFromSearchParams(await searchParams)
+  );
   if (!wpPage) {
     return {
       title: "ページが見つかりません | Shu Digital Works",
@@ -73,10 +81,16 @@ export async function generateMetadata({
   };
 }
 
-export default async function WpFixedPageRoute({ params }: PageProps) {
+export default async function WpFixedPageRoute({
+  params,
+  searchParams,
+}: PageProps) {
   const { slug } = await params;
   const path = slug.join("/");
-  const wpPage = await getPageBySlug(path);
+  const wpPage = await getPageBySlug(
+    path,
+    previewOptionsFromSearchParams(await searchParams)
+  );
   if (!wpPage) {
     notFound();
   }

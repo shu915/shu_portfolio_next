@@ -326,11 +326,8 @@ export function ContactForm() {
               onExpire={() => {
                 setTurnstileToken(null);
               }}
-              onError={(errorCode) => {
+              onError={() => {
                 setTurnstileToken(null);
-                if (process.env.NODE_ENV === "development") {
-                  console.warn("[Turnstile]", errorCode);
-                }
                 setSubmitServerError(
                   "送信前の確認に失敗しました。ページを再読み込みしてお試しください。"
                 );

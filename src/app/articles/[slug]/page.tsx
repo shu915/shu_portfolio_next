@@ -5,21 +5,29 @@ import { ArticleSingleMain } from "@/components/articles/ArticleSingleMain";
 import { ArticlesSidebar } from "@/components/articles/ArticlesSidebar";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
+import { previewOptionsFromSearchParams } from "@/lib/draft-signature";
 import { getPostBySlug } from "@/lib/article-single";
 import {
   getArticlesSidebarBundle,
   stripExcerptHtml,
 } from "@/lib/articles-archive";
 
+export const dynamic = "force-dynamic";
+
 type PageProps = {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const post = await getPostBySlug(
+    slug,
+    previewOptionsFromSearchParams(await searchParams)
+  );
   if (!post) {
     return { title: "記事が見つかりません | Shu Digital Works" };
   }
@@ -30,9 +38,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function ArticleSinglePage({ params }: PageProps) {
+export default async function ArticleSinglePage({
+  params,
+  searchParams,
+}: PageProps) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const post = await getPostBySlug(
+    slug,
+    previewOptionsFromSearchParams(await searchParams)
+  );
   if (!post) {
     notFound();
   }

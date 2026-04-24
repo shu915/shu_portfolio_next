@@ -7,16 +7,26 @@ import { WorkSingleMain } from "@/components/works/WorkSingleMain";
 import { WorksPageShell } from "@/components/works/WorksPageShell";
 import { stripExcerptHtml } from "@/lib/articles-archive";
 import { getRelatedWorks } from "@/lib/work-related";
+import { previewOptionsFromSearchParams } from "@/lib/draft-signature";
 import { getWorkBySlug } from "@/lib/work-single";
 import { noSidebarMainClassName } from "@/lib/no-sidebar-main";
 
+export const dynamic = "force-dynamic";
+
 type PageProps = {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const work = await getWorkBySlug(slug);
+  const work = await getWorkBySlug(
+    slug,
+    previewOptionsFromSearchParams(await searchParams)
+  );
   if (!work) {
     return { title: "制作実績が見つかりません | Shu Digital Works" };
   }
@@ -27,9 +37,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function WorkSinglePage({ params }: PageProps) {
+export default async function WorkSinglePage({
+  params,
+  searchParams,
+}: PageProps) {
   const { slug } = await params;
-  const work = await getWorkBySlug(slug);
+  const work = await getWorkBySlug(
+    slug,
+    previewOptionsFromSearchParams(await searchParams)
+  );
   if (!work) {
     notFound();
   }

@@ -19,3 +19,23 @@ export function singleEntryDataCacheTag(postType: string, slug: string): string 
   }
   return `${broad}:${slug}`;
 }
+
+export type WpEntityForCacheTag = keyof typeof DATA_CACHE_TAG_BY_POST_TYPE;
+
+/**
+ * プレビュー有効時は Data Cache を使わない（署名付き URL で下書きを返すため）。
+ * 通常時は一覧タグ + 各スラッグ候補タグ（Webhook の `revalidateTag` と一致）。
+ */
+export function fetchCacheOptionsForSingleEntry(
+  allowPreview: boolean,
+  postType: WpEntityForCacheTag,
+  slugCandidatesForTags: string[],
+): { cache?: "no-store"; tags: string[] } {
+  if (allowPreview) {
+    return { cache: "no-store", tags: [] };
+  }
+  const broad = DATA_CACHE_TAG_BY_POST_TYPE[postType];
+  const unique = [...new Set(slugCandidatesForTags.filter(Boolean))];
+  const slugTags = unique.map((s) => singleEntryDataCacheTag(postType, s));
+  return { tags: [broad, ...slugTags] };
+}

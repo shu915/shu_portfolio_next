@@ -14,7 +14,6 @@ const RESERVED_SINGLE_SEGMENTS = new Set([
   "works",
   "contact",
   "profile",
-  "debug",
 ]);
 
 function singlePathSegment(pathname: string): string | null {
@@ -32,7 +31,7 @@ function singlePathSegment(pathname: string): string | null {
  * Next の `/articles/*`・`/works/*` に 308 で寄せる。
  * 直下1セグメントの固定ページ（WP `pages` の URI が `/slug` のもの）は除外。
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const seg = singlePathSegment(request.nextUrl.pathname);
   if (!seg) {
     return NextResponse.next();
