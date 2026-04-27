@@ -35,6 +35,7 @@ const GET_POSTS_SITEMAP_CHUNK = `
       nodes {
         slug
         modified
+        date
       }
     }
   }
@@ -51,21 +52,6 @@ const GET_WORKS_SITEMAP_CHUNK = `
       nodes {
         slug
         modified
-      }
-    }
-  }
-`;
-
-const GET_POST_DATES_CHUNK = `
-  query SitemapPostDatesChunk($size: Int!, $offset: Int!) {
-    posts(where: { offsetPagination: { size: $size, offset: $offset } }) {
-      pageInfo {
-        offsetPagination {
-          hasMore
-        }
-      }
-      nodes {
-        date
       }
     }
   }
@@ -97,7 +83,11 @@ const GET_PAGES_URIS = `
   }
 `;
 
-type PostSlugRow = { slug: string; modified: string | null };
+type PostSlugRow = {
+  slug: string;
+  modified: string | null;
+  date: string | null;
+};
 type WorkSlugRow = { slug: string; modified: string | null };
 
 async function fetchAllPostRows(): Promise<PostSlugRow[]> {
@@ -160,36 +150,6 @@ async function fetchAllWorkRows(): Promise<WorkSlugRow[]> {
   return out;
 }
 
-async function fetchAllPostDates(): Promise<string[]> {
-  const out: string[] = [];
-  let offset = 0;
-  for (;;) {
-    const data = await gqlFetch<{
-      posts: {
-        nodes: { date: string }[];
-        pageInfo: { offsetPagination: { hasMore: boolean } | null } | null;
-      };
-    }>(GET_POST_DATES_CHUNK, {
-      variables: { size: CHUNK, offset },
-      tags: ["posts"],
-    });
-    const nodes = data.posts?.nodes ?? [];
-    for (const n of nodes) {
-      if (n.date) {
-        out.push(n.date);
-      }
-    }
-    if (nodes.length < CHUNK) {
-      break;
-    }
-    if (!data.posts?.pageInfo?.offsetPagination?.hasMore) {
-      break;
-    }
-    offset += CHUNK;
-  }
-  return out;
-}
-
 function yearMonthArchivePaths(
   base: string,
   dates: string[],
@@ -236,16 +196,19 @@ export async function buildSitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/profile`, changeFrequency: "yearly", priority: 0.6 },
   ];
 
-  const [postRows, workRows, postDates, taxonomies, fromPages] = await Promise.all([
+  const [postRows, workRows, taxonomies, fromPages] = await Promise.all([
     fetchAllPostRows(),
     fetchAllWorkRows(),
-    fetchAllPostDates(),
     gqlFetch<{
       categories: { nodes: { slug: string }[] };
       tags: { nodes: { slug: string }[] };
     }>(GET_TAXONOMIES_SITEMAP, { tags: ["posts"] }),
     fetchSitemapPageNodes(),
   ]);
+
+  const postDatesForArchives = postRows
+    .map((r) => r.date)
+    .filter((d): d is string => Boolean(d));
 
   const fromPosts: MetadataRoute.Sitemap = postRows.map((row) => ({
     url: pathWithEncodedSegments(`${base}/articles`, row.slug),
@@ -279,7 +242,10 @@ export async function buildSitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }));
 
-  const archiveEntries = yearMonthArchivePaths(base, postDates);
+  const archiveEntries = yearMonthArchivePaths(
+    base,
+    postDatesForArchives
+  );
 
   const merged: MetadataRoute.Sitemap = [
     ...staticEntries,
