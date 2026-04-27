@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
@@ -60,6 +61,7 @@ export default function RootLayout({
         {/* ヘッダーが fixed のため、コンテンツ上部に同じ高さの余白を確保 */}
         <main className="flex-1 mt-15">{children}</main>
         <Footer />
+        <SpeedInsights />
       </body>
     </html>
   );

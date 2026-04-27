@@ -5,7 +5,7 @@ const GRAPHQL_SECRET = process.env.NEXTJS_WORDPRESS_GRAPHQL_SECRET;
 
 if (!GRAPHQL_URL) {
   throw new Error(
-    "NEXTJS_WORDPRESS_GRAPHQL_URL が環境変数に設定されていません"
+    "NEXTJS_WORDPRESS_GRAPHQL_URL が環境変数に設定されていません",
   );
 }
 
@@ -49,7 +49,7 @@ export async function gqlFetch<T>(
     variables?: Record<string, unknown>;
     cache?: RequestCache;
     forDraftPreview?: boolean;
-  } = {}
+  } = {},
 ): Promise<T> {
   const res = await fetch(GRAPHQL_URL!, {
     method: "POST",
