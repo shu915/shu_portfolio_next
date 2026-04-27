@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DEFAULT_OG_IMAGE_PATH } from "@/lib/og-metadata";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Header } from "@/components/layout/Header";
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
     siteName: "Shu Digital Works",
     images: [
       {
-        url: "/images/front-page/front-page-main-visual-pc-3840.webp",
+        url: DEFAULT_OG_IMAGE_PATH,
         alt: "Shu Digital Works",
       },
     ],
