@@ -11,8 +11,6 @@ import { previewOptionsFromSearchParams } from "@/lib/draft-signature";
 import { getWorkBySlug } from "@/lib/work-single";
 import { noSidebarMainClassName } from "@/lib/no-sidebar-main";
 
-export const dynamic = "force-dynamic";
-
 type PageProps = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
