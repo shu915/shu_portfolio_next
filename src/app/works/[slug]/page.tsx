@@ -8,6 +8,7 @@ import { WorksPageShell } from "@/components/works/WorksPageShell";
 import { stripExcerptHtml } from "@/lib/articles-archive";
 import { getRelatedWorks } from "@/lib/work-related";
 import { previewOptionsFromSearchParams } from "@/lib/draft-signature";
+import { ogFromFeaturedImage } from "@/lib/og-metadata";
 import { getWorkBySlug } from "@/lib/work-single";
 import { noSidebarMainClassName } from "@/lib/no-sidebar-main";
 
@@ -32,6 +33,11 @@ export async function generateMetadata({
   return {
     title: `${work.title} | Shu Digital Works`,
     description: excerpt?.slice(0, 160) || undefined,
+    ...ogFromFeaturedImage({
+      sourceUrl: work.featuredImage?.node.sourceUrl,
+      mediaAltText: work.featuredImage?.node.altText,
+      pageTitle: work.title,
+    }),
   };
 }
 

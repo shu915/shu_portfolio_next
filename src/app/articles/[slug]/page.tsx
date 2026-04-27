@@ -11,6 +11,7 @@ import {
   getArticlesSidebarBundle,
   stripExcerptHtml,
 } from "@/lib/articles-archive";
+import { ogFromFeaturedImage } from "@/lib/og-metadata";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -33,6 +34,11 @@ export async function generateMetadata({
   return {
     title: `${post.title} | Shu Digital Works`,
     description: excerpt?.slice(0, 160) || undefined,
+    ...ogFromFeaturedImage({
+      sourceUrl: post.featuredImage?.node.sourceUrl,
+      mediaAltText: post.featuredImage?.node.altText,
+      pageTitle: post.title,
+    }),
   };
 }
 
