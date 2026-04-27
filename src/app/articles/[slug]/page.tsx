@@ -12,8 +12,6 @@ import {
   stripExcerptHtml,
 } from "@/lib/articles-archive";
 
-export const dynamic = "force-dynamic";
-
 type PageProps = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;

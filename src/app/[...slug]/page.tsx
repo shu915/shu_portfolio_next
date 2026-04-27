@@ -8,8 +8,6 @@ import { previewOptionsFromSearchParams } from "@/lib/draft-signature";
 import { getPageBySlug } from "@/lib/wp-page";
 import { noSidebarMainClassName } from "@/lib/no-sidebar-main";
 
-export const dynamic = "force-dynamic";
-
 type PageProps = {
   params: Promise<{ slug: string[] }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
