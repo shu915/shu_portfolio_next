@@ -31,12 +31,14 @@ export async function generateMetadata({
     return { title: "記事が見つかりません | Shu Digital Works" };
   }
   const excerpt = post.excerpt ? stripExcerptHtml(post.excerpt) : undefined;
-  const imageAlt =
-    post.featuredImage?.node.altText?.trim() || post.title || "Shu Digital Works";
   return {
     title: `${post.title} | Shu Digital Works`,
     description: excerpt?.slice(0, 160) || undefined,
-    ...ogFromFeaturedImage(post.featuredImage?.node.sourceUrl, imageAlt),
+    ...ogFromFeaturedImage({
+      sourceUrl: post.featuredImage?.node.sourceUrl,
+      mediaAltText: post.featuredImage?.node.altText,
+      pageTitle: post.title,
+    }),
   };
 }
 
