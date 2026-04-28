@@ -37,6 +37,7 @@ export function WorkDetailRelated({ works }: Props) {
               thumbnailAlt={item.featuredImage?.node.altText}
               categoryName={item.services?.nodes[0]?.name}
               priority={index === 0}
+              prefetch={false}
             />
           </li>
         ))}

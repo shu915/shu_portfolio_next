@@ -17,6 +17,11 @@ type Props = {
    * @see https://nextjs.org/docs/app/api-reference/components/image#priority
    */
   priority?: boolean;
+  /**
+   * `false` は **制作実績シングル下部の関連記事カード専用**（INP 対策でルートプレフェッチを止める）。他の一覧では指定しない。
+   * @see https://nextjs.org/docs/app/api-reference/components/link#prefetch
+   */
+  prefetch?: boolean;
 };
 
 /**
@@ -37,9 +42,14 @@ export function ArticleListItem({
   thumbnailAlt = "",
   categoryName,
   priority = false,
+  prefetch,
 }: Props) {
   return (
-    <Link href={href} className={styles.card}>
+    <Link
+      href={href}
+      className={styles.card}
+      prefetch={prefetch === false ? false : undefined}
+    >
       {/* サムネイル */}
       <div className={styles.thumb}>
         <Image
