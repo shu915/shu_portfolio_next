@@ -6,9 +6,9 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
 
-/** Google Fonts を `<head>` で読み込み（preconnect で接続を先行）。フォント名は globals.css の :root と一致 */
+/** Google Fonts を `<head>` で読み込み（preconnect で接続を先行）。フォント名は globals.css の @theme と一致 */
 const GOOGLE_FONTS_STYLESHEET =
-  "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@200;300;400;500;600;700;900&display=swap";
+  "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap";
 
 const siteUrlRaw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
 const metadataBaseUrl =
@@ -57,7 +57,7 @@ export default function RootLayout({
         <link rel="stylesheet" href={GOOGLE_FONTS_STYLESHEET} />
       </head>
       <body
-        className="flex min-h-screen flex-col bg-white font-noto-serif-jp text-base leading-[1.6] text-body"
+        className="flex min-h-screen flex-col bg-white font-shippori-mincho text-base leading-[1.6] text-body"
       >
         <Header />
         {/* ヘッダーが fixed のため、コンテンツ上部に同じ高さの余白を確保 */}

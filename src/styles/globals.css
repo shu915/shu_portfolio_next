@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  /* `<head>` の Google Fonts と同名（font-cormorant / font-noto-serif-jp ユーティリティ） */
+  /* `<head>` の Google Fonts と同名（font-cormorant / font-shippori-mincho ユーティリティ） */
   --font-cormorant: "Cormorant Garamond", serif;
-  --font-noto-serif-jp: "Noto Serif JP", serif;
+  --font-shippori-mincho: "Shippori Mincho", serif;
   --color-primary: #211E55;
   --color-secondary: #E4EBF7;
   --color-accent: #d7003a;
