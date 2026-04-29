@@ -81,7 +81,7 @@
   z-index: 2;
   background: var(--color-primary);
   color: #fff;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.16em;
   padding: 3px 12px 3px 8px;
@@ -92,12 +92,12 @@
   content: '';
   position: absolute;
   top: 0;
-  right: -8px;
+  right: -9px;
   width: 0;
   height: 0;
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
-  border-left: 8px solid var(--color-primary);
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
+  border-left: 9px solid var(--color-primary);
 }
 
 /* ── ボディ ── */
@@ -123,7 +123,7 @@
   flex-shrink: 0;
 }
 .date {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   letter-spacing: 0.08em;
   color: #444;
@@ -131,12 +131,12 @@
 
 /* ── タイトル（3行固定） ── */
 .title {
-  font-size: 13.5px;
+  font-size: 15px;
   font-weight: 700;
-  line-height: 1.6;
+  line-height: 1.5;
   letter-spacing: 0.03em;
   color: #1a1a2e;
-  height: calc(1.6 * 3 * 13.5px);
+  height: calc(1.5 * 3 * 15px);
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -162,12 +162,12 @@
 
 /* ── 抜粋（3行固定） ── */
 .excerpt {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
-  line-height: 1.8;
+  line-height: 1.65;
   letter-spacing: 0.01em;
   color: #444;
-  height: calc(1.8 * 3 * 12px);
+  height: calc(1.65 * 3 * 14px);
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
