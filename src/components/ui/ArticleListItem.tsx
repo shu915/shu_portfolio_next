@@ -48,7 +48,7 @@ export function ArticleListItem({
     <Link
       href={href}
       className={styles.card}
-      prefetch={prefetch === false ? false : undefined}
+      prefetch={prefetch}
     >
       {/* サムネイル */}
       <div className={styles.thumb}>

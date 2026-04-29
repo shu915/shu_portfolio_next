@@ -6,16 +6,13 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
+import { siteBaseUrl } from "@/lib/site-base-url";
 
 /** Google Fonts を `<head>` で読み込み（preconnect で接続を先行）。フォント名は globals.css の @theme と一致 */
 const GOOGLE_FONTS_STYLESHEET =
   "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap";
 
-const siteUrlRaw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-const metadataBaseUrl =
-  siteUrlRaw && /^https?:\/\//i.test(siteUrlRaw)
-    ? siteUrlRaw.replace(/\/$/, "")
-    : "http://localhost:3000";
+const metadataBaseUrl = siteBaseUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(metadataBaseUrl),
