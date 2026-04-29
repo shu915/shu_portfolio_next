@@ -78,26 +78,32 @@
   position: absolute;
   bottom: 10px;
   left: 14px;
+  right: auto;
   z-index: 2;
+  display: inline-block;
+  max-width: calc(100% - 28px);
+  box-sizing: border-box;
   background: var(--color-primary);
   color: #fff;
   font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.16em;
-  padding: 3px 12px 3px 8px;
-  line-height: 1.6;
+  letter-spacing: 0.12em;
+  padding: 3px 8px 3px 8px;
+  line-height: 1.45;
+  word-break: break-word;
 }
-/* 右端の三角（リボン） */
+/* 右端の三角（リボン）：縦中央に寄せ、letter-spacing 由来のすき間を詰める */
 .category::after {
   content: '';
   position: absolute;
-  top: 0;
-  right: -9px;
+  top: 50%;
+  right: -8px;
   width: 0;
   height: 0;
-  border-top: 14px solid transparent;
-  border-bottom: 14px solid transparent;
-  border-left: 9px solid var(--color-primary);
+  transform: translateY(-50%);
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+  border-left: 8px solid var(--color-primary);
 }
 
 /* ── ボディ ── */

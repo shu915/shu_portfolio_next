@@ -45,7 +45,7 @@ type PostNode = {
 
 /** フロントページに表示するカテゴリリンク（WordPress に合わせて固定） */
 const CATEGORY_LINKS = [
-  { label: "プログラミング", slug: "programming" },
+  { label: "エンジニアリング", slug: "engineering" },
   { label: "準備中", slug: "design" },
   { label: "準備中", slug: "business" },
 ] as const;

@@ -25,9 +25,12 @@ export function WorkDetailRelated({ works }: Props) {
       >
         関連記事
       </h2>
-      <ul className="mx-auto mt-8 grid w-fit grid-cols-[repeat(3,16.6rem)] gap-4 max-[929px]:grid-cols-[16.6rem] max-[929px]:justify-center max-[929px]:gap-8 max-[430px]:w-full max-[430px]:grid-cols-1">
+      <ul className="mx-auto mt-8 grid w-fit grid-cols-[repeat(3,16.6rem)] gap-4 max-[929px]:grid-cols-[16.6rem] max-[929px]:justify-center max-[929px]:gap-8 max-[430px]:w-full max-[430px]:grid-cols-1 max-[430px]:justify-items-center">
         {works.map((item, index) => (
-          <li key={item.id}>
+          <li
+            key={item.id}
+            className="w-full max-w-[16.6rem] max-[430px]:w-full max-[430px]:max-w-[min(100%,16.6rem)] min-w-0 justify-self-center"
+          >
             <ArticleListItem
               href={`/works/${item.slug}`}
               title={item.title}
