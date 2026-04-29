@@ -4,6 +4,7 @@ import Image from "next/image";
  * 各ページ上部のサブヘッダー（背景画像 + タイトル + サブタイトル）
  *
  * 背景は `next/image` + `priority`（LCP）。PC/SP で画像を切り替え。
+ * テキストはテキスト幅だけのフロストパネル＋左アクセントバー。
  */
 type Props = {
   variant:
@@ -56,6 +57,7 @@ export function SubHeader({ variant, title, subtitle }: Props) {
 
   return (
     <div className="relative h-75 max-md:h-50 overflow-hidden">
+      {/* 背景画像 */}
       {bg ? (
         <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
           <Image
@@ -77,14 +79,30 @@ export function SubHeader({ variant, title, subtitle }: Props) {
         </div>
       ) : null}
 
-      <div className="relative z-10 mx-auto h-full max-w-[1232px] px-4 md:px-6 lg:px-8">
-        <div className="flex h-full flex-col justify-center gap-4">
-          <h2 className="w-fit bg-white/70 px-2 font-bold leading-[1.3] tracking-widest text-primary text-[clamp(3rem,2.781rem+0.933vw,3.5rem)] max-md:text-[2.5rem]">
-            {title}
-          </h2>
-          <p className="w-fit bg-white/70 px-2 font-bold leading-relaxed tracking-widest text-primary text-[clamp(1.25rem,1.141rem+0.467vw,1.5rem)]">
-            {subtitle.trim()}
-          </p>
+      {/* フロストパネル */}
+      <div className="relative z-10 mx-auto flex h-full max-w-[1232px] items-center px-4 md:px-6 lg:px-8">
+        <div className="flex items-stretch">
+          {/* 左アクセントバー */}
+          <div className="w-1 shrink-0 bg-primary" />
+
+          {/* テキストパネル */}
+          <div className="flex flex-col gap-2 bg-white/82 px-5 py-4 backdrop-blur-md md:gap-2.5 md:px-7 md:py-[18px]">
+            {/* 英語タイトル */}
+            <h2 className="font-cormorant font-semibold leading-none tracking-[0.08em] text-primary text-[clamp(2.25rem,1.8rem+1.9vw,4.5rem)]">
+              {title}
+            </h2>
+
+            {/* サブタイトル */}
+            <div className="flex items-center gap-2.5">
+              <span
+                className="h-px w-5 shrink-0 bg-primary opacity-50 max-md:w-3.5"
+                aria-hidden="true"
+              />
+              <p className="font-semibold tracking-widest text-primary text-[clamp(0.75rem,0.65rem+0.4vw,1rem)]">
+                {subtitle.trim()}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
