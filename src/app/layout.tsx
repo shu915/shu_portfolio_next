@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import NextTopLoader from "nextjs-toploader";
 import { DEFAULT_OG_IMAGE_PATH } from "@/lib/og-metadata";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -59,6 +60,14 @@ export default function RootLayout({
       <body
         className="flex min-h-screen flex-col bg-white font-shippori-mincho text-base leading-[1.6] text-body"
       >
+        <NextTopLoader
+          color="#E4EBF7"
+          height={3}
+          showSpinner={false}
+          crawlSpeed={200}
+          shadow="0 0 10px rgba(33, 30, 85, 0.2)"
+          zIndex={40}
+        />
         <Header />
         {/* ヘッダーが fixed のため、コンテンツ上部に同じ高さの余白を確保 */}
         <main className="flex-1 mt-15">{children}</main>
