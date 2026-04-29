@@ -1,15 +1,8 @@
 import type { MetadataRoute } from "next";
 import { gqlFetch } from "@/lib/graphql";
+import { siteBaseUrl } from "@/lib/site-base-url";
 
 const CHUNK = 100;
-
-function siteBaseUrl(): string {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-  if (raw && /^https?:\/\//i.test(raw)) {
-    return raw.replace(/\/$/, "");
-  }
-  return "http://localhost:3000";
-}
 
 /** スラッグの `/` 区切りに `encodeURIComponent` を当て、サイト内パス用の URL を作る */
 function pathWithEncodedSegments(
