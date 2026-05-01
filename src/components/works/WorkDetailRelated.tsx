@@ -24,7 +24,7 @@ export function WorkDetailRelated({ works }: Props) {
       <div className="text-center">
         <h2
           id="work-related-heading"
-          className="font-cormorant text-[1.75rem] font-semibold leading-none tracking-[0.1em] text-primary"
+          className="font-cormorant text-[1.75rem] font-semibold leading-none tracking-widest text-primary"
         >
           Related Works
         </h2>

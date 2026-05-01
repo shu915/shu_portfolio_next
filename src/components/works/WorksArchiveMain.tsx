@@ -38,10 +38,10 @@ export function WorksArchiveMain({
     "flex w-full items-center border-b-0 border-l-2 px-4 py-3 text-[0.8125rem]";
 
   const tabActive =
-    `${tabBase} border-l-primary bg-secondary text-primary md:border-l-transparent md:border-b-primary md:bg-transparent`;
+    `${tabBase} border-l-primary bg-secondary text-primary md:border-b-primary md:bg-transparent`;
 
   const tabInactive =
-    `${tabBase} border-l-transparent text-[#888] md:border-b-transparent md:border-l-transparent ` +
+    `${tabBase} border-l-transparent text-[#888] md:border-b-transparent ` +
     "hover:border-l-primary/30 hover:bg-secondary/60 hover:text-primary md:hover:border-b-primary/20 md:hover:bg-transparent";
 
   return (
