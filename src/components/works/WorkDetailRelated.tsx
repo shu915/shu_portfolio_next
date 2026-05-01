@@ -7,7 +7,8 @@ type Props = {
 };
 
 /**
- * 制作実績シングル下部の関連一覧（レガシー `article-detail-related.php`・`--white`）
+ * 制作実績シングル下部の関連一覧。
+ * 見出しは A 案。親の白カード（noSidebarMain）内で区切り線のみ—二重の箱にしない。
  */
 export function WorkDetailRelated({ works }: Props) {
   if (works.length === 0) {
@@ -16,21 +17,30 @@ export function WorkDetailRelated({ works }: Props) {
 
   return (
     <section
-      className="mx-auto mt-32 w-full max-w-260 rounded-lg border border-border-subtle bg-neutral-50 p-8 shadow-[0_0_10px_rgba(0,0,0,0.1)] max-[929px]:mt-24 max-[929px]:max-w-full max-[430px]:p-4"
+      className="mt-12 w-full border-t border-border-subtle pt-10 max-[929px]:mt-10 max-[929px]:pt-8"
       aria-labelledby="work-related-heading"
     >
-      <h2
-        id="work-related-heading"
-        className="mx-auto w-fit border-b-4 border-primary pb-1 text-center text-2xl font-bold tracking-widest text-primary"
-      >
-        関連記事
-      </h2>
+      {/* 見出し */}
+      <div className="text-center">
+        <h2
+          id="work-related-heading"
+          className="font-cormorant text-[1.75rem] font-semibold leading-none tracking-widest text-primary"
+        >
+          Related Works
+        </h2>
+        <div className="mt-2 flex items-center justify-center gap-3">
+          <span className="h-px w-8 bg-primary opacity-25" aria-hidden />
+          <span className="text-[0.8125rem] font-semibold tracking-[0.12em] text-primary/50">
+            関連する制作実績
+          </span>
+          <span className="h-px w-8 bg-primary opacity-25" aria-hidden />
+        </div>
+      </div>
+
+      {/* グリッド */}
       <ul className="mx-auto mt-8 grid w-fit grid-cols-[repeat(3,16.6rem)] gap-4 max-[929px]:grid-cols-[16.6rem] max-[929px]:justify-center max-[929px]:gap-8 max-[430px]:w-full max-[430px]:grid-cols-1 max-[430px]:justify-items-center">
         {works.map((item, index) => (
-          <li
-            key={item.id}
-            className="w-full max-w-[16.6rem] min-w-0"
-          >
+          <li key={item.id} className="w-full max-w-[16.6rem] min-w-0">
             <ArticleListItem
               href={`/works/${item.slug}`}
               title={item.title}
