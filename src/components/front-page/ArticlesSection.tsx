@@ -114,7 +114,7 @@ export async function ArticlesSection() {
                     <li key={cat.slug}>
                       <Link
                         href={`/articles/category/${cat.slug}`}
-                        className="text-base font-semibold bg-secondary text-primary rounded px-[0.7rem] py-1 tracking-widest transition-colors duration-300 hover:bg-white hover:text-primary"
+                        className="text-base font-semibold bg-secondary text-primary px-[0.7rem] py-1 tracking-widest transition-colors duration-300 hover:bg-white hover:text-primary"
                       >
                         {cat.label}
                       </Link>

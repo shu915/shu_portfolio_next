@@ -33,7 +33,7 @@ export function ArticleSingleMain({ post }: Props) {
           {category && (
             <Link
               href={`/articles/category/${category.slug}`}
-              className="inline-block rounded-sm bg-secondary px-1.5 py-0.5 text-sm font-semibold tracking-widest transition-colors hover:bg-primary hover:text-white"
+              className="inline-block bg-secondary px-1.5 py-0.5 text-sm font-semibold tracking-widest transition-colors hover:bg-primary hover:text-white"
             >
               {category.name}
             </Link>
@@ -42,7 +42,7 @@ export function ArticleSingleMain({ post }: Props) {
             <Link
               key={tag.slug}
               href={`/articles/tag/${tag.slug}`}
-              className="inline-block rounded-sm bg-[#eee] px-1.5 py-0.5 text-sm font-semibold tracking-widest transition-colors hover:bg-primary hover:text-white"
+              className="inline-block bg-[#eee] px-1.5 py-0.5 text-sm font-semibold tracking-widest transition-colors hover:bg-primary hover:text-white"
             >
               {tag.name}
             </Link>

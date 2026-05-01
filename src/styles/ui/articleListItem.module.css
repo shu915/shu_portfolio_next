@@ -73,7 +73,7 @@
   opacity: 0.08;
 }
 
-/* ── カテゴリリボン（sectionTitle の DNA を継承） ── */
+/* ── カテゴリバッジ（サムネ左下・長いラベルは折り返し） ── */
 .category {
   position: absolute;
   bottom: 10px;
@@ -88,22 +88,9 @@
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.12em;
-  padding: 3px 8px 3px 8px;
+  padding: 3px 8px;
   line-height: 1.45;
   word-break: break-word;
-}
-/* 右端の三角（リボン）：縦中央に寄せ、letter-spacing 由来のすき間を詰める */
-.category::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: -8px;
-  width: 0;
-  height: 0;
-  transform: translateY(-50%);
-  border-top: 11px solid transparent;
-  border-bottom: 11px solid transparent;
-  border-left: 8px solid var(--color-primary);
 }
 
 /* ── ボディ ── */

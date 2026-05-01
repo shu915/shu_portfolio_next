@@ -33,7 +33,7 @@ export function WorkSingleMain({ work }: Props) {
             <Link
               key={s.slug}
               href={`/works?service=${encodeURIComponent(s.slug)}`}
-              className="inline-block rounded-sm bg-secondary px-1.5 py-0.5 text-sm font-semibold tracking-widest transition-colors hover:bg-primary hover:text-white"
+              className="inline-block bg-secondary px-1.5 py-0.5 text-sm font-semibold tracking-widest transition-colors hover:bg-primary hover:text-white"
             >
               {s.name}
             </Link>
