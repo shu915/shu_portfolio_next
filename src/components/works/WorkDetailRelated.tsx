@@ -29,7 +29,7 @@ export function WorkDetailRelated({ works }: Props) {
         {works.map((item, index) => (
           <li
             key={item.id}
-            className="w-full max-w-[16.6rem] max-[430px]:w-full max-[430px]:max-w-[min(100%,16.6rem)] min-w-0 justify-self-center"
+            className="w-full max-w-[16.6rem] min-w-0"
           >
             <ArticleListItem
               href={`/works/${item.slug}`}

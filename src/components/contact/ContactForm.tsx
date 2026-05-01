@@ -224,7 +224,7 @@ export function ContactForm() {
             <textarea
               id="your-message"
               className={`${inputClassName} h-40 resize-none`}
-              placeholder="具体的な内容をご記入下さい"
+              placeholder="具体的な内容をご記入ください"
               aria-required="true"
               aria-invalid={errors["your-message"] ? true : undefined}
               aria-describedby={errors["your-message"] ? fieldErrorId("your-message") : undefined}
