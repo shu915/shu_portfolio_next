@@ -109,7 +109,7 @@ export function ContactForm() {
           <h3 className="font-cormorant text-[2.25rem] font-semibold leading-none tracking-[0.08em] text-primary">
             Contact Form
           </h3>
-          <p className="mt-2 flex items-center gap-2 font-shippori text-[0.8rem] font-semibold tracking-[0.1em] text-primary/60">
+          <p className="mt-2 flex items-center gap-2 font-shippori text-[0.8rem] font-semibold tracking-widest text-primary/60">
             <span className="inline-block h-px w-5 bg-primary opacity-40" />
             お問い合わせ内容はこちらにご記入ください
           </p>

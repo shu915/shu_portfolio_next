@@ -10,7 +10,6 @@
   padding: 1rem 1.25rem;
   background-color: #fafafa;
   border: 1px solid #c8c8c8;
-  border-radius: 0.375rem;
   color: #666;
 }
 
@@ -36,7 +35,7 @@
 
 /* 子リストだけ：階層のインデント（積み上げはこの幅だけ） */
 .list .list {
-  margin-top: 0.2em;
+  margin-top: 0.24em;
   padding-left: var(--toc-nest-indent);
 }
 
@@ -46,7 +45,7 @@
   flex-wrap: wrap;
   align-items: flex-start;
   column-gap: 0.35rem;
-  margin-top: 0.22em;
+  margin-top: 0.3em;
   counter-increment: toc-item;
 }
 
@@ -76,7 +75,7 @@
 .list > .listItem > .list {
   flex: 0 0 100%;
   width: 100%;
-  margin-top: 0.2em;
+  margin-top: 0.24em;
 }
 
 .link {
@@ -96,5 +95,5 @@
 .link:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: 0;
 }
