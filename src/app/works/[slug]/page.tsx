@@ -69,8 +69,8 @@ export default async function WorkSinglePage({
         />
         <div className={noSidebarMainClassName}>
           <WorkSingleMain work={work} />
+          <WorkDetailRelated works={relatedWorks} />
         </div>
-        <WorkDetailRelated works={relatedWorks} />
       </div>
     </WorksPageShell>
   );
