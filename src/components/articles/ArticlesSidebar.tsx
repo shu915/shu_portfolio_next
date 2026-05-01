@@ -117,7 +117,7 @@ export function ArticlesSidebar({
                   */}
                   <div className="mt-[0.1rem]">
                     {post.categories?.nodes[0]?.name ? (
-                      <span className="inline-block rounded-sm bg-secondary px-1 py-0.5 text-[0.75rem] font-semibold tracking-widest">
+                      <span className="inline-block bg-secondary px-1 py-0.5 text-[0.75rem] font-semibold tracking-widest">
                         {post.categories.nodes[0].name}
                       </span>
                     ) : null}
@@ -149,7 +149,7 @@ export function ArticlesSidebar({
               <Link
                 key={cat.slug}
                 href={`/articles/category/${cat.slug}`}
-                className="inline-block rounded-sm bg-secondary px-1.5 py-0.5 text-sm font-semibold tracking-widest transition-colors hover:bg-primary hover:text-white max-[430px]:px-1 max-[430px]:text-xs"
+                className="inline-block bg-secondary px-1.5 py-0.5 text-sm font-semibold tracking-widest transition-colors hover:bg-primary hover:text-white max-[430px]:px-1 max-[430px]:text-xs"
               >
                 {cat.name}
               </Link>
@@ -172,7 +172,7 @@ export function ArticlesSidebar({
               <Link
                 key={tag.slug}
                 href={`/articles/tag/${tag.slug}`}
-                className="inline-block rounded-sm bg-[#eee] px-1.5 py-0.5 text-sm font-semibold tracking-widest transition-colors hover:bg-primary hover:text-white max-[430px]:px-1 max-[430px]:text-xs"
+                className="inline-block bg-[#eee] px-1.5 py-0.5 text-sm font-semibold tracking-widest transition-colors hover:bg-primary hover:text-white max-[430px]:px-1 max-[430px]:text-xs"
               >
                 {tag.name}
               </Link>

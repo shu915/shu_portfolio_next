@@ -73,31 +73,24 @@
   opacity: 0.08;
 }
 
-/* ── カテゴリリボン（sectionTitle の DNA を継承） ── */
+/* ── カテゴリバッジ（サムネ左下・長いラベルは折り返し） ── */
 .category {
   position: absolute;
   bottom: 10px;
   left: 14px;
+  right: auto;
   z-index: 2;
+  display: inline-block;
+  max-width: calc(100% - 28px);
+  box-sizing: border-box;
   background: var(--color-primary);
   color: #fff;
   font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.16em;
-  padding: 3px 12px 3px 8px;
-  line-height: 1.6;
-}
-/* 右端の三角（リボン） */
-.category::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: -9px;
-  width: 0;
-  height: 0;
-  border-top: 14px solid transparent;
-  border-bottom: 14px solid transparent;
-  border-left: 9px solid var(--color-primary);
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
+  line-height: 1.45;
+  word-break: break-word;
 }
 
 /* ── ボディ ── */
