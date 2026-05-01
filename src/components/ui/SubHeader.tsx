@@ -98,7 +98,7 @@ export function SubHeader({ variant, title, subtitle }: Props) {
                 className="h-px w-5 shrink-0 bg-primary opacity-50 max-md:w-3.5"
                 aria-hidden="true"
               />
-              <p className="font-semibold tracking-widest text-primary text-[clamp(0.75rem,0.65rem+0.4vw,1rem)]">
+              <p className="font-semibold leading-relaxed tracking-[0.08em] text-primary text-[clamp(0.9375rem,0.78rem+0.55vw,1.1875rem)]">
                 {subtitle.trim()}
               </p>
             </div>
