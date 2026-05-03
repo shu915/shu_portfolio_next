@@ -112,7 +112,7 @@ export function ProfileMain() {
         <section>
           <h3 className={SECTION_TITLE}>使用ツール</h3>
           <p className={SECTION_BODY}>
-            Cursor / GitHub / Code Rabbit / Figma / Notion / Slack / Discord
+            Cursor / GitHub / Gemini Code Assist / Claude Design / Notion / Slack / Discord
           </p>
         </section>
       </div>

@@ -10,9 +10,19 @@ import {
   type ContactFormValues,
 } from "@/lib/validations/contact-form";
 
+function TurnstileLoadingPlaceholder() {
+  return (
+    <div
+      className="box-border h-[65px] w-full max-w-[300px] shrink-0 animate-pulse rounded-[2px] bg-white ring-1 ring-inset ring-primary/10"
+      aria-hidden
+      role="presentation"
+    />
+  );
+}
+
 const Turnstile = dynamic(
   () => import("@marsidev/react-turnstile").then((mod) => mod.Turnstile),
-  { ssr: false, loading: () => null }
+  { ssr: false, loading: TurnstileLoadingPlaceholder }
 );
 
 const inputClassName =
@@ -238,7 +248,7 @@ export function ContactForm() {
           </div>
 
           {/* プライバシー */}
-          <div className="relative mt-2 flex items-center justify-center max-[359px]:text-[0.8rem]">
+          <div className="mt-2 flex flex-col items-center gap-1 max-[359px]:text-[0.8rem]">
             <label
               htmlFor="js-your-privacy-checkbox"
               className="relative flex cursor-pointer flex-wrap items-center justify-center gap-1.5 text-center font-shippori"
@@ -269,20 +279,21 @@ export function ContactForm() {
               </Link>
               に同意する
             </label>
+            {errors["your-privacy"] && (
+              <p id={fieldErrorId("your-privacy")} className="text-center font-shippori text-sm font-semibold text-accent" role="alert">
+                {errors["your-privacy"].message}
+              </p>
+            )}
           </div>
-          {errors["your-privacy"] && (
-            <p id={fieldErrorId("your-privacy")} className="mt-1 text-center font-shippori text-sm font-semibold text-accent" role="alert">
-              {errors["your-privacy"].message}
-            </p>
-          )}
 
           {/* Turnstile ＋送信（幅 300px で揃える／狭すぎる max を戻す） */}
           <div className="mx-auto mt-4 flex w-full max-w-[300px] flex-col items-stretch gap-3">
             {turnstileSiteKey ? (
-              <div className="flex min-h-[65px] flex-col items-center justify-center" aria-label="Turnstile">
+              <div className="isolate h-[65px] w-full max-w-[300px] shrink-0" aria-label="Turnstile">
                 <Turnstile
                   key={turnstileMountKey}
                   siteKey={turnstileSiteKey}
+                  options={{ size: "normal" }}
                   onSuccess={(token) => { setTurnstileToken(token); setSubmitServerError(null); }}
                   onExpire={() => { setTurnstileToken(null); }}
                   onError={() => {
