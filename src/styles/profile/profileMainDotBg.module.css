@@ -1,0 +1,10 @@
+/* rgb(from ...) は任意 Tailwind が煩雑になりやすいためここだけ */
+.dotBg {
+  background-color: transparent;
+  background-image: radial-gradient(
+    circle,
+    rgb(from var(--color-primary) r g b / 0.07) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+}
