@@ -58,7 +58,14 @@ export function ArticlesSidebar({
         <p className="mt-[18px] text-center font-cormorant text-[40px] font-semibold leading-none tracking-[0.06em] text-primary">
           Shu
         </p>
-        <p className="mt-2 text-justify text-sm leading-normal tracking-widest">
+        <div className="mt-[10px] flex items-center justify-center gap-[10px]">
+          <span className="h-px w-7 bg-primary/30" />
+          <span className="text-[13px] font-semibold tracking-[0.22em] text-primary/55">
+            Full Stack Engineer
+          </span>
+          <span className="h-px w-7 bg-primary/30" />
+        </div>
+        <p className="mt-4 text-justify text-[14px] leading-[1.95] tracking-[0.06em] text-[#444]">
           Webエンジニアリングを通じて、実用的で信頼性の高い成果を提供。細部にこだわり、使いやすさとクオリティを追求。技術の力で未来を形にします。
         </p>
       </section>
