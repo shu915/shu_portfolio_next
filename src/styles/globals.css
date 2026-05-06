@@ -15,6 +15,20 @@
 
 /* ベースの body / html の見た目は app/layout.tsx の className（Tailwind）へ */
 
+/* 記事一覧サイドバー: 見出し下線（左36pxネイビー＋残りヘアライン） */
+.sidebar-rule-bottom {
+  background-image: linear-gradient(
+    90deg,
+    #211e55 0,
+    #211e55 36px,
+    rgba(33, 30, 85, 0.12) 36px,
+    rgba(33, 30, 85, 0.12) 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  background-position: bottom left;
+}
+
 /* ヒーロー「Scroll」ガイド（HeroSection） */
 @keyframes scrollLine {
   0% {
