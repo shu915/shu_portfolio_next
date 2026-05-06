@@ -14,7 +14,7 @@
   overflow-wrap: anywhere;
 }
 
-/* 本文 h1: .c-common-title 相当。行間は body と同じ 1.6 でゆとり。下線は .c-heading3 の border に近い太さ */
+/* 本文 h1: .c-common-title 相当。行間は body と同じ 1.6 でゆとり。下線は h2/h3 よりやや太め（1px hairline と差を付ける） */
 .articleBody :where(h1) {
   margin: 4rem 0 1.5rem;
   padding: 0.8rem 0;
@@ -38,7 +38,7 @@
   margin: 4rem 0 1rem;
   padding: 0.8rem;
   background-color: var(--color-secondary);
-  border-left: 0.5rem solid var(--color-primary);
+  border-left: 3px solid var(--color-primary);
   color: var(--color-primary);
   font-size: 1.5rem;
   font-weight: 700;
@@ -51,7 +51,7 @@
   margin: 4rem 0 1rem;
   padding: 0.6rem;
   background-color: var(--color-secondary);
-  border-bottom: 0.2rem solid var(--color-primary);
+  border-bottom: 1px solid var(--color-primary);
   color: var(--color-primary);
   font-size: 1.3rem;
   font-weight: 600;
@@ -59,7 +59,7 @@
   line-height: 1.6;
 }
 
-/* .c-heading4 */
+/* .c-heading4（角は丸めない — 背景ボックスを直角に） */
 .articleBody :where(h4) {
   margin: 2rem 0 1rem;
   padding: 0.6rem;
@@ -68,13 +68,14 @@
   font-size: 1.2rem;
   font-weight: 500;
   line-height: 1.6;
+  border-radius: 0;
 }
 
 /* .c-heading5 */
 .articleBody :where(h5) {
   margin: 2rem 0 1rem;
   padding: 0.3rem 0.6rem;
-  border-bottom: 0.25rem solid var(--color-secondary);
+  border-bottom: 1px solid var(--color-secondary);
   color: var(--color-primary);
   font-size: 1.1rem;
   font-weight: 500;
@@ -147,7 +148,7 @@
   letter-spacing: 0.05em;
   background-color: #fafafa;
   border: 1px solid #ccc;
-  border-radius: 0.5rem;
+  border-radius: 0;
 }
 
 .articleBody ul {
@@ -256,7 +257,7 @@
   -webkit-overflow-scrolling: touch;
   background-color: #fafafa;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 0;
   color: #333;
   font-family:
     ui-monospace,
@@ -296,7 +297,7 @@
  */
 .articleBody :where(*:not(pre) > code) {
   padding: 0.125em 0.35em;
-  border-radius: 3px;
+  border-radius: 0;
   background-color: #f0f0f0;
   font-family:
     ui-monospace,
