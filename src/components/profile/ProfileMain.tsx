@@ -1,167 +1,162 @@
 import Image from "next/image";
+import dotBg from "@/styles/profile/profileMainDotBg.module.css";
 
-const PROFILE_MAIN =
-  "mx-auto mt-8 w-[1080px] max-w-full bg-[url('/images/profile/bg-grid.webp')] bg-[length:1.5rem] bg-repeat px-[6.5rem] py-16 max-[1099px]:px-8 max-[1099px]:py-8 max-[430px]:px-0";
-
-const PROFILE_CONTAINER =
-  "flex justify-between gap-8 max-[1099px]:flex-col max-[1099px]:items-center";
-
-const PROFILE_IMAGE_FIGURE = "m-0 w-[16.625rem] max-w-full";
-
-const PROFILE_CONTENT = "w-[32rem] max-w-full";
-
-const PROFILE_NAME =
-  "text-5xl font-bold tracking-widest leading-none max-[1099px]:text-center max-[1099px]:text-[2rem]";
-
-const PROFILE_INTRO =
-  "mt-6 max-w-xl text-lg leading-relaxed tracking-widest text-justify max-[899px]:text-base max-[430px]:text-base";
-
-const SECTION_TITLE =
-  "relative mt-14 border-b border-primary pl-4 text-2xl font-medium tracking-[0.05rem] before:absolute before:left-0 before:top-1/2 before:h-[80%] before:w-2 before:-translate-y-1/2 before:bg-primary before:content-[''] max-[430px]:text-xl";
-
-const SECTION_BODY =
-  "mt-4 px-4 tracking-[0.05rem] max-[430px]:px-0 max-[430px]:text-sm";
-
-const CAREER = "flex flex-col gap-4";
-
-const CAREER_ROW =
-  "flex justify-start pb-[0.2rem] max-[899px]:flex-col max-[899px]:border-b max-[899px]:border-primary";
-
-const CAREER_YEAR = "w-28 shrink-0";
-
-const MOTTO_LIST = "ml-8 list-disc leading-[1.8] max-[430px]:ml-4";
-
-/**
- * プロフィール本文（レガシー page-profile.php のベタ書きを移植）
- */
+/** プロフィール本文（カード枠はページ側の noSidebarMain） */
 export function ProfileMain() {
-  return (
-    <div className={PROFILE_MAIN}>
-      <div className={PROFILE_CONTAINER}>
-        <figure className={PROFILE_IMAGE_FIGURE}>
-          <Image
-            src="/images/profile/profile-image-target.webp"
-            alt="プロフィール画像"
-            width={400}
-            height={520}
-            className="h-auto w-full"
-            sizes="(max-width: 1099px) 100vw, 16.625rem"
-            priority
-          />
-        </figure>
-        <div className={PROFILE_CONTENT}>
-          <h3 className={PROFILE_NAME}>Shu</h3>
-          <p className={PROFILE_INTRO}>
-            Webエンジニアリングを通じて、実用的で信頼性の高い成果を提供しています。細部にこだわりながら、使いやすさとクオリティを追求し、一つひとつのプロジェクトで確かな価値を生み出すことを大切にしています。技術の力で未来を形にします。
-          </p>
-        </div>
-      </div>
-
-      <div>
-        <section>
-          <h3 className={SECTION_TITLE}>経歴</h3>
-          <div className={SECTION_BODY}>
-            <dl className={CAREER}>
-              <div className={CAREER_ROW}>
-                <dt className={CAREER_YEAR}>2020年3月</dt>
-                <dd className="m-0">
+  const sections: { label: string; content: React.ReactNode }[] = [
+    {
+      label: "経歴",
+      content: (
+        <div>
+          {(
+            [
+              [
+                "2020年3月",
+                <>
                   文系大学卒業
                   <br />
                   リベラルアーツ、現代社会、ビジネス、語学などを学習した
-                </dd>
-              </div>
-              <div className={CAREER_ROW}>
-                <dt className={CAREER_YEAR}>2023年7月</dt>
-                <dd className="m-0">
+                </>,
+              ],
+              [
+                "2023年7月",
+                <>
                   デイトラのWEB制作コースを卒業
                   <br />
                   LPやWordPressテーマを作成できるようになる
-                </dd>
-              </div>
-              <div className={CAREER_ROW}>
-                <dt className={CAREER_YEAR}>2025年12月</dt>
-                <dd className="m-0">
-                  Happiness Chainを卒業、フルスタック開発が可能になる
-                </dd>
-              </div>
-            </dl>
+                </>,
+              ],
+              [
+                "2025年12月",
+                <>Happiness Chainを卒業、フルスタック開発が可能になる</>,
+              ],
+            ] as const
+          ).map(([year, body]) => (
+            <div
+              key={year}
+              className="mb-2 flex gap-4 max-md:mb-3 max-md:flex-col max-md:gap-1"
+            >
+              <span className="w-[88px] shrink-0 text-sm font-semibold text-primary max-md:w-auto">
+                {year}
+              </span>
+              <span>{body}</span>
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      label: "バックエンド",
+      content: "Go言語 / Ruby / Rails / PostgreSQL",
+    },
+    {
+      label: "フロントエンド",
+      content: "JavaScript / TypeScript / React / Next.js / Tailwind CSS",
+    },
+    {
+      label: "インフラ",
+      content: "AWS / Docker / GitHub Actions / Terraform",
+    },
+    {
+      label: "使用ツール",
+      content:
+        "Cursor / GitHub / Gemini Code Assist / Claude Design / Notion / Slack / Discord",
+    },
+    {
+      label: "語学",
+      content: "日本語 / 中国語 / 英語(学習中)",
+    },
+    {
+      label: "趣味",
+      content: "読書 / ゲーム / 散歩 / AIとチャット",
+    },
+    {
+      label: "保有資格",
+      content: "基本情報技術者 / HSK5級 / 色彩検定1級",
+    },
+    {
+      label: "座右の銘",
+      content: (
+        <ul className="ml-4 list-disc [&>li]:mb-0.5">
+          <li>雨だれ岩を穿つ</li>
+          <li>神は細部に宿る</li>
+        </ul>
+      ),
+    },
+    {
+      label: "強み",
+      content: (
+        <ul className="ml-4 list-disc [&>li]:mb-0.5">
+          <li>戦略、ビジョン、計画などを考えるのが得意</li>
+          <li>全体像だけでなく、細部までこだわり抜く</li>
+          <li>主体性を持って、改善をし続ける事ができる</li>
+          <li>継続的に努力ができる</li>
+          <li>柔軟性を持ち、新しいことを学び続けられる</li>
+          <li>
+            ユーザー視点を大切にし、価値を届けることに意識を向けている
+          </li>
+          <li>エンジニアリングの力でより良い未来を創造していく</li>
+        </ul>
+      ),
+    },
+  ];
+
+  return (
+    <article className={`min-w-0 w-full ${dotBg.dotBg}`}>
+      <div className="relative grid grid-cols-[240px_1fr] items-stretch gap-8 border-b border-primary/8 pt-2 pb-7 max-[899px]:gap-6 max-[899px]:py-5 max-md:grid-cols-1 max-md:py-5 max-[430px]:py-4">
+        <div className="flex w-60 shrink-0 self-stretch max-md:mx-auto max-md:w-full max-md:max-w-[240px]">
+          <div className="w-full leading-none">
+            <Image
+              src="/images/profile/profile-image-target.webp"
+              alt="プロフィール画像"
+              width={400}
+              height={520}
+              className="mx-auto h-auto w-full max-w-[240px] object-contain"
+              sizes="240px"
+              priority
+            />
           </div>
-        </section>
-
-        <section>
-          <h3 className={SECTION_TITLE}>バックエンド</h3>
-          <p className={SECTION_BODY}>
-            Go言語 / Ruby / Rails / PostgreSQL
-          </p>
-        </section>
-
-        <section>
-          <h3 className={SECTION_TITLE}>フロントエンド</h3>
-          <p className={SECTION_BODY}>
-            JavaScript / TypeScript / React / Next.js / Tailwind CSS
-          </p>
-        </section>
-
-        <section>
-          <h3 className={SECTION_TITLE}>インフラ</h3>
-          <p className={SECTION_BODY}>
-            AWS / Docker / GitHub Actions / Terraform
-          </p>
-        </section>
-
-        <section>
-          <h3 className={SECTION_TITLE}>使用ツール</h3>
-          <p className={SECTION_BODY}>
-            Cursor / GitHub / Code Rabbit / Figma / Notion / Slack / Discord
-          </p>
-        </section>
+        </div>
+        <div className="flex min-h-0 flex-col justify-between max-md:min-h-0 max-md:gap-5">
+          <div className="flex flex-col gap-1.5 max-md:items-center max-md:text-center">
+            <h3 className="font-cormorant text-[56px] font-semibold leading-none tracking-[0.04em] text-primary max-[899px]:text-[42px] max-md:text-center max-md:text-[2rem] max-[430px]:text-[1.75rem]">
+              Shu
+            </h3>
+            <p className="m-0 font-cormorant text-base font-semibold tracking-[0.22em] text-primary/50">
+              Full Stack Engineer
+            </p>
+          </div>
+          <div>
+            <div className="my-3.5 h-px w-8 bg-primary/20 max-md:mx-auto" />
+            <p className="text-[15px] leading-loose tracking-[0.06em] text-[#444] max-md:text-justify max-md:[text-align-last:auto]">
+              Webエンジニアリングを通じて、実用的で信頼性の高い成果を提供しています。細部にこだわりながら、使いやすさとクオリティを追求し、一つひとつのプロジェクトで確かな価値を生み出すことを大切にしています。技術の力で未来を形にします。
+            </p>
+          </div>
+        </div>
       </div>
 
-      <section>
-        <h3 className={SECTION_TITLE}>語学</h3>
-        <p className={SECTION_BODY}>
-          日本語 / 中国語 / 英語(学習中)
-        </p>
-      </section>
-
-      <section>
-        <h3 className={SECTION_TITLE}>趣味</h3>
-        <p className={SECTION_BODY}>
-          読書 / ゲーム / 散歩 / AIとチャット
-        </p>
-      </section>
-
-      <section>
-        <h3 className={SECTION_TITLE}>保有資格</h3>
-        <p className={SECTION_BODY}>基本情報技術者 / HSK5級 / 色彩検定1級</p>
-      </section>
-
-      <section>
-        <h3 className={SECTION_TITLE}>座右の銘</h3>
-        <div className={SECTION_BODY}>
-          <ul className={MOTTO_LIST}>
-            <li>雨だれ岩を穿つ</li>
-            <li>神は細部に宿る</li>
-          </ul>
-        </div>
-      </section>
-
-      <section>
-        <h3 className={SECTION_TITLE}>強み</h3>
-        <div className={SECTION_BODY}>
-          <ul className={MOTTO_LIST}>
-            <li>戦略、ビジョン、計画などを考えるのが得意</li>
-            <li>全体像だけでなく、細部までこだわり抜く</li>
-            <li>主体性を持って、改善をし続ける事ができる</li>
-            <li>継続的に努力ができる</li>
-            <li>柔軟性を持ち、新しいことを学び続けられる</li>
-            <li>
-              ユーザー視点を大切にし、価値を届けることに意識を向けている
-            </li>
-            <li>エンジニアリングの力でより良い未来を創造していく</li>
-          </ul>
-        </div>
-      </section>
-    </div>
+      <div className="pt-3 max-[899px]:pt-2 max-[430px]:pt-2">
+        {sections.map(({ label, content }, i) => {
+          const isFirst = i === 0;
+          return (
+            <div
+              key={label}
+              className={`grid grid-cols-[132px_1fr] gap-0 max-md:grid-cols-1 ${isFirst ? "mt-0" : "mt-5"}`}
+            >
+              <div
+                className={`border-t border-primary/10 pt-3 font-shippori-mincho text-[15px] font-semibold tracking-[0.2em] text-primary max-md:pb-1 ${isFirst ? "border-t-0" : ""}`}
+              >
+                {label}
+              </div>
+              <div
+                className={`border-t border-primary/10 pl-4 pt-3 text-[15px] leading-[1.9] tracking-[0.04em] text-[#444] max-md:border-t-0 max-md:px-0 max-md:pt-2 ${isFirst ? "border-t-0 pt-3 max-md:pt-2" : ""}`}
+              >
+                {content}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </article>
   );
 }

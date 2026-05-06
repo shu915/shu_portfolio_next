@@ -40,15 +40,12 @@ export function ArticlesSidebar({
 
   return (
     <aside className="w-full">
-      {/* プロフィール */}
+      {/* プロフィール（写真先行・名前主役・見出し視覚は sr-only） */}
       <section aria-labelledby="sidebar-profile-heading">
-        <h2
-          id="sidebar-profile-heading"
-          className="text-center text-2xl font-bold"
-        >
+        <h2 id="sidebar-profile-heading" className="sr-only">
           プロフィール
         </h2>
-        <figure className="mx-auto mt-2 w-45">
+        <figure className="mx-auto w-[220px]">
           <Image
             src="/images/common/profile-image.webp"
             alt="プロフィール"
@@ -58,10 +55,17 @@ export function ArticlesSidebar({
             loading="eager"
           />
         </figure>
-        <p className="mt-2 text-center text-2xl font-bold tracking-widest">
+        <p className="mt-[18px] text-center font-cormorant text-[40px] font-semibold leading-none tracking-[0.06em] text-primary">
           Shu
         </p>
-        <p className="mt-2 text-justify text-sm leading-normal tracking-widest">
+        <div className="mt-[10px] flex items-center justify-center gap-[10px]">
+          <span className="h-px w-7 bg-primary/30" />
+          <span className="text-[13px] font-semibold tracking-[0.22em] text-primary/55">
+            Full Stack Engineer
+          </span>
+          <span className="h-px w-7 bg-primary/30" />
+        </div>
+        <p className="mt-4 text-justify text-[14px] leading-[1.95] tracking-[0.06em] text-[#444]">
           Webエンジニアリングを通じて、実用的で信頼性の高い成果を提供。細部にこだわり、使いやすさとクオリティを追求。技術の力で未来を形にします。
         </p>
       </section>
@@ -99,7 +103,8 @@ export function ArticlesSidebar({
                 <div className="relative aspect-square w-[35%] max-w-20 shrink-0 overflow-hidden">
                   <Image
                     src={
-                      post.featuredImage?.node.sourceUrl ?? "/images/common/no-image.webp"
+                      post.featuredImage?.node.sourceUrl ??
+                      "/images/common/no-image.webp"
                     }
                     alt={post.featuredImage?.node.altText || post.title}
                     fill
@@ -240,7 +245,7 @@ function SidebarSectionHeading({
   return (
     <h2
       id={id}
-      className="flex items-center gap-4 border-b-2 border-[#d9d9d9] pb-1 text-[clamp(1.375rem,1.232rem+0.3vw,1.5rem)] font-bold tracking-widest"
+      className="sidebar-rule-bottom flex items-center gap-4 pb-2.5 text-[clamp(1.375rem,1.232rem+0.3vw,1.5rem)] font-bold tracking-widest"
     >
       {/* eslint-disable-next-line @next/next/no-img-element -- 小さな装飾 SVG */}
       <img

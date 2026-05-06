@@ -4,7 +4,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
 import { WorkDetailRelated } from "@/components/works/WorkDetailRelated";
 import { WorkSingleMain } from "@/components/works/WorkSingleMain";
-import { WorksPageShell } from "@/components/works/WorksPageShell";
+import { SlashBgShell } from "@/components/layout/SlashBgShell";
 import { stripExcerptHtml } from "@/lib/articles-archive";
 import { getRelatedWorks } from "@/lib/work-related";
 import { previewOptionsFromSearchParams } from "@/lib/draft-signature";
@@ -57,7 +57,7 @@ export default async function WorkSinglePage({
   const relatedWorks = await getRelatedWorks(work.id);
 
   return (
-    <WorksPageShell>
+    <SlashBgShell>
       <SubHeader variant="works" title="Works" subtitle="制作実績" />
       <div className="mx-auto max-w-[1232px] px-4 pb-32 md:px-6 lg:px-8">
         <Breadcrumbs
@@ -72,6 +72,6 @@ export default async function WorkSinglePage({
           <WorkDetailRelated works={relatedWorks} />
         </div>
       </div>
-    </WorksPageShell>
+    </SlashBgShell>
   );
 }

@@ -52,10 +52,11 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        <link rel="preconnect" href="https://challenges.cloudflare.com" />
         <link rel="stylesheet" href={GOOGLE_FONTS_STYLESHEET} />
       </head>
       <body
-        className="flex min-h-screen flex-col bg-white font-shippori-mincho text-base leading-[1.6] text-body"
+        className="flex min-h-screen supports-[height:100dvh]:min-h-dvh flex-col bg-white font-shippori-mincho text-base leading-[1.6] text-body"
       >
         <NextTopLoader
           color="#E4EBF7"

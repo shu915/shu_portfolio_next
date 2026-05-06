@@ -83,7 +83,7 @@ export function SubHeader({ variant, title, subtitle }: Props) {
       <div className="relative z-10 mx-auto flex h-full max-w-[1232px] items-center px-4 md:px-6 lg:px-8">
         <div className="flex items-stretch">
           {/* 左アクセントバー */}
-          <div className="w-1 shrink-0 bg-primary" />
+          <div className="w-px shrink-0 bg-primary" />
 
           {/* テキストパネル */}
           <div className="flex flex-col gap-2 bg-white/82 px-5 py-4 backdrop-blur-md md:gap-2.5 md:px-7 md:py-[18px]">

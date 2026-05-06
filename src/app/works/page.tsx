@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { WorksArchiveMain } from "@/components/works/WorksArchiveMain";
-import { WorksPageShell } from "@/components/works/WorksPageShell";
+import { SlashBgShell } from "@/components/layout/SlashBgShell";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
 import {
@@ -88,7 +88,7 @@ export default async function WorksPage({
   }
 
   return (
-    <WorksPageShell>
+    <SlashBgShell>
       <SubHeader variant="works" title="Works" subtitle="制作実績" />
       <div className="mx-auto max-w-[1232px] px-4 pb-32 md:px-6 lg:px-8">
         <Breadcrumbs items={[{ label: "Top", href: "/" }, { label: "Works" }]} />
@@ -100,6 +100,6 @@ export default async function WorksPage({
           serviceTerms={WORKS_SERVICE_TAB_TERMS}
         />
       </div>
-    </WorksPageShell>
+    </SlashBgShell>
   );
 }
