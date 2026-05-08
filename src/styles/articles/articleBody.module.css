@@ -33,12 +33,12 @@
   }
 }
 
-/* .c-heading2 */
+/* .c-heading2 — 左帯は SubHeader のアクセントバー（w-1 = 0.25rem）と同じ太さに揃える */
 .articleBody :where(h2) {
   margin: 4rem 0 1rem;
   padding: 0.8rem;
   background-color: var(--color-secondary);
-  border-left: 3px solid var(--color-primary);
+  border-left: 0.25rem solid var(--color-primary);
   color: var(--color-primary);
   font-size: 1.5rem;
   font-weight: 700;
