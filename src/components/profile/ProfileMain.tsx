@@ -107,7 +107,7 @@ export function ProfileMain() {
         <div className="flex w-60 shrink-0 self-stretch max-md:mx-auto max-md:w-full max-md:max-w-[240px]">
           <div className="w-full leading-none">
             <Image
-              src="/images/profile/profile-image-target.webp"
+              src="/images/common/profile-image.webp"
               alt="プロフィール画像"
               width={400}
               height={520}
