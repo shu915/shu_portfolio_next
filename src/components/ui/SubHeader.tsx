@@ -3,8 +3,8 @@ import Image from "next/image";
 /**
  * 各ページ上部のサブヘッダー（背景画像 + タイトル + サブタイトル）
  *
- * 背景は `next/image` + `priority`（LCP）。PC/SP で画像を切り替え。
- * テキストはテキスト幅だけのフロストパネル＋左アクセントバー。
+ * 背景画像は全バリアント共通で Contact 用アセットを使用（`/images/contact/sub-header-contact-*`）。
+ * PC / SP で画像を切り替え、`next/image` + `priority`（LCP）。
  */
 type Props = {
   variant:
@@ -20,36 +20,24 @@ type Props = {
   subtitle: string;
 };
 
+/** 全ページで共通のサブヘッダー背景（Contact 用画像） */
+const SUB_HEADER_BG = {
+  pc: "/images/contact/sub-header-contact-pc-3840.webp",
+  sp: "/images/contact/sub-header-contact-sp-800.webp",
+} as const;
+
 /** PC は `public` にある最大幅（旧 image-set 2x 相当）。SP は *-sp-800 のみ */
 const BG_BY_VARIANT: Record<
   Props["variant"],
   { pc: string; sp: string } | null
 > = {
-  articles: {
-    pc: "/images/articles/sub-header-articles-pc-3150.webp",
-    sp: "/images/articles/sub-header-articles-sp-800.webp",
-  },
-  search: {
-    pc: "/images/search/sub-header-search-pc-3840.webp",
-    sp: "/images/search/sub-header-search-sp-800.webp",
-  },
-  works: {
-    pc: "/images/works/sub-header-works-pc-3840.webp",
-    sp: "/images/works/sub-header-works-sp-800.webp",
-  },
-  profile: {
-    pc: "/images/profile/sub-header-profile-pc-3840.webp",
-    sp: "/images/profile/sub-header-profile-sp-800.webp",
-  },
-  contact: {
-    pc: "/images/contact/sub-header-contact-pc-3840.webp",
-    sp: "/images/contact/sub-header-contact-sp-800.webp",
-  },
+  articles: SUB_HEADER_BG,
+  search: SUB_HEADER_BG,
+  works: SUB_HEADER_BG,
+  profile: SUB_HEADER_BG,
+  contact: SUB_HEADER_BG,
   archive: null,
-  page: {
-    pc: "/images/page/sub-header-page-pc-3840.webp",
-    sp: "/images/page/sub-header-page-sp-800.webp",
-  },
+  page: SUB_HEADER_BG,
 };
 
 export function SubHeader({ variant, title, subtitle }: Props) {

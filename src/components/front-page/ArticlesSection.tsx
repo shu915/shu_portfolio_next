@@ -1,11 +1,12 @@
-import Link from "next/link";
 import { ArticleListItem } from "@/components/ui/ArticleListItem";
+import { SectionTitle } from "@/components/ui/SectionTitle";
+import { SectionMoreLink } from "@/components/ui/SectionMoreLink";
+import { stripExcerptHtml } from "@/lib/articles-archive";
 import { gqlFetch } from "@/lib/graphql";
-import sectionsStyles from "@/styles/front-page/sections.module.css";
 
 const GET_ARTICLES = `
   query GetFrontPageArticles {
-    posts(first: 3) {
+    posts(first: 4) {
       nodes {
         id
         title
@@ -43,18 +44,21 @@ type PostNode = {
   };
 };
 
-/** フロントページに表示するカテゴリリンク（WordPress に合わせて固定） */
-const CATEGORY_LINKS = [
-  { label: "エンジニアリング", slug: "engineering" },
-  { label: "準備中", slug: "design" },
-  { label: "準備中", slug: "business" },
-] as const;
-
 /**
  * フロントページ Articles セクション
- * - 左: 最新3件の一般投稿カード（WPGraphQL から取得）
- * - 右: セクションタイトル・カテゴリリンク・All Articles ボタン
- * - 1239px 以下でカラム切り替え（右カラムは display:contents で親のflexに合流）
+ *
+ * レイアウト:
+ *   - SectionTitle（中央: ── 投稿記事 ── + Articles、ダーク版）
+ *   - 記事カード（共有 ArticleListItem、16.6rem 固定幅）
+ *       Mobile : 1列
+ *       Tablet : 2×2 グリッド（grid なので flex-wrap での 3:1 崩れが起きない）
+ *       Desktop: 1行 4列
+ *   - SectionMoreLink（投稿記事一覧はこちら、ダーク版）
+ *       Mobile : 中央寄せ
+ *       Tablet+: 右寄せ（cards-block 内で justify-end → rightmost card 右端と縦ラインが揃う）
+ *
+ * カラムを `16.6rem` 固定で切ることでカードの引き伸ばしを防止。
+ * アクセントは **ホバー時の底辺ラインのみ** `variant="soft"`（secondary と primary の color-mix）。
  */
 export async function ArticlesSection() {
   const data = await gqlFetch<{ posts: { nodes: PostNode[] } }>(GET_ARTICLES, {
@@ -65,77 +69,55 @@ export async function ArticlesSection() {
 
   return (
     <section
-      className="py-20 bg-primary"
+      className="bg-primary py-20 md:py-30"
       aria-labelledby="articles-section-title"
     >
-      <div className="mx-auto max-w-[1232px] px-4 md:px-6 lg:px-8">
-        <div className="flex justify-between gap-12 items-start max-[1239px]:flex-col max-[1239px]:items-center max-[1239px]:gap-6">
-          {/* 記事カードリスト（3列）*/}
-          <ul className="flex justify-between gap-10 max-[1239px]:order-2 max-[1239px]:gap-6 max-[899px]:flex-col max-[899px]:items-center max-[899px]:w-[16.6rem]">
-            {posts.map((post, index) => (
-              <li key={post.id} className="w-[16.6rem] shrink-0">
+      <div className="mx-auto flex max-w-[1232px] flex-col items-center px-4 md:px-6 lg:px-8">
+        <SectionTitle
+          eyebrow="投稿記事"
+          title="Articles"
+          id="articles-section-title"
+          tone="dark"
+        />
+
+        {/*
+          cards-block:
+          - w-fit でグリッド自体の自然幅（カード列の合計）に合わせる
+          - 内側で CTA を justify-end すると rightmost card の右端と縦ラインが一致する
+        */}
+        <div className="mt-11 w-fit max-w-full md:mt-16">
+          <ul
+            className={[
+              "grid justify-center",
+              "grid-cols-[16.6rem] gap-7",
+              "md:grid-cols-[repeat(2,16.6rem)] md:gap-8",
+              "xl:grid-cols-[repeat(4,16.6rem)] xl:gap-8",
+            ].join(" ")}
+          >
+            {posts.map((post) => (
+              <li key={post.id}>
                 <ArticleListItem
                   href={`/articles/${post.slug}`}
+                  variant="soft"
                   title={post.title}
                   date={post.date}
-                  excerpt={post.excerpt
-                    .replace(/<[^>]*>/g, " ")
-                    .replace(/\s+/g, " ")
-                    .trim()}
+                  excerpt={stripExcerptHtml(post.excerpt)}
                   thumbnailUrl={post.featuredImage?.node.sourceUrl}
                   thumbnailAlt={post.featuredImage?.node.altText}
                   categoryName={post.categories?.nodes[0]?.name}
-                  priority={index === 0}
                 />
               </li>
             ))}
           </ul>
 
-          {/*
-           * 右カラム：1239px 以下では display:contents になり
-           * 子要素が親 flex コンテナに直接参加する（order で並び順制御）
-           */}
-          <div className="max-[1239px]:contents">
-            {/* セクションタイトル + カテゴリ */}
-            <div className="max-[1239px]:order-1">
-              <h2
-                id="articles-section-title"
-                className={`${sectionsStyles.sectionTitle} ${sectionsStyles.sectionTitleSecondary} text-[2.25rem] font-bold font-cormorant tracking-[0.15em] max-[1239px]:mx-auto`}
-              >
-                Articles
-              </h2>
-
-              <div className="mt-6">
-                <h3 className="text-[1.25rem] font-bold tracking-widest text-white font-cormorant max-[1239px]:text-center">
-                  Category
-                </h3>
-                <ul className="mt-3 flex flex-col gap-4 max-[1239px]:flex-row max-[767px]:flex-col max-[767px]:items-start max-[767px]:w-fit max-[767px]:mx-auto">
-                  {CATEGORY_LINKS.map((cat) => (
-                    <li key={cat.slug}>
-                      <Link
-                        href={`/articles/category/${cat.slug}`}
-                        className="text-base font-semibold bg-secondary text-primary px-[0.7rem] py-1 tracking-widest transition-colors duration-300 hover:bg-white hover:text-primary"
-                      >
-                        {cat.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* All Articles ボタン */}
-            <div className="mt-8 max-[1239px]:order-3 max-[1239px]:ml-auto max-[1239px]:mt-4 max-[767px]:mx-auto">
-              <Link
-                href="/articles"
-                className={`${sectionsStyles.arrowButton} ${sectionsStyles.arrowButtonWhite}`}
-              >
-                All Articles
-              </Link>
-              <p className="text-[0.875rem] leading-none mt-2 tracking-[0.05em] text-white">
-                投稿記事一覧はこちら
-              </p>
-            </div>
+          <div className="mt-12 flex justify-center md:mt-14 md:justify-end">
+            <SectionMoreLink
+              href="/articles"
+              ariaLabel="投稿記事一覧を見る"
+              tone="dark"
+            >
+              投稿記事一覧はこちら
+            </SectionMoreLink>
           </div>
         </div>
       </div>

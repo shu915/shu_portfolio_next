@@ -1,0 +1,76 @@
+import Link from "next/link";
+import type { ReactNode } from "react";
+
+type Props = {
+  href: string;
+  children: ReactNode;
+  /** Next.js `<Link prefetch>` を明示制御したい場合のみ指定。 */
+  prefetch?: boolean;
+  /** スクリーンリーダー用ラベル（文脈で必要な場合のみ） */
+  ariaLabel?: string;
+  /** `dark`: `bg-primary` など暗背景向け（文字・罫線を白系に） */
+  tone?: "light" | "dark";
+  /** 追加 className */
+  className?: string;
+};
+
+/**
+ * セクション末尾の「もっと見る」誘導リンク（和文ラベル + 矢印 + 下線）
+ *
+ *   詳しいプロフィールはこちら  →
+ *   ────────────────────────────
+ *
+ * - 和文ラベル（Shippori Mincho、本文と同フォント）
+ * - 右端に細い矢印アイコン
+ * - 下端に primary 色の細い罫線（`tone="dark"` で白系）
+ * - ホバーで矢印が右に 6px シフト
+ */
+export function SectionMoreLink({
+  href,
+  children,
+  prefetch,
+  ariaLabel,
+  tone = "light",
+  className = "",
+}: Props) {
+  const toneClasses =
+    tone === "dark"
+      ? "border-white/85 text-white"
+      : "border-primary text-primary";
+
+  return (
+    <Link
+      href={href}
+      prefetch={prefetch}
+      aria-label={ariaLabel}
+      className={[
+        "group inline-flex items-center gap-3.5",
+        "py-2.5",
+        "border-b",
+        toneClasses,
+        "font-shippori-mincho font-medium",
+        "text-[14px] md:text-[16px]",
+        "tracking-widest md:tracking-[0.12em]",
+        "min-w-[240px] md:min-w-[280px]",
+        className,
+      ].join(" ")}
+    >
+      <span className="flex-1">{children}</span>
+      <svg
+        width="22"
+        height="10"
+        viewBox="0 0 22 10"
+        aria-hidden="true"
+        style={{ overflow: "visible" }}
+        className="shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5"
+      >
+        <path
+          d="M0 5 H20 M16 1 L20 5 L16 9"
+          stroke="currentColor"
+          strokeWidth="1.2"
+          fill="none"
+        />
+      </svg>
+    </Link>
+  );
+}

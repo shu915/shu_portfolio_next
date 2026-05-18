@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { WpFixedPageMain } from "@/components/fixed-page/WpFixedPageMain";
-import { WpFixedPageShell } from "@/components/fixed-page/WpFixedPageShell";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
 import { previewOptionsFromSearchParams } from "@/lib/draft-signature";
@@ -100,7 +99,7 @@ export default async function WpFixedPageRoute({
         title={subHeaderEnglishFromSegments(slug)}
         subtitle={wpPage.title}
       />
-      <WpFixedPageShell>
+      <div className="pb-32">
         <div className="mx-auto max-w-[1232px] px-4 md:px-6 lg:px-8">
           <Breadcrumbs
             items={[{ label: "Top", href: "/" }, { label: wpPage.title }]}
@@ -109,7 +108,7 @@ export default async function WpFixedPageRoute({
             <WpFixedPageMain page={wpPage} />
           </main>
         </div>
-      </WpFixedPageShell>
+      </div>
     </>
   );
 }

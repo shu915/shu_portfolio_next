@@ -3,6 +3,9 @@ import Link from "next/link";
 import { formatDateJa } from "@/lib/format-date-ja";
 import styles from "@/styles/ui/articleListItem.module.css";
 
+/** 一覧カードのアクセントライン（底辺バー・日付横・セパレーター）の色バリエーション */
+export type ArticleListItemVariant = "default" | "soft";
+
 type Props = {
   href: string;
   title: string;
@@ -12,6 +15,11 @@ type Props = {
   thumbnailUrl?: string;
   thumbnailAlt?: string;
   categoryName?: string;
+  /**
+   * `default`: `--color-primary`（紺）
+   * `soft`: **底辺ホバーラインのみ** secondary と primary を `color-mix`（日付・sep は紺のまま）
+   */
+  variant?: ArticleListItemVariant;
   /**
    * ファーストビューに載る1枚だけ true（LCP 向けに preload）
    * @see https://nextjs.org/docs/app/api-reference/components/image#priority
@@ -32,6 +40,7 @@ type Props = {
  * - カテゴリ：画像左下の矩形バッジ
  * - 日付：ショートダッシュ＋Shippori Mincho で視認性重視
  * - ホバー：カード浮き上がり・底辺ラインが伸びる・セパレーター伸長
+ * - `variant`: アクセントラインを紺（default）／水色（soft）で切替
  */
 export function ArticleListItem({
   href,
@@ -41,13 +50,16 @@ export function ArticleListItem({
   thumbnailUrl,
   thumbnailAlt = "",
   categoryName,
+  variant = "default",
   priority = false,
   prefetch,
 }: Props) {
   return (
     <Link
       href={href}
-      className={styles.card}
+      className={[styles.card, variant === "soft" && styles.cardSoft]
+        .filter(Boolean)
+        .join(" ")}
       prefetch={prefetch}
     >
       {/* サムネイル */}
