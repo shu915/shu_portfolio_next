@@ -33,8 +33,7 @@ function fieldErrorId(name: keyof ContactFormValues): string {
 }
 
 /**
- * ContactForm — B案（左アクセントバー＋フォームパネル）
- * しっぽり明朝で日本語テキストを統一
+ * ContactForm — フォームパネル版（しっぽり明朝で日本語テキストを統一）
  */
 export function ContactForm() {
   const turnstileSiteKey =
@@ -107,13 +106,8 @@ export function ContactForm() {
   };
 
   return (
-    /* 左アクセントバー＋フォームパネル */
-    <div className="mx-auto mt-16 flex w-full max-w-[720px] items-stretch max-[899px]:mt-10 max-[430px]:mt-6">
-      {/* 左アクセントバー */}
-      <div className="w-1 shrink-0 bg-primary" />
-
-      {/* パネル本体 */}
-      <div className="flex-1 bg-[#EFF2F9] px-10 py-10 max-[899px]:px-6 max-[899px]:py-8 max-[430px]:px-4 max-[430px]:py-6">
+    <div className="mx-auto mt-16 w-full max-w-[720px] max-[899px]:mt-10 max-[430px]:mt-6">
+      <div className="bg-[#EFF2F9] px-12 py-10 max-[899px]:px-8 max-[899px]:py-8 max-[430px]:px-5 max-[430px]:py-6 lg:px-14">
         {/* 見出し */}
         <div className="mb-7">
           <h3 className="font-cormorant text-[2.25rem] font-semibold leading-none tracking-[0.08em] text-primary">

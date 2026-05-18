@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ProfileMain } from "@/components/profile/ProfileMain";
-import { SlashBgShell } from "@/components/layout/SlashBgShell";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SubHeader } from "@/components/ui/SubHeader";
 import { noSidebarMainClassName } from "@/lib/no-sidebar-main";
@@ -13,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function ProfilePage() {
   return (
-    <SlashBgShell>
+    <>
       <SubHeader variant="profile" title="Profile" subtitle="プロフィール" />
       <div className="mx-auto max-w-[1232px] px-4 pb-32 md:px-6 lg:px-8">
         <Breadcrumbs items={[{ label: "Top", href: "/" }, { label: "Profile" }]} />
@@ -21,6 +20,6 @@ export default function ProfilePage() {
           <ProfileMain />
         </div>
       </div>
-    </SlashBgShell>
+    </>
   );
 }
