@@ -1,6 +1,6 @@
 import { ArticleListItem } from "@/components/ui/ArticleListItem";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { EditorialUnderlineLink } from "@/components/ui/EditorialUnderlineLink";
+import { SectionMoreLink } from "@/components/ui/SectionMoreLink";
 import { gqlFetch } from "@/lib/graphql";
 
 const GET_ARTICLES = `
@@ -52,7 +52,7 @@ type PostNode = {
  *       Mobile : 1列
  *       Tablet : 2×2 グリッド（grid なので flex-wrap での 3:1 崩れが起きない）
  *       Desktop: 1行 4列
- *   - EditorialUnderlineLink（投稿記事一覧はこちら、ダーク版）
+ *   - SectionMoreLink（投稿記事一覧はこちら、ダーク版）
  *       Mobile : 中央寄せ
  *       Tablet+: 右寄せ（cards-block 内で justify-end → rightmost card 右端と縦ラインが揃う）
  *
@@ -114,13 +114,13 @@ export async function ArticlesSection() {
           </ul>
 
           <div className="mt-12 flex justify-center md:mt-14 md:justify-end">
-            <EditorialUnderlineLink
+            <SectionMoreLink
               href="/articles"
               ariaLabel="投稿記事一覧を見る"
               tone="dark"
             >
               投稿記事一覧はこちら
-            </EditorialUnderlineLink>
+            </SectionMoreLink>
           </div>
         </div>
       </div>
