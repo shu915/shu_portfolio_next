@@ -1,6 +1,7 @@
 import { ArticleListItem } from "@/components/ui/ArticleListItem";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { SectionMoreLink } from "@/components/ui/SectionMoreLink";
+import { stripExcerptHtml } from "@/lib/articles-archive";
 import { gqlFetch } from "@/lib/graphql";
 
 const GET_WORKS = `
@@ -95,20 +96,16 @@ export async function WorksSection() {
               "xl:grid-cols-[repeat(4,16.6rem)] xl:gap-8",
             ].join(" ")}
           >
-            {works.map((work, index) => (
+            {works.map((work) => (
               <li key={work.id}>
                 <ArticleListItem
                   href={`/works/${work.slug}`}
                   title={work.title}
                   date={work.date}
-                  excerpt={work.excerpt
-                    .replace(/<[^>]*>/g, " ")
-                    .replace(/\s+/g, " ")
-                    .trim()}
+                  excerpt={stripExcerptHtml(work.excerpt)}
                   thumbnailUrl={work.featuredImage?.node.sourceUrl}
                   thumbnailAlt={work.featuredImage?.node.altText}
                   categoryName={work.services?.nodes[0]?.name}
-                  priority={index === 0}
                 />
               </li>
             ))}

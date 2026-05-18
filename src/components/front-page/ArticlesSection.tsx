@@ -1,6 +1,7 @@
 import { ArticleListItem } from "@/components/ui/ArticleListItem";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { SectionMoreLink } from "@/components/ui/SectionMoreLink";
+import { stripExcerptHtml } from "@/lib/articles-archive";
 import { gqlFetch } from "@/lib/graphql";
 
 const GET_ARTICLES = `
@@ -93,21 +94,17 @@ export async function ArticlesSection() {
               "xl:grid-cols-[repeat(4,16.6rem)] xl:gap-8",
             ].join(" ")}
           >
-            {posts.map((post, index) => (
+            {posts.map((post) => (
               <li key={post.id}>
                 <ArticleListItem
                   href={`/articles/${post.slug}`}
                   variant="soft"
                   title={post.title}
                   date={post.date}
-                  excerpt={post.excerpt
-                    .replace(/<[^>]*>/g, " ")
-                    .replace(/\s+/g, " ")
-                    .trim()}
+                  excerpt={stripExcerptHtml(post.excerpt)}
                   thumbnailUrl={post.featuredImage?.node.sourceUrl}
                   thumbnailAlt={post.featuredImage?.node.altText}
                   categoryName={post.categories?.nodes[0]?.name}
-                  priority={index === 0}
                 />
               </li>
             ))}
