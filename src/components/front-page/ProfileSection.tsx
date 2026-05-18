@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { EditorialUnderlineLink } from "@/components/ui/EditorialUnderlineLink";
+import { SectionMoreLink } from "@/components/ui/SectionMoreLink";
 
 const DESCRIPTION =
   "Webエンジニアリングを通じて、実用的で信頼性の高い成果を提供しています。細部にこだわりながら、使いやすさとクオリティを追求し、一つひとつのプロジェクトで確かな価値を生み出すことを大切にしています。技術の力で未来を形にします。";
@@ -105,12 +105,12 @@ export function ProfileSection() {
             </p>
 
             <div className="mt-7 md:mt-8">
-              <EditorialUnderlineLink
+              <SectionMoreLink
                 href="/profile"
                 ariaLabel="詳しいプロフィールを見る"
               >
                 詳しいプロフィールはこちら
-              </EditorialUnderlineLink>
+              </SectionMoreLink>
             </div>
           </div>
         </div>

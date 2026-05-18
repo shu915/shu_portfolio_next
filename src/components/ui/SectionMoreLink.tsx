@@ -15,19 +15,17 @@ type Props = {
 };
 
 /**
- * 編集的な下線リンク（和文ラベル + 矢印アイコン + 下線）
+ * セクション末尾の「もっと見る」誘導リンク（和文ラベル + 矢印 + 下線）
  *
  *   詳しいプロフィールはこちら  →
  *   ────────────────────────────
  *
  * - 和文ラベル（Shippori Mincho、本文と同フォント）
  * - 右端に細い矢印アイコン
- * - 下端に primary 色の細い罫線
+ * - 下端に primary 色の細い罫線（`tone="dark"` で白系）
  * - ホバーで矢印が右に 6px シフト
- *
- * 用途: フロントページ各セクションの「もっと見る」誘導など。
  */
-export function EditorialUnderlineLink({
+export function SectionMoreLink({
   href,
   children,
   prefetch,
