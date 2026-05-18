@@ -5,6 +5,8 @@ type Props = {
   eyebrow: string;
   /** 英文の大見出し（Cormorant Garamond） */
   title: string;
+  /** `dark`: `bg-primary` など暗背景向け（文字を白系に） */
+  tone?: "light" | "dark";
   /**
    * 描画するタグ。デフォルトは `h2`。
    * 詳細ページなどで `h1` が別にある場合は `"div"` などに変更可。
@@ -32,10 +34,18 @@ type Props = {
 export function SectionTitle({
   eyebrow,
   title,
+  tone = "light",
   as: Tag = "h2",
   id,
   className = "",
 }: Props): ReactNode {
+  const eyebrowTone =
+    tone === "dark"
+      ? "text-white/75"
+      : "text-body-muted";
+  const titleTone =
+    tone === "dark" ? "text-white" : "text-primary";
+
   return (
     <div
       className={[
@@ -46,7 +56,8 @@ export function SectionTitle({
       <span
         className={[
           "inline-flex items-center leading-none",
-          "font-shippori-mincho font-medium text-body-muted",
+          "font-shippori-mincho font-medium",
+          eyebrowTone,
           "gap-2.5 md:gap-3.5",
           "text-[14px] tracking-[0.24em] md:tracking-[0.32em]",
           "before:content-[''] before:inline-block before:h-px before:bg-current before:opacity-60",
@@ -61,7 +72,8 @@ export function SectionTitle({
       <Tag
         id={id}
         className={[
-          "m-0 font-cormorant font-medium text-primary",
+          "m-0 font-cormorant font-medium",
+          titleTone,
           "leading-none tracking-[0.04em]",
           "text-[48px] md:text-[60px]",
         ].join(" ")}

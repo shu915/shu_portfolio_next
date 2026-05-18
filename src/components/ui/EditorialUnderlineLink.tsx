@@ -8,6 +8,8 @@ type Props = {
   prefetch?: boolean;
   /** スクリーンリーダー用ラベル（文脈で必要な場合のみ） */
   ariaLabel?: string;
+  /** `dark`: `bg-primary` など暗背景向け（文字・罫線を白系に） */
+  tone?: "light" | "dark";
   /** 追加 className */
   className?: string;
 };
@@ -30,8 +32,14 @@ export function EditorialUnderlineLink({
   children,
   prefetch,
   ariaLabel,
+  tone = "light",
   className = "",
 }: Props) {
+  const toneClasses =
+    tone === "dark"
+      ? "border-white/85 text-white"
+      : "border-primary text-primary";
+
   return (
     <Link
       href={href}
@@ -40,8 +48,9 @@ export function EditorialUnderlineLink({
       className={[
         "group inline-flex items-center gap-3.5",
         "py-2.5",
-        "border-b border-primary",
-        "font-shippori-mincho font-medium text-primary",
+        "border-b",
+        toneClasses,
+        "font-shippori-mincho font-medium",
         "text-[14px] md:text-[16px]",
         "tracking-widest md:tracking-[0.12em]",
         "min-w-[240px] md:min-w-[280px]",
