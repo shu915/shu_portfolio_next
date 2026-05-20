@@ -1,116 +1,178 @@
-import Image from "next/image";
-
-/** `src` は利用可能な最大解像度（旧 image-set の 2x 相当）。`sizes` と最適化で端末に合わせて配信 */
-const HERO_PC = "/images/front-page/front-page-main-visual-pc-3840.webp";
-const HERO_SP = "/images/front-page/front-page-main-visual-sp-1500.webp";
+import { HeroHudBackground } from "./HeroHudBackground";
+import styles from "@/styles/front-page/heroSection.module.css";
 
 /**
  * フロントページのメインビジュアル（ヒーローセクション）
- * WordPress テーマの .p-front-page__main-visual を移植
  *
- * 背景は `next/image` + `priority`（LCP / fetchpriority 用）。PC/SP で画像を切り替え。
+ * - 100vh / 100dvh フルサイズ
+ * - 背景は HUD 風の同心円アニメーション（HeroHudBackground / Canvas）
+ * - 既存の global Header（fixed h-15）がこの上に乗る前提で、
+ *   コピーの padding-top で header 分を確保している
  */
 export function HeroSection() {
   return (
     <section
       className={[
-        "relative overflow-hidden pt-15 aspect-3/1",
-        "max-md:pt-0 max-md:aspect-auto max-md:h-140",
+        "relative w-full overflow-hidden isolate text-white",
+        "h-screen min-h-[640px]",
+        "supports-[height:100dvh]:h-dvh",
+        "max-md:min-h-[560px]",
+        styles.hero,
       ].join(" ")}
       aria-label="メインビジュアル"
     >
-      <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
-        <Image
-          src={HERO_PC}
-          alt=""
-          fill
-          priority
-          sizes="(min-width: 768px) 100vw, 0px"
-          className="hidden object-cover object-center md:block"
-        />
-        <Image
-          src={HERO_SP}
-          alt=""
-          fill
-          priority
-          sizes="(max-width: 767px) 100vw, 0px"
-          className="object-cover object-center md:hidden"
-        />
-      </div>
+      {/* HUD canvas (背景) */}
+      <HeroHudBackground />
 
-      {/* 内側コンテナ */}
-      <div className="relative z-10 mx-auto h-full max-w-[1232px] px-4 max-md:flex max-md:items-center md:px-6 lg:px-8">
-        {/* キャッチコピーブロック：PC は右寄せ中段、SP は中央 */}
+      {/* スキャンライン + ビネット */}
+      <div className={styles.scanline} aria-hidden="true" />
+      <div className={styles.vignette} aria-hidden="true" />
+
+      {/* HUD コーナーマーカー（左下・右下） */}
+      <span className={`${styles.corner} ${styles.cornerBl}`} aria-hidden="true" />
+      <span className={`${styles.corner} ${styles.cornerBr}`} aria-hidden="true" />
+
+      {/* 中央ステージ：header 60px + 余白 56px (= 116px) 確保 */}
+      <div
+        className={[
+          "relative z-[4] h-full grid place-items-center",
+          "px-5 md:px-10 lg:px-14",
+          "pt-[116px] pb-20",
+          "max-md:pl-[clamp(32px,9vw,56px)] max-md:pr-6 max-md:pt-20 max-md:pb-10 max-md:place-items-stretch",
+        ].join(" ")}
+      >
         <div
           className={[
-            "absolute top-[40%] right-0 -translate-y-1/2 flex flex-col items-end",
-            "max-[1280px]:right-[3%] max-[1280px]:top-[35%]",
-            "max-[999px]:top-[30%]",
-            "max-md:static max-md:items-center max-md:translate-y-0 max-md:mx-auto",
+            "relative w-full max-w-[980px]",
+            "flex flex-col items-start gap-[26px]",
+            "max-md:gap-[18px] max-md:h-full max-md:justify-center max-md:max-w-[min(100%,440px)]",
           ].join(" ")}
         >
-          {/* 日本語キャッチコピー */}
+          {/* Eyebrow */}
+          <span
+            className={[
+              "inline-flex items-center gap-3.5",
+              "font-mono uppercase",
+              "text-[11px] tracking-[0.34em] text-white/65",
+              "max-md:text-[9.5px] max-md:tracking-[0.28em] max-md:gap-2.5",
+              styles.fadeUpEyebrow,
+            ].join(" ")}
+          >
+            <span className="inline-block w-7 h-px bg-white/55 max-md:w-5" />
+            <span className={styles.pulseDot} />
+            Full Stack Engineer · Portfolio
+          </span>
+
+          {/* JP メインキャッチ */}
           <h1
             className={[
-              "w-fit flex flex-col gap-[0.8rem] items-end",
-              "text-[clamp(1.5rem,0.357rem+2.381vw,2.5rem)]",
-              "max-md:items-center max-md:gap-2",
+              "m-0 text-white text-balance",
+              "font-shippori-mincho font-medium leading-[1.35]",
+              "text-[clamp(36px,6vw,80px)] tracking-[0.06em]",
+              "max-md:text-[clamp(30px,9vw,44px)] max-md:tracking-[0.04em]",
+              styles.catchJp,
             ].join(" ")}
           >
-            {["WEBエンジニアリングで", "あなたの課題を解決いたします"].map(
-              (line) => (
-                <span
-                  key={line}
-                  className="px-4 py-[0.3rem] w-fit bg-white/80 leading-normal font-semibold max-md:text-[clamp(1.25rem,0.357rem+2.381vw,2rem)]"
-                >
-                  {line}
-                </span>
-              )
-            )}
+            <span className={styles.reveal}>
+              <span>全体を見通し、</span>
+            </span>
+            <br />
+            <span className={styles.reveal}>
+              <span>
+                <span className={styles.accent}>細部</span>で応える
+                <span className={styles.punct}>。</span>
+              </span>
+            </span>
           </h1>
 
-          {/* 英語サブコピー */}
+          {/* 英語サブキャッチ */}
           <p
             className={[
-              "text-white leading-loose tracking-[0.02em] w-fit",
-              "text-[clamp(1rem,0.429rem+1.19vw,1.5rem)]",
-              "max-md:bg-black/50 max-md:px-4 max-md:py-[0.3rem] max-md:mt-2 max-md:text-center max-md:leading-[1.4]",
+              "m-0 font-cormorant italic font-normal",
+              "text-[clamp(20px,2.4vw,32px)] tracking-[0.03em] leading-[1.4]",
+              "text-[rgb(232_238_255/0.82)]",
+              "max-md:text-[clamp(16px,4.6vw,20px)] max-md:tracking-[0.02em]",
+              styles.fadeUpEn,
             ].join(" ")}
           >
-            Construct the Future with{" "}
-            <br className="hidden max-md:block" />
-            Web Engineering.
+            From <span className="text-[rgb(184_205_255/0.85)]">architecture</span>{" "}
+            to every detail.
           </p>
+
+          {/* Divider */}
+          <div className={styles.divider} />
+
+          {/* Brand 行 + Meta */}
+          <div
+            className={[
+              "w-full flex items-end justify-between gap-6 flex-wrap",
+              "max-md:flex-col max-md:items-start max-md:gap-5 max-md:mt-1.5",
+              styles.fadeUpBrand,
+            ].join(" ")}
+          >
+            <div className="flex flex-col gap-1.5">
+              <div
+                className={[
+                  "font-cormorant font-medium leading-none text-white",
+                  "text-[clamp(28px,3.4vw,44px)] tracking-[0.04em]",
+                  "max-md:text-[clamp(22px,7vw,30px)] max-md:tracking-[0.03em]",
+                ].join(" ")}
+              >
+                Shu <em className="not-italic font-normal text-[rgb(184_205_255/0.9)] italic">Digital</em> Works
+              </div>
+            </div>
+
+            {/* Meta — PC は横並び / 狭い幅では縦積み */}
+            <div
+              className={[
+                "flex gap-7 font-mono uppercase text-white/55",
+                "text-[10.5px] tracking-[0.28em]",
+                "max-md:flex-col max-md:gap-4 max-md:w-full max-md:text-[9px] max-md:tracking-[0.22em]",
+              ].join(" ")}
+            >
+              <div>
+                <span className="block text-white/40 text-[10.5px] tracking-[0.28em] mb-1 max-md:text-[8.5px] max-md:tracking-[0.24em] max-md:mb-[3px]">
+                  Status
+                </span>
+                <span className="text-[rgb(232_238_255/0.95)] font-medium max-md:text-[10px] max-md:tracking-[0.18em]">
+                  Available · 2026
+                </span>
+              </div>
+              <div>
+                <span className="block text-white/40 text-[10.5px] tracking-[0.28em] mb-1 max-md:text-[8.5px] max-md:tracking-[0.24em] max-md:mb-[3px]">
+                  Based
+                </span>
+                <span className="text-[rgb(232_238_255/0.95)] font-medium max-md:text-[10px] max-md:tracking-[0.18em]">
+                  Anywhere, JP
+                </span>
+              </div>
+              <div>
+                <span className="block text-white/40 text-[10.5px] tracking-[0.28em] mb-1 max-md:text-[8.5px] max-md:tracking-[0.24em] max-md:mb-[3px]">
+                  Stack
+                </span>
+                <span className="text-[rgb(232_238_255/0.95)] font-medium max-md:text-[10px] max-md:tracking-[0.18em]">
+                  Next · Go · AWS
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* ボトムバー：「Shu Digital Works」大文字テキスト（SP では非表示） */}
-      <div className="absolute bottom-0 left-0 z-10 w-full bg-black/40 max-md:hidden">
-        <div className="mx-auto max-w-[1232px] px-4 md:px-6 lg:px-8">
-          <p
-            className={[
-              "font-semibold text-white tracking-[0.03em] leading-none select-none overflow-hidden",
-              "font-cormorant",
-              "text-[clamp(2.5rem,-3.5rem+12.5vw,7.75rem)]",
-              "relative bottom-[calc(clamp(0.5rem,-0.529rem+2.143vw,1.4rem)*-0.4)]",
-              "max-[899px]:text-center",
-            ].join(" ")}
-            aria-hidden="true"
-          >
-            Shu Digital Works
-          </p>
-        </div>
-      </div>
-
-      {/* スクロールガイド（SP のみ表示） */}
-      <div className="absolute bottom-0 left-1/2 z-10 hidden h-[100px] w-[100px] -translate-x-1/2 text-center max-md:block">
-        <span className="mb-[10px] block text-base tracking-widest text-primary">
-          Scroll
-        </span>
-        <div
-          className="relative -bottom-16 mx-auto h-[60px] w-[2px] animate-[scrollLine_2.2s_cubic-bezier(0.76,0,0.3,1)_infinite] bg-primary"
-          aria-hidden="true"
-        />
+      {/* Scroll cue */}
+      <div
+        className={[
+          "absolute left-1/2 -translate-x-1/2 bottom-6 z-[5]",
+          "inline-flex flex-col items-center gap-2",
+          "font-mono uppercase text-white/55",
+          "text-[9.5px] tracking-[0.34em]",
+          "max-md:bottom-[18px] max-md:gap-1.5 max-md:text-[8.5px] max-md:tracking-[0.3em]",
+          styles.scrollcue,
+        ].join(" ")}
+        aria-hidden="true"
+      >
+        <span>Scroll</span>
+        <span className={styles.scrollLine} />
       </div>
     </section>
   );

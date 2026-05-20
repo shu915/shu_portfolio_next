@@ -13,7 +13,6 @@ type Props = {
     | "search"
     | "profile"
     | "contact"
-    | "archive"
     | "page";
   title: string;
   /** 英字見出しの下に出す日本語など（固定ページでは WP タイトル） */
@@ -36,7 +35,6 @@ const BG_BY_VARIANT: Record<
   works: SUB_HEADER_BG,
   profile: SUB_HEADER_BG,
   contact: SUB_HEADER_BG,
-  archive: null,
   page: SUB_HEADER_BG,
 };
 
