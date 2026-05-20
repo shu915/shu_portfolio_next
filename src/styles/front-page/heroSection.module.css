@@ -102,6 +102,11 @@
   color: #b8cdff;
   font-style: normal;
 }
+.brandEm {
+  color: #b8cdff;
+  font-style: italic;
+  font-weight: 400;
+}
 .punct {
   color: rgba(255, 255, 255, 0.65);
   margin-left: -0.05em;

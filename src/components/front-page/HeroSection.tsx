@@ -1,6 +1,8 @@
 import { HeroHudBackground } from "./HeroHudBackground";
 import styles from "@/styles/front-page/heroSection.module.css";
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 /**
  * フロントページのメインビジュアル（ヒーローセクション）
  *
@@ -35,7 +37,7 @@ export function HeroSection() {
       {/* 中央ステージ：header 60px + 余白 56px (= 116px) 確保 */}
       <div
         className={[
-          "relative z-[4] h-full grid place-items-center",
+          "relative z-4 h-full grid place-items-center",
           "px-5 md:px-10 lg:px-14",
           "pt-[116px] pb-20",
           "max-md:pl-[clamp(32px,9vw,56px)] max-md:pr-6 max-md:pt-20 max-md:pb-10 max-md:place-items-stretch",
@@ -118,7 +120,7 @@ export function HeroSection() {
                   "max-md:text-[clamp(22px,7vw,30px)] max-md:tracking-[0.03em]",
                 ].join(" ")}
               >
-                Shu <em className="not-italic font-normal text-[rgb(184_205_255/0.9)] italic">Digital</em> Works
+                Shu <em className={styles.brandEm}>Digital</em> Works
               </div>
             </div>
 
@@ -135,7 +137,7 @@ export function HeroSection() {
                   Status
                 </span>
                 <span className="text-[rgb(232_238_255/0.95)] font-medium max-md:text-[10px] max-md:tracking-[0.18em]">
-                  Available · 2026
+                  Available · {CURRENT_YEAR}
                 </span>
               </div>
               <div>
@@ -162,7 +164,7 @@ export function HeroSection() {
       {/* Scroll cue */}
       <div
         className={[
-          "absolute left-1/2 -translate-x-1/2 bottom-6 z-[5]",
+          "absolute left-1/2 -translate-x-1/2 bottom-6 z-5",
           "inline-flex flex-col items-center gap-2",
           "font-mono uppercase text-white/55",
           "text-[9.5px] tracking-[0.34em]",

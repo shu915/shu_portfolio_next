@@ -336,7 +336,7 @@ export function HeroHudBackground() {
     <div
       ref={wrapRef}
       aria-hidden="true"
-      className="absolute inset-0 z-[1] overflow-hidden pointer-events-auto"
+      className="absolute inset-0 z-1 overflow-hidden pointer-events-auto"
       style={{
         background:
           "radial-gradient(120% 80% at 18% 78%, rgba(82,124,210,0.22) 0%, transparent 55%)," +
