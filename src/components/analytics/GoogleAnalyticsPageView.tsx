@@ -16,15 +16,21 @@ type Props = {
 const GTAG_WAIT_MS = 50;
 const GTAG_MAX_ATTEMPTS = 100;
 
+function isGtagReady(): boolean {
+  return typeof window.gtag === "function";
+}
+
 function sendPageView(gaId: string, pagePath: string) {
-  window.gtag?.("config", gaId, {
+  if (!isGtagReady()) return;
+
+  window.gtag!("config", gaId, {
     page_path: pagePath,
   });
 }
 
 /** gtag 初期化前に useEffect が走っても、準備完了まで再試行する */
 function whenGtagReady(run: () => void): () => void {
-  if (window.gtag) {
+  if (isGtagReady()) {
     run();
     return () => {};
   }
@@ -32,7 +38,7 @@ function whenGtagReady(run: () => void): () => void {
   let attempts = 0;
   const timer = window.setInterval(() => {
     attempts += 1;
-    if (window.gtag) {
+    if (isGtagReady()) {
       window.clearInterval(timer);
       run();
     } else if (attempts >= GTAG_MAX_ATTEMPTS) {
