@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { SentryTestPanel } from "@/components/sentry/SentryTestPanel";
 import { isSentryTestEnabled } from "@/lib/sentry-test";
 
+export const dynamic = "force-dynamic";
+
 /** Sentry 動作確認ページ（dev または NEXT_PUBLIC_SENTRY_TEST_ENABLED=true） */
 export default function SentryTestPage() {
   if (!isSentryTestEnabled()) {
