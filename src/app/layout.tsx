@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
 import { DEFAULT_OG_IMAGE_PATH } from "@/lib/og-metadata";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -71,7 +70,6 @@ export default function RootLayout({
         <main className="flex-1 mt-15">{children}</main>
         <Footer />
         <GoogleAnalytics />
-        <SpeedInsights />
       </body>
     </html>
   );
