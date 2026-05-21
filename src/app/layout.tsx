@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
 import { DEFAULT_OG_IMAGE_PATH } from "@/lib/og-metadata";
-import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
@@ -70,7 +70,7 @@ export default function RootLayout({
         {/* ヘッダーが fixed のため、コンテンツ上部に同じ高さの余白を確保 */}
         <main className="flex-1 mt-15">{children}</main>
         <Footer />
-        <Analytics />
+        <GoogleAnalytics />
         <SpeedInsights />
       </body>
     </html>
