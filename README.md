@@ -21,6 +21,20 @@ https://shu-digital-works.com
 | メール送信 | **Resend**（問い合わせ通知） |
 | ボット対策 | **Cloudflare Turnstile**（`@marsidev/react-turnstile`） |
 | 本文表示 | **node-html-parser**、**html-react-parser**（CMS 出力 HTML の解析・描画） |
+| 環境変数 | **Infisical**（本番・Preview 等へのシークレット配信） |
+| 監視・分析 | **Sentry**（エラー・パフォーマンス）、**Google Analytics 4** |
+
+---
+
+## UI
+
+トップページを中心に、**Claude Design** で UI をリメイクしています。ヒーロー（HUD 風 Canvas アニメーション）、各セクションのレイアウト・タイポグラフィを刷新し、既存の WordPress 連携やルーティング構成は維持したまま見た目と体験を更新しています。
+
+---
+
+## 環境変数（Infisical）
+
+GraphQL URL、revalidate シークレット、Resend、Turnstile、Sentry などの**環境依存の値は Infisical で管理**し、Vercel の各デプロイ環境（Production / Preview 等）へ同期しています。リポジトリには `.env.example` のみを置き、秘密情報はコミットしません。
 
 ---
 
@@ -57,3 +71,8 @@ https://shu-digital-works.com
 
 - 問い合わせ API：**Zod** で入力検証、**Turnstile** でボット対策、**Resend** で通知メール。
 - 環境変数未設定時は**起動時やリクエスト時に明示的に失敗**させ、誤デプロイを防ぐ方針（例: GraphQL URL、revalidate シークレット）。
+
+### 監視・分析（Sentry / GA4）
+
+- **Sentry（`@sentry/nextjs`）** でサーバー・Edge・クライアントのエラーとパフォーマンストレースを収集。`global-error.tsx` と `instrumentation` により App Router 上の例外も捕捉。ソースマップは `SENTRY_AUTH_TOKEN` がある環境でのみアップロード。
+- **GA4** は本番デプロイ（`VERCEL_ENV=production`）でのみ有効。Preview やローカル開発の計測ノイズを避ける。
