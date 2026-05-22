@@ -1,9 +1,47 @@
+import * as Sentry from "@sentry/nextjs";
 import { Resend } from "resend";
 import {
   buildContactConfirmationEmail,
   buildContactNotificationEmail,
 } from "@/lib/contact-email";
 import type { ContactFormValues } from "@/lib/validations/contact-form";
+
+const CONTACT_EMAIL_FAILURE_MESSAGES = {
+  env: "Contact form: Resend env not configured",
+  admin_notification: "Contact form: admin notification failed",
+  submitter_confirmation: "Contact form: submitter confirmation failed",
+} as const;
+
+type ContactEmailFailureStage = keyof typeof CONTACT_EMAIL_FAILURE_MESSAGES;
+
+function reportContactEmailFailure(
+  stage: ContactEmailFailureStage,
+  error?: unknown
+): void {
+  Sentry.withScope((scope) => {
+    scope.setTag("contact_email.stage", stage);
+
+    if (error !== undefined && error !== null) {
+      if (error instanceof Error) {
+        scope.setContext("error_detail", {
+          name: error.name,
+          message: error.message,
+        });
+      } else if (typeof error === "object") {
+        scope.setContext("error_detail", error as Record<string, unknown>);
+      } else {
+        scope.setContext("error_detail", { message: String(error) });
+      }
+    }
+
+    if (error instanceof Error) {
+      Sentry.captureException(error);
+      return;
+    }
+
+    Sentry.captureMessage(CONTACT_EMAIL_FAILURE_MESSAGES[stage], "error");
+  });
+}
 
 let resend: Resend | null = null;
 
@@ -44,6 +82,7 @@ export async function sendContactNotification(
     console.error(
       "[contact-email] RESEND_API_KEY / RESEND_FROM / RESEND_TO のいずれかが未設定です"
     );
+    reportContactEmailFailure("env");
     return { ok: false };
   }
 
@@ -60,10 +99,12 @@ export async function sendContactNotification(
     });
     if (error) {
       console.error("[resend] admin notification", error);
+      reportContactEmailFailure("admin_notification", error);
       return { ok: false };
     }
   } catch (e) {
     console.error("[resend] admin notification", e);
+    reportContactEmailFailure("admin_notification", e);
     return { ok: false };
   }
 
@@ -80,9 +121,11 @@ export async function sendContactNotification(
     });
     if (error) {
       console.error("[resend] submitter confirmation (admin mail was sent)", error);
+      reportContactEmailFailure("submitter_confirmation", error);
     }
   } catch (e) {
     console.error("[resend] submitter confirmation (admin mail was sent)", e);
+    reportContactEmailFailure("submitter_confirmation", e);
   }
 
   return { ok: true };
