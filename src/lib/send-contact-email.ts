@@ -21,25 +21,11 @@ function reportContactEmailFailure(
   Sentry.withScope((scope) => {
     scope.setTag("contact_email.stage", stage);
 
-    if (error !== undefined && error !== null) {
-      if (error instanceof Error) {
-        scope.setContext("error_detail", {
-          name: error.name,
-          message: error.message,
-        });
-      } else if (typeof error === "object") {
-        scope.setContext("error_detail", error as Record<string, unknown>);
-      } else {
-        scope.setContext("error_detail", { message: String(error) });
-      }
-    }
-
-    if (error instanceof Error) {
+    if (error) {
       Sentry.captureException(error);
-      return;
+    } else {
+      Sentry.captureMessage(CONTACT_EMAIL_FAILURE_MESSAGES[stage], "error");
     }
-
-    Sentry.captureMessage(CONTACT_EMAIL_FAILURE_MESSAGES[stage], "error");
   });
 }
 
