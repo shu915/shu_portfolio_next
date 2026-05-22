@@ -13,7 +13,6 @@ const WORDPRESS_HOSTNAME = (() => {
 })();
 
 const isDev = process.env.NODE_ENV === "development";
-const hasSentryAuthToken = Boolean(process.env.SENTRY_AUTH_TOKEN?.trim());
 
 /**
  * WordPress が .local ドメインの間は本番モードでも画像最適化をスキップする。
@@ -43,9 +42,9 @@ export default withSentryConfig(nextConfig, {
  // For all available options, see:
  // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
- org: "shu-digital-works",
+ org: "shu-digital-works-org",
 
- project: "shu-digital-works",
+ project: "shu-digital-works-next",
 
  authToken: process.env.SENTRY_AUTH_TOKEN,
 
@@ -53,8 +52,7 @@ export default withSentryConfig(nextConfig, {
  silent: !process.env.CI,
 
  sourcemaps: {
-   // Preview 等で SENTRY_AUTH_TOKEN が無い場合はアップロードをスキップしてビルドを通す
-   disable: !hasSentryAuthToken,
+   disable: !process.env.SENTRY_AUTH_TOKEN?.trim(),
  },
 
  // For all available options, see:
