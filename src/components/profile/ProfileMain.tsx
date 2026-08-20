@@ -72,7 +72,7 @@ export function ProfileMain() {
     },
     {
       label: "保有資格",
-      content: "基本情報技術者 / 簿記3級 / HSK5級 / 色彩検定1級",
+      content: "基本情報技術者 / 簿記3級 / ビジネス実務法務3級 / HSK5級 / 色彩検定1級",
     },
     {
       label: "座右の銘",
