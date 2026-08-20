@@ -11,6 +11,6 @@ export function getSentryInitOptions(): Pick<
     dsn,
     enabled: Boolean(dsn),
     sendDefaultPii: false,
-    tracesSampleRate: 0,
+    tracesSampleRate: 1.0,
   };
 }
